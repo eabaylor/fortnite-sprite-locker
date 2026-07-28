@@ -6,8 +6,20 @@ const display = Archivo_Black({ variable: "--font-display", subsets: ["latin"], 
 const body = DM_Sans({ variable: "--font-body", subsets: ["latin"] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://sprite-locker-checklist.eabaylor.chatgpt.site"),
   title: "Sprite Locker — Fortnite Sprite Checklist",
   description: "A mobile-first checklist for all 91 currently available Fortnite Sprite variants.",
+  openGraph: {
+    title: "Sprite Locker",
+    description: "Track all 91 available Sprite variants—acquired and mastered.",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Sprite Locker — 91 variants" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Sprite Locker",
+    description: "Track all 91 available Sprite variants—acquired and mastered.",
+    images: ["/og.png"],
+  },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

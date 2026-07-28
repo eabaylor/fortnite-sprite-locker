@@ -11,7 +11,7 @@ const SPRITES: SpriteFamily[] = [
   { name: "Batman", rarity: "Mythic", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil", "Cube"] },
   { name: "Water", rarity: "Rare", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"] },
   { name: "Earth", rarity: "Rare", variants: ["Base", "Gold", "Gummy", "Galaxy", "Cube"] },
-  { name: "Fire", rarity: "Rare", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"] },
+  { name: "Fire", rarity: "Rare", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil", "Cube"] },
   { name: "Duck", rarity: "Epic", variants: ["Base", "Gold", "Gummy", "Galaxy"] },
   { name: "Ghost", rarity: "Epic", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"] },
   { name: "Dream", rarity: "Legendary", variants: ["Base", "Gold", "Gummy", "Galaxy", "Cube"] },
@@ -33,6 +33,10 @@ const SPRITES: SpriteFamily[] = [
 
 const TOTAL = SPRITES.reduce((sum, sprite) => sum + sprite.variants.length, 0);
 const keyFor = (name: string, variant: Variant) => `${name}::${variant}`;
+const imageFor = (name: string, variant: Variant) => {
+  const slug = name.toLowerCase().replace(/\./g, "").replace(/\s+/g, "-");
+  return `/sprites/${slug}-${variant.toLowerCase()}-256.webp`;
+};
 
 function ProgressRing({ value, label, tone }: { value: number; label: string; tone: "green" | "gold" }) {
   const percent = Math.round((value / TOTAL) * 100);
@@ -104,12 +108,7 @@ export default function Home() {
           <a className="brand" href="#top" aria-label="Sprite Locker home"><span>SL</span> Sprite Locker</a>
           <a className="source-link" href="https://fortnite.gg/sprites" target="_blank" rel="noreferrer">Live Sprite source ↗</a>
         </nav>
-        <div className="hero-copy" id="top">
-          <div>
-            <p className="eyebrow">FORTNITE · CHAPTER 7 SEASON 3</p>
-            <h1>Your Sprite hunt,<br /><em>all in one place.</em></h1>
-            <p className="intro">Track every available variant. Your checks save automatically on this device—no sign-in needed.</p>
-          </div>
+        <div className="hero-progress" id="top">
           <div className="progress-panel" aria-label="Collection progress">
             <ProgressRing value={counts.acquired} label="Acquired" tone="green" />
             <ProgressRing value={counts.mastered} label="Mastered" tone="gold" />
@@ -159,9 +158,13 @@ export default function Home() {
                   return (
                     <article className={`sprite-card ${state.mastered ? "is-mastered" : state.acquired ? "is-acquired" : ""}`} key={variant}>
                       <div className={`sprite-art ${variant.toLowerCase()}`}>
-                        <span className="ear left" /><span className="ear right" />
-                        <span className="eye left" /><span className="eye right" />
-                        <b>{sprite.name.split(" ").map((part) => part[0]).join("").slice(0, 2)}</b>
+                        <img
+                          src={imageFor(sprite.name, variant)}
+                          alt={`${variant === "Base" ? "" : `${variant} `}${sprite.name} Sprite`}
+                          width="256"
+                          height="256"
+                          loading="lazy"
+                        />
                       </div>
                       <h4>{variant}</h4>
                       <label className="check acquired-check">
