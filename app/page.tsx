@@ -105,7 +105,9 @@ export default function Home() {
     <main>
       <header className="hero">
         <nav>
-          <a className="brand" href="#top" aria-label="Sprite Locker home"><span>SL</span> Sprite Locker</a>
+          <a className="brand" href="#top" aria-label="Fortnite Sprite Locker home">
+            <img src="/fortnite-sprite-locker-logo.png" alt="Fortnite Sprite Locker" width="2016" height="1016" />
+          </a>
           <a className="source-link" href="https://fortnite.gg/sprites" target="_blank" rel="noreferrer">Live Sprite source ↗</a>
         </nav>
         <div className="hero-progress" id="top">
@@ -113,15 +115,12 @@ export default function Home() {
             <ProgressRing value={counts.acquired} label="Acquired" tone="green" />
             <ProgressRing value={counts.mastered} label="Mastered" tone="gold" />
           </div>
+          <p className="update-stamp">UPDATED JULY 25, 2026 · PATCH V41.20</p>
         </div>
       </header>
 
       <section className="tracker" aria-label="Sprite checklist">
         <div className="tracker-head">
-          <div>
-            <p className="eyebrow">UPDATED JULY 25, 2026 · PATCH V41.20</p>
-            <h2>91 variants. How many are yours?</h2>
-          </div>
           <label className="search">
             <span>⌕</span>
             <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Find a Sprite…" aria-label="Find a Sprite" />
@@ -191,7 +190,7 @@ export default function Home() {
       </aside>
 
       <footer>
-        <span>SPRITE LOCKER · FAN-MADE CHECKLIST</span>
+        <span>FORTNITE SPRITE LOCKER · FAN-MADE CHECKLIST</span>
         <p>Not affiliated with or endorsed by Epic Games. Fortnite is a trademark of Epic Games, Inc.</p>
       </footer>
     </main>
