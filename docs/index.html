@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a3d30" />
+    <meta name="description" content="A mobile-first checklist for all 91 currently available Fortnite Sprite variants." />
+    <meta property="og:title" content="Fortnite Sprite Locker" />
+    <meta property="og:description" content="Track all 91 available Sprite variants—acquired and mastered." />
+    <meta property="og:image" content="og.png" />
+    <title>Fortnite Sprite Locker — Sprite Checklist</title>
+    <link rel="icon" href="favicon.svg" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <main>
+      <header class="hero">
+        <nav>
+          <a class="brand" href="#top" aria-label="Fortnite Sprite Locker home">
+            <img src="fortnite-sprite-locker-logo-transparent.png" alt="Fortnite Sprite Locker" width="1983" height="793" />
+          </a>
+          <a class="source-link" href="https://fortnite.gg/sprites" target="_blank" rel="noreferrer">Live Sprite source ↗</a>
+          <div class="header-status" id="top">
+            <div class="progress-panel" aria-label="Collection progress">
+              <div class="progress-unit">
+                <div class="ring green" id="acquired-ring"><span>0%</span></div>
+                <div><strong><span id="acquired-count">0</span><small> / 91</small></strong><span>Acquired</span></div>
+              </div>
+              <div class="progress-unit">
+                <div class="ring gold" id="mastered-ring"><span>0%</span></div>
+                <div><strong><span id="mastered-count">0</span><small> / 91</small></strong><span>Mastered</span></div>
+              </div>
+            </div>
+            <p class="update-stamp">UPDATED JULY 25, 2026 · PATCH V41.20</p>
+          </div>
+        </nav>
+      </header>
+
+      <section class="tracker" aria-label="Sprite checklist">
+        <div class="filters" role="group" aria-label="Filter checklist">
+          <button class="active" data-filter="all">All</button>
+          <button data-filter="missing">Missing</button>
+          <button data-filter="acquired">Acquired</button>
+          <button data-filter="mastered">Mastered</button>
+          <button class="reset" id="reset">Reset</button>
+          <label class="search">
+            <span>⌕</span>
+            <input id="search" placeholder="Find a Sprite…" aria-label="Find a Sprite" />
+          </label>
+        </div>
+
+        <div class="legend" aria-hidden="true">
+          <span><i class="dot acquired-dot"></i> Acquired</span>
+          <span><i class="dot mastered-dot"></i> Mastered</span>
+        </div>
+        <div class="sprite-list" id="sprite-list"></div>
+      </section>
+
+      <aside class="sync-note">
+        <span class="lock">⌁</span>
+        <div><strong>About Fortnite account sync</strong><p>Epic does not currently offer public access to a player’s Sprite collection, so automatic live syncing isn’t available. Your checklist stays private in this browser.</p></div>
+      </aside>
+
+      <footer>
+        <span>FORTNITE SPRITE LOCKER · FAN-MADE CHECKLIST</span>
+        <p>Not affiliated with or endorsed by Epic Games. Fortnite is a trademark of Epic Games, Inc.</p>
+      </footer>
+    </main>
+  </body>
+</html>
