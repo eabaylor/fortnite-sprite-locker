@@ -62,7 +62,15 @@ export default function Home() {
   useEffect(() => {
     try {
       const saved = localStorage.getItem("sprite-locker-progress");
-      if (saved) setProgress(JSON.parse(saved));
+      if (saved) {
+        const parsed = JSON.parse(saved) as Progress;
+        setProgress(Object.fromEntries(
+          Object.entries(parsed).map(([key, state]) => [
+            key,
+            state.mastered ? { ...state, acquired: true } : state,
+          ]),
+        ));
+      }
     } catch {}
     setReady(true);
   }, []);
@@ -106,27 +114,20 @@ export default function Home() {
       <header className="hero">
         <nav>
           <a className="brand" href="#top" aria-label="Fortnite Sprite Locker home">
-            <img src="/fortnite-sprite-locker-logo.png" alt="Fortnite Sprite Locker" width="2016" height="1016" />
+            <img src="/fortnite-sprite-locker-logo-transparent.png" alt="Fortnite Sprite Locker" width="1983" height="793" />
           </a>
           <a className="source-link" href="https://fortnite.gg/sprites" target="_blank" rel="noreferrer">Live Sprite source ↗</a>
-        </nav>
-        <div className="hero-progress" id="top">
-          <div className="progress-panel" aria-label="Collection progress">
-            <ProgressRing value={counts.acquired} label="Acquired" tone="green" />
-            <ProgressRing value={counts.mastered} label="Mastered" tone="gold" />
+          <div className="header-status" id="top">
+            <div className="progress-panel" aria-label="Collection progress">
+              <ProgressRing value={counts.acquired} label="Acquired" tone="green" />
+              <ProgressRing value={counts.mastered} label="Mastered" tone="gold" />
+            </div>
+            <p className="update-stamp">UPDATED JULY 25, 2026 · PATCH V41.20</p>
           </div>
-          <p className="update-stamp">UPDATED JULY 25, 2026 · PATCH V41.20</p>
-        </div>
+        </nav>
       </header>
 
       <section className="tracker" aria-label="Sprite checklist">
-        <div className="tracker-head">
-          <label className="search">
-            <span>⌕</span>
-            <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Find a Sprite…" aria-label="Find a Sprite" />
-          </label>
-        </div>
-
         <div className="filters" role="group" aria-label="Filter checklist">
           {(["all", "missing", "acquired", "mastered"] as Filter[]).map((item) => (
             <button key={item} className={filter === item ? "active" : ""} onClick={() => setFilter(item)}>
@@ -134,6 +135,10 @@ export default function Home() {
             </button>
           ))}
           <button className="reset" onClick={() => { if (confirm("Clear every checkmark?")) setProgress({}); }}>Reset</button>
+          <label className="search">
+            <span>⌕</span>
+            <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Find a Sprite…" aria-label="Find a Sprite" />
+          </label>
         </div>
 
         <div className="legend" aria-hidden="true">
@@ -167,12 +172,12 @@ export default function Home() {
                       </div>
                       <h4>{variant}</h4>
                       <label className="check acquired-check">
-                        <input type="checkbox" checked={state.acquired} onChange={() => toggle(sprite.name, variant, "acquired")} />
-                        <span>Acquired</span>
+                        <input type="checkbox" checked={state.acquired} onChange={() => toggle(sprite.name, variant, "acquired")} aria-label={`${sprite.name} ${variant} acquired`} />
+                        <span><span className="long-label">Acquired</span><span className="short-label">A</span></span>
                       </label>
                       <label className="check mastered-check">
-                        <input type="checkbox" checked={state.mastered} onChange={() => toggle(sprite.name, variant, "mastered")} />
-                        <span>Mastered</span>
+                        <input type="checkbox" checked={state.mastered} onChange={() => toggle(sprite.name, variant, "mastered")} aria-label={`${sprite.name} ${variant} mastered`} />
+                        <span><span className="long-label">Mastered</span><span className="short-label">M</span></span>
                       </label>
                     </article>
                   );
