@@ -1,8 +1,8 @@
 const SPRITES = [
   ["Batman", "Mythic", ["Base", "Gold", "Gummy", "Galaxy", "Holofoil", "Cube"]],
-  ["Water", "Rare", ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"]],
-  ["Earth", "Rare", ["Base", "Gold", "Gummy", "Galaxy", "Cube"]],
-  ["Fire", "Rare", ["Base", "Gold", "Gummy", "Galaxy", "Holofoil", "Cube"]],
+  ["Water", "Rare", ["Base", "Gold", "Gummy", "Galaxy", "Holofoil", "Quack"]],
+  ["Earth", "Rare", ["Base", "Gold", "Gummy", "Galaxy", "Cube", "Quack"]],
+  ["Fire", "Rare", ["Base", "Gold", "Gummy", "Galaxy", "Holofoil", "Cube", "Quack"]],
   ["Duck", "Epic", ["Base", "Gold", "Gummy", "Galaxy"]],
   ["Ghost", "Epic", ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"]],
   ["Dream", "Legendary", ["Base", "Gold", "Gummy", "Galaxy", "Cube"]],
@@ -11,15 +11,19 @@ const SPRITES = [
   ["King", "Epic", ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"]],
   ["Burnt Peanut", "Mythic", ["Base"]],
   ["Vini Jr.", "Mythic", ["Base"]],
-  ["Zero Point", "Mythic", ["Base", "Gold", "Gummy", "Galaxy"]],
+  ["Zero Point", "Mythic", ["Base", "Gold", "Gummy", "Galaxy", "Holofoil", "Cube", "Quack"]],
   ["Fishy", "Rare", ["Base", "Gold", "Gummy", "Galaxy", "Cube"]],
   ["Striker", "Legendary", ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"]],
   ["Aura", "Legendary", ["Base", "Gold", "Gummy", "Galaxy"]],
   ["Boss", "Legendary", ["Base", "Gold", "Gummy", "Galaxy", "Cube"]],
-  ["Grim", "Mythic", ["Base", "Gold", "Gummy", "Galaxy", "Cube"]],
+  ["Grim", "Mythic", ["Base", "Gold", "Gummy", "Galaxy", "Gem", "Holofoil", "Cube"]],
   ["Air", "Rare", ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"]],
   ["Seven", "Legendary", ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"]],
   ["Pollo", "Mythic", ["Base"]],
+  ["John Wick", "Mythic", ["Base"]],
+  ["Ironmouse", "Mythic", ["Base"]],
+  ["Llama", "Legendary", ["Base", "Gold", "Gummy", "Galaxy", "Gem"]],
+  ["Peely", "Legendary", ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"]],
 ];
 
 const TOTAL = SPRITES.reduce((sum, [, , variants]) => sum + variants.length, 0);
@@ -56,6 +60,9 @@ function updateCounts() {
     ring.style.setProperty("--progress", `${percent * 3.6}deg`);
     ring.querySelector("span").textContent = `${percent}%`;
   }
+  document.querySelectorAll(".total-count").forEach((node) => {
+    node.textContent = TOTAL;
+  });
 }
 
 function render() {

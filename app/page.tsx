@@ -2,16 +2,16 @@
 
 import { useEffect, useMemo, useState } from "react";
 
-type Variant = "Base" | "Gold" | "Gummy" | "Galaxy" | "Holofoil" | "Cube";
+type Variant = "Base" | "Gold" | "Gummy" | "Galaxy" | "Gem" | "Holofoil" | "Cube" | "Quack";
 type SpriteFamily = { name: string; rarity: string; variants: Variant[] };
 type Progress = Record<string, { acquired: boolean; mastered: boolean }>;
 type Filter = "all" | "missing" | "acquired" | "mastered";
 
 const SPRITES: SpriteFamily[] = [
   { name: "Batman", rarity: "Mythic", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil", "Cube"] },
-  { name: "Water", rarity: "Rare", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"] },
-  { name: "Earth", rarity: "Rare", variants: ["Base", "Gold", "Gummy", "Galaxy", "Cube"] },
-  { name: "Fire", rarity: "Rare", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil", "Cube"] },
+  { name: "Water", rarity: "Rare", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil", "Quack"] },
+  { name: "Earth", rarity: "Rare", variants: ["Base", "Gold", "Gummy", "Galaxy", "Cube", "Quack"] },
+  { name: "Fire", rarity: "Rare", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil", "Cube", "Quack"] },
   { name: "Duck", rarity: "Epic", variants: ["Base", "Gold", "Gummy", "Galaxy"] },
   { name: "Ghost", rarity: "Epic", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"] },
   { name: "Dream", rarity: "Legendary", variants: ["Base", "Gold", "Gummy", "Galaxy", "Cube"] },
@@ -20,15 +20,19 @@ const SPRITES: SpriteFamily[] = [
   { name: "King", rarity: "Epic", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"] },
   { name: "Burnt Peanut", rarity: "Mythic", variants: ["Base"] },
   { name: "Vini Jr.", rarity: "Mythic", variants: ["Base"] },
-  { name: "Zero Point", rarity: "Mythic", variants: ["Base", "Gold", "Gummy", "Galaxy"] },
+  { name: "Zero Point", rarity: "Mythic", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil", "Cube", "Quack"] },
   { name: "Fishy", rarity: "Rare", variants: ["Base", "Gold", "Gummy", "Galaxy", "Cube"] },
   { name: "Striker", rarity: "Legendary", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"] },
   { name: "Aura", rarity: "Legendary", variants: ["Base", "Gold", "Gummy", "Galaxy"] },
   { name: "Boss", rarity: "Legendary", variants: ["Base", "Gold", "Gummy", "Galaxy", "Cube"] },
-  { name: "Grim", rarity: "Mythic", variants: ["Base", "Gold", "Gummy", "Galaxy", "Cube"] },
+  { name: "Grim", rarity: "Mythic", variants: ["Base", "Gold", "Gummy", "Galaxy", "Gem", "Holofoil", "Cube"] },
   { name: "Air", rarity: "Rare", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"] },
   { name: "Seven", rarity: "Legendary", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"] },
   { name: "Pollo", rarity: "Mythic", variants: ["Base"] },
+  { name: "John Wick", rarity: "Mythic", variants: ["Base"] },
+  { name: "Ironmouse", rarity: "Mythic", variants: ["Base"] },
+  { name: "Llama", rarity: "Legendary", variants: ["Base", "Gold", "Gummy", "Galaxy", "Gem"] },
+  { name: "Peely", rarity: "Legendary", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"] },
 ];
 
 const TOTAL = SPRITES.reduce((sum, sprite) => sum + sprite.variants.length, 0);
@@ -122,7 +126,7 @@ export default function Home() {
               <ProgressRing value={counts.acquired} label="Acquired" tone="green" />
               <ProgressRing value={counts.mastered} label="Mastered" tone="gold" />
             </div>
-            <p className="update-stamp">UPDATED JULY 25, 2026 · PATCH V41.20</p>
+            <p className="update-stamp">UPDATED JULY 30, 2026 · PATCH V41.30</p>
           </div>
         </nav>
       </header>
