@@ -25,12 +25,11 @@ const SPRITES: SpriteFamily[] = [
   { name: "Striker", rarity: "Legendary", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"] },
   { name: "Aura", rarity: "Legendary", variants: ["Base", "Gold", "Gummy", "Galaxy"] },
   { name: "Boss", rarity: "Legendary", variants: ["Base", "Gold", "Gummy", "Galaxy", "Cube"] },
-  { name: "Grim", rarity: "Mythic", variants: ["Base", "Gold", "Gummy", "Galaxy", "Gem", "Holofoil", "Cube"] },
+  { name: "Grim", rarity: "Mythic", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil", "Cube"] },
   { name: "Air", rarity: "Rare", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"] },
   { name: "Seven", rarity: "Legendary", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"] },
   { name: "Pollo", rarity: "Mythic", variants: ["Base"] },
   { name: "John Wick", rarity: "Mythic", variants: ["Base"] },
-  { name: "Ironmouse", rarity: "Mythic", variants: ["Base"] },
   { name: "Llama", rarity: "Legendary", variants: ["Base", "Gold", "Gummy", "Galaxy", "Gem"] },
   { name: "Peely", rarity: "Legendary", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"] },
 ];
@@ -126,7 +125,7 @@ export default function Home() {
               <ProgressRing value={counts.acquired} label="Acquired" tone="green" />
               <ProgressRing value={counts.mastered} label="Mastered" tone="gold" />
             </div>
-            <p className="update-stamp">UPDATED JULY 30, 2026 · PATCH V41.30</p>
+            <p className="update-stamp">UPDATED JULY 31, 2026 · PATCH V41.30</p>
           </div>
         </nav>
       </header>

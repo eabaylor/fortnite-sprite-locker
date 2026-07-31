@@ -16,12 +16,11 @@ const SPRITES = [
   ["Striker", "Legendary", ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"]],
   ["Aura", "Legendary", ["Base", "Gold", "Gummy", "Galaxy"]],
   ["Boss", "Legendary", ["Base", "Gold", "Gummy", "Galaxy", "Cube"]],
-  ["Grim", "Mythic", ["Base", "Gold", "Gummy", "Galaxy", "Gem", "Holofoil", "Cube"]],
+  ["Grim", "Mythic", ["Base", "Gold", "Gummy", "Galaxy", "Holofoil", "Cube"]],
   ["Air", "Rare", ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"]],
   ["Seven", "Legendary", ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"]],
   ["Pollo", "Mythic", ["Base"]],
   ["John Wick", "Mythic", ["Base"]],
-  ["Ironmouse", "Mythic", ["Base"]],
   ["Llama", "Legendary", ["Base", "Gold", "Gummy", "Galaxy", "Gem"]],
   ["Peely", "Legendary", ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"]],
 ];
