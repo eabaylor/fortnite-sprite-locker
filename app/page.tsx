@@ -5,7 +5,15 @@ import { useEffect, useMemo, useState } from "react";
 type Variant = "Base" | "Gold" | "Gummy" | "Galaxy" | "Gem" | "Holofoil" | "Cube" | "Quack";
 type SpriteFamily = { name: string; rarity: string; variants: Variant[] };
 type Progress = Record<string, { acquired: boolean; mastered: boolean }>;
-type Filter = "all" | "missing" | "acquired" | "mastered";
+type Filter = "all" | "missing" | "acquired" | "acquired-unmastered" | "mastered";
+
+const FILTERS: { value: Filter; label: string }[] = [
+  { value: "all", label: "All" },
+  { value: "missing", label: "Missing" },
+  { value: "acquired", label: "Acquired" },
+  { value: "acquired-unmastered", label: "Acquired / Not Mastered" },
+  { value: "mastered", label: "Mastered" },
+];
 
 const SPRITES: SpriteFamily[] = [
   { name: "Batman", rarity: "Mythic", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil", "Cube"] },
@@ -59,6 +67,7 @@ function ProgressRing({ value, label, tone }: { value: number; label: string; to
 export default function Home() {
   const [progress, setProgress] = useState<Progress>({});
   const [filter, setFilter] = useState<Filter>("all");
+  const [spriteFilter, setSpriteFilter] = useState("all");
   const [query, setQuery] = useState("");
   const [ready, setReady] = useState(false);
 
@@ -96,10 +105,15 @@ export default function Home() {
       const state = progress[keyFor(sprite.name, variant)] ?? { acquired: false, mastered: false };
       if (filter === "missing") return !state.acquired;
       if (filter === "acquired") return state.acquired;
+      if (filter === "acquired-unmastered") return state.acquired && !state.mastered;
       if (filter === "mastered") return state.mastered;
       return true;
     }),
-  })).filter((sprite) => sprite.variants.length && sprite.name.toLowerCase().includes(query.toLowerCase())), [filter, progress, query]);
+  })).filter((sprite) => (
+    sprite.variants.length
+    && (spriteFilter === "all" || sprite.name === spriteFilter)
+    && sprite.name.toLowerCase().includes(query.toLowerCase())
+  )), [filter, progress, query, spriteFilter]);
 
   function toggle(name: string, variant: Variant, field: "acquired" | "mastered") {
     const key = keyFor(name, variant);
@@ -125,18 +139,25 @@ export default function Home() {
               <ProgressRing value={counts.acquired} label="Acquired" tone="green" />
               <ProgressRing value={counts.mastered} label="Mastered" tone="gold" />
             </div>
-            <p className="update-stamp">UPDATED JULY 31, 2026 · PATCH V41.30</p>
+            <p className="update-stamp">UPDATED AUGUST 1, 2026 · PATCH V41.30</p>
           </div>
         </nav>
       </header>
 
       <section className="tracker" aria-label="Sprite checklist">
         <div className="filters" role="group" aria-label="Filter checklist">
-          {(["all", "missing", "acquired", "mastered"] as Filter[]).map((item) => (
-            <button key={item} className={filter === item ? "active" : ""} onClick={() => setFilter(item)}>
-              {item[0].toUpperCase() + item.slice(1)}
+          {FILTERS.map((item) => (
+            <button key={item.value} className={filter === item.value ? "active" : ""} onClick={() => setFilter(item.value)}>
+              {item.label}
             </button>
           ))}
+          <label className="sprite-filter">
+            <span>Sprite</span>
+            <select value={spriteFilter} onChange={(event) => setSpriteFilter(event.target.value)} aria-label="Filter by Sprite">
+              <option value="all">All Sprites</option>
+              {SPRITES.map((sprite) => <option key={sprite.name} value={sprite.name}>{sprite.name}</option>)}
+            </select>
+          </label>
           <button className="reset" onClick={() => { if (confirm("Clear every checkmark?")) setProgress({}); }}>Reset</button>
           <label className="search">
             <span>⌕</span>

@@ -28,6 +28,7 @@ const SPRITES = [
 const TOTAL = SPRITES.reduce((sum, [, , variants]) => sum + variants.length, 0);
 const STORAGE_KEY = "sprite-locker-progress";
 let filter = "all";
+let spriteFilter = "all";
 let query = "";
 let progress = {};
 
@@ -70,11 +71,13 @@ function render() {
   let shown = 0;
 
   for (const [name, rarity, variants] of SPRITES) {
+    if (spriteFilter !== "all" && name !== spriteFilter) continue;
     if (!name.toLowerCase().includes(query.toLowerCase())) continue;
     const visibleVariants = variants.filter((variant) => {
       const state = stateFor(name, variant);
       if (filter === "missing") return !state.acquired;
       if (filter === "acquired") return state.acquired;
+      if (filter === "acquired-unmastered") return state.acquired && !state.mastered;
       if (filter === "mastered") return state.mastered;
       return true;
     });
@@ -133,6 +136,18 @@ document.querySelector(".filters").addEventListener("click", (event) => {
 
 document.querySelector("#search").addEventListener("input", (event) => {
   query = event.target.value;
+  render();
+});
+
+const spriteSelect = document.querySelector("#sprite-filter");
+for (const [name] of SPRITES) {
+  const option = document.createElement("option");
+  option.value = name;
+  option.textContent = name;
+  spriteSelect.append(option);
+}
+spriteSelect.addEventListener("change", (event) => {
+  spriteFilter = event.target.value;
   render();
 });
 

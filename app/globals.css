@@ -14,7 +14,7 @@
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; background: var(--cream); }
 body { margin: 0; color: var(--ink); background: var(--cream); font-family: var(--font-body), sans-serif; }
-button, input { font: inherit; }
+button, input, select { font: inherit; }
 a { color: inherit; }
 
 .hero {
@@ -60,6 +60,9 @@ h2 { margin-bottom: 0; font-family: var(--font-display), sans-serif; text-transf
 .filters { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0 0 10px; }
 .filters button { white-space: nowrap; cursor: pointer; border: 1px solid #c8d0c8; background: transparent; color: var(--ink); border-radius: 999px; padding: 7px 12px; font-weight: 700; font-size: 12px; }
 .filters button.active { background: var(--ink); border-color: var(--ink); color: white; }
+.sprite-filter { display: flex; align-items: center; gap: 5px; border: 1px solid #c8d0c8; border-radius: 999px; padding: 0 9px; color: var(--ink); font-size: 11px; font-weight: 800; }
+.sprite-filter span { color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+.sprite-filter select { max-width: 145px; min-height: 30px; border: 0; outline: 0; color: var(--ink); background: transparent; cursor: pointer; font-weight: 700; }
 .filters .reset { margin-left: auto; color: #8c554d; border-color: #d7bbb5; }
 .legend { display: flex; gap: 18px; align-items: center; padding: 10px 2px 16px; color: var(--muted); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
 .legend span { display: flex; align-items: center; gap: 6px; }
@@ -120,6 +123,8 @@ footer p { margin: 0; text-align: right; }
   .tracker { padding: 6px 7px 10px; }
   .filters { gap: 4px; margin-bottom: 7px; }
   .filters button { padding: 6px 7px; font-size: 10px; }
+  .sprite-filter { gap: 3px; padding: 0 6px; font-size: 9px; }
+  .sprite-filter select { max-width: 98px; min-height: 27px; font-size: 10px; }
   .filters .reset { margin-left: 0; }
   .search { flex: 1 1 72px; min-width: 72px; max-width: none; gap: 3px; padding: 4px 1px; }
   .search span { font-size: 16px; }
