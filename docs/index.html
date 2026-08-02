@@ -11,7 +11,7 @@
     <title>Fortnite Sprite Locker — Sprite Checklist</title>
     <link rel="icon" href="favicon.svg" />
     <link rel="stylesheet" href="styles.css" />
-    <script src="app.js?v=20260801-1" defer></script>
+    <script src="app.js?v=20260801-2" defer></script>
   </head>
   <body>
     <main>
@@ -44,12 +44,18 @@
           <button data-filter="acquired">Acquired</button>
           <button data-filter="acquired-unmastered">Acquired / Not Mastered</button>
           <button data-filter="mastered">Mastered</button>
-          <label class="sprite-filter">
-            <span>Sprite</span>
-            <select id="sprite-filter" aria-label="Filter by Sprite">
-              <option value="all">All Sprites</option>
-            </select>
-          </label>
+          <details class="multi-filter sprite-filter">
+            <summary><span>Sprites</span><strong id="sprite-filter-label">All</strong></summary>
+            <div class="filter-menu" id="sprite-filter-menu" role="group" aria-label="Filter by Sprites">
+              <button type="button" class="filter-menu-clear" data-clear-selection>Show all</button>
+            </div>
+          </details>
+          <details class="multi-filter variant-filter">
+            <summary><span>Variants</span><strong id="variant-filter-label">All</strong></summary>
+            <div class="filter-menu" id="variant-filter-menu" role="group" aria-label="Filter by Variants">
+              <button type="button" class="filter-menu-clear" data-clear-selection>Show all</button>
+            </div>
+          </details>
           <button class="reset" id="reset">Reset</button>
           <label class="search">
             <span>⌕</span>

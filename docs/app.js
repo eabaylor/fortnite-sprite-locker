@@ -28,7 +28,8 @@ const SPRITES = [
 const TOTAL = SPRITES.reduce((sum, [, , variants]) => sum + variants.length, 0);
 const STORAGE_KEY = "sprite-locker-progress";
 let filter = "all";
-let spriteFilter = "all";
+const selectedSprites = new Set();
+const selectedVariants = new Set();
 let query = "";
 let progress = {};
 
@@ -71,9 +72,10 @@ function render() {
   let shown = 0;
 
   for (const [name, rarity, variants] of SPRITES) {
-    if (spriteFilter !== "all" && name !== spriteFilter) continue;
+    if (selectedSprites.size && !selectedSprites.has(name)) continue;
     if (!name.toLowerCase().includes(query.toLowerCase())) continue;
     const visibleVariants = variants.filter((variant) => {
+      if (selectedVariants.size && !selectedVariants.has(variant)) return false;
       const state = stateFor(name, variant);
       if (filter === "missing") return !state.acquired;
       if (filter === "acquired") return state.acquired;
@@ -139,17 +141,39 @@ document.querySelector("#search").addEventListener("input", (event) => {
   render();
 });
 
-const spriteSelect = document.querySelector("#sprite-filter");
-for (const [name] of SPRITES) {
-  const option = document.createElement("option");
-  option.value = name;
-  option.textContent = name;
-  spriteSelect.append(option);
+function setupMultiFilter(menuId, labelId, items, selected) {
+  const menu = document.querySelector(`#${menuId}`);
+  const label = document.querySelector(`#${labelId}`);
+
+  for (const item of items) {
+    const option = document.createElement("label");
+    option.innerHTML = `<input type="checkbox" value="${item}" /><span>${item}</span>`;
+    menu.append(option);
+  }
+
+  const updateLabel = () => {
+    label.textContent = selected.size === 0 ? "All" : selected.size === 1 ? [...selected][0] : `${selected.size} selected`;
+  };
+
+  menu.addEventListener("change", (event) => {
+    const input = event.target.closest("input[type=checkbox]");
+    if (!input) return;
+    if (input.checked) selected.add(input.value);
+    else selected.delete(input.value);
+    updateLabel();
+    render();
+  });
+
+  menu.querySelector("[data-clear-selection]").addEventListener("click", () => {
+    selected.clear();
+    menu.querySelectorAll("input[type=checkbox]").forEach((input) => { input.checked = false; });
+    updateLabel();
+    render();
+  });
 }
-spriteSelect.addEventListener("change", (event) => {
-  spriteFilter = event.target.value;
-  render();
-});
+
+setupMultiFilter("sprite-filter-menu", "sprite-filter-label", SPRITES.map(([name]) => name), selectedSprites);
+setupMultiFilter("variant-filter-menu", "variant-filter-label", ["Base", "Gold", "Gummy", "Galaxy", "Gem", "Holofoil", "Cube", "Quack"], selectedVariants);
 
 document.querySelector("#reset").addEventListener("click", () => {
   if (!confirm("Clear every checkmark?")) return;

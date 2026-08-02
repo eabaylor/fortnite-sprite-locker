@@ -64,10 +64,43 @@ function ProgressRing({ value, label, tone }: { value: number; label: string; to
   );
 }
 
+function MultiSelectFilter({
+  label,
+  items,
+  selected,
+  onToggle,
+  onClear,
+  className = "",
+}: {
+  label: string;
+  items: readonly string[];
+  selected: readonly string[];
+  onToggle: (item: string) => void;
+  onClear: () => void;
+  className?: string;
+}) {
+  const summary = selected.length === 0 ? "All" : selected.length === 1 ? selected[0] : `${selected.length} selected`;
+  return (
+    <details className={`multi-filter ${className}`}>
+      <summary><span>{label}</span><strong>{summary}</strong></summary>
+      <div className="filter-menu" role="group" aria-label={`Filter by ${label}`}>
+        <button type="button" className="filter-menu-clear" onClick={onClear}>Show all</button>
+        {items.map((item) => (
+          <label key={item}>
+            <input type="checkbox" checked={selected.includes(item)} onChange={() => onToggle(item)} />
+            <span>{item}</span>
+          </label>
+        ))}
+      </div>
+    </details>
+  );
+}
+
 export default function Home() {
   const [progress, setProgress] = useState<Progress>({});
   const [filter, setFilter] = useState<Filter>("all");
-  const [spriteFilter, setSpriteFilter] = useState("all");
+  const [selectedSprites, setSelectedSprites] = useState<string[]>([]);
+  const [selectedVariants, setSelectedVariants] = useState<Variant[]>([]);
   const [query, setQuery] = useState("");
   const [ready, setReady] = useState(false);
 
@@ -102,6 +135,7 @@ export default function Home() {
   const visible = useMemo(() => SPRITES.map((sprite) => ({
     ...sprite,
     variants: sprite.variants.filter((variant) => {
+      if (selectedVariants.length && !selectedVariants.includes(variant)) return false;
       const state = progress[keyFor(sprite.name, variant)] ?? { acquired: false, mastered: false };
       if (filter === "missing") return !state.acquired;
       if (filter === "acquired") return state.acquired;
@@ -111,9 +145,18 @@ export default function Home() {
     }),
   })).filter((sprite) => (
     sprite.variants.length
-    && (spriteFilter === "all" || sprite.name === spriteFilter)
+    && (!selectedSprites.length || selectedSprites.includes(sprite.name))
     && sprite.name.toLowerCase().includes(query.toLowerCase())
-  )), [filter, progress, query, spriteFilter]);
+  )), [filter, progress, query, selectedSprites, selectedVariants]);
+
+  function toggleSpriteFilter(name: string) {
+    setSelectedSprites((current) => current.includes(name) ? current.filter((item) => item !== name) : [...current, name]);
+  }
+
+  function toggleVariantFilter(variant: string) {
+    const typedVariant = variant as Variant;
+    setSelectedVariants((current) => current.includes(typedVariant) ? current.filter((item) => item !== typedVariant) : [...current, typedVariant]);
+  }
 
   function toggle(name: string, variant: Variant, field: "acquired" | "mastered") {
     const key = keyFor(name, variant);
@@ -151,13 +194,22 @@ export default function Home() {
               {item.label}
             </button>
           ))}
-          <label className="sprite-filter">
-            <span>Sprite</span>
-            <select value={spriteFilter} onChange={(event) => setSpriteFilter(event.target.value)} aria-label="Filter by Sprite">
-              <option value="all">All Sprites</option>
-              {SPRITES.map((sprite) => <option key={sprite.name} value={sprite.name}>{sprite.name}</option>)}
-            </select>
-          </label>
+          <MultiSelectFilter
+            label="Sprites"
+            items={SPRITES.map((sprite) => sprite.name)}
+            selected={selectedSprites}
+            onToggle={toggleSpriteFilter}
+            onClear={() => setSelectedSprites([])}
+            className="sprite-filter"
+          />
+          <MultiSelectFilter
+            label="Variants"
+            items={["Base", "Gold", "Gummy", "Galaxy", "Gem", "Holofoil", "Cube", "Quack"]}
+            selected={selectedVariants}
+            onToggle={toggleVariantFilter}
+            onClear={() => setSelectedVariants([])}
+            className="variant-filter"
+          />
           <button className="reset" onClick={() => { if (confirm("Clear every checkmark?")) setProgress({}); }}>Reset</button>
           <label className="search">
             <span>⌕</span>
