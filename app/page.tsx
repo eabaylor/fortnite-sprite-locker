@@ -217,12 +217,6 @@ export default function Home() {
           </label>
         </div>
 
-        <div className="legend" aria-hidden="true">
-          <span><i className="dot acquired-dot" /> Acquired</span>
-          <span><i className="dot mastered-dot" /> Mastered</span>
-          <span className="swipe">Swipe rows to see more →</span>
-        </div>
-
         <div className="sprite-list">
           {visible.map((sprite) => (
             <section className="sprite-row" key={sprite.name}>
