@@ -36,6 +36,7 @@ const SPRITES: SpriteFamily[] = [
   { name: "Grim", rarity: "Mythic", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil", "Cube"] },
   { name: "Air", rarity: "Rare", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"] },
   { name: "Seven", rarity: "Legendary", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"] },
+  { name: "Ironmouse", rarity: "Mythic", variants: ["Base"] },
   { name: "Pollo", rarity: "Mythic", variants: ["Base"] },
   { name: "John Wick", rarity: "Mythic", variants: ["Base"] },
   { name: "Llama", rarity: "Legendary", variants: ["Base", "Gold", "Gummy", "Galaxy", "Gem"] },
@@ -182,7 +183,7 @@ export default function Home() {
               <ProgressRing value={counts.acquired} label="Acquired" tone="green" />
               <ProgressRing value={counts.mastered} label="Mastered" tone="gold" />
             </div>
-            <p className="update-stamp">UPDATED AUGUST 1, 2026 · PATCH V41.30</p>
+            <p className="update-stamp">UPDATED AUGUST 4, 2026 · PATCH V41.30</p>
           </div>
         </nav>
       </header>
