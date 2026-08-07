@@ -17,23 +17,23 @@ const FILTERS: { value: Filter; label: string }[] = [
 
 const SPRITES: SpriteFamily[] = [
   { name: "Batman", rarity: "Mythic", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil", "Cube"] },
-  { name: "Water", rarity: "Rare", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil", "Quack"] },
-  { name: "Earth", rarity: "Rare", variants: ["Base", "Gold", "Gummy", "Galaxy", "Cube", "Quack"] },
+  { name: "Water", rarity: "Rare", variants: ["Base", "Gold", "Gummy", "Galaxy", "Gem", "Holofoil", "Quack"] },
+  { name: "Earth", rarity: "Rare", variants: ["Base", "Gold", "Gummy", "Galaxy", "Gem", "Cube", "Quack"] },
   { name: "Fire", rarity: "Rare", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil", "Cube", "Quack"] },
-  { name: "Duck", rarity: "Epic", variants: ["Base", "Gold", "Gummy", "Galaxy"] },
+  { name: "Duck", rarity: "Epic", variants: ["Base", "Gold", "Gummy", "Galaxy", "Gem"] },
   { name: "Ghost", rarity: "Epic", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"] },
   { name: "Dream", rarity: "Legendary", variants: ["Base", "Gold", "Gummy", "Galaxy", "Cube"] },
-  { name: "Demon", rarity: "Epic", variants: ["Base", "Gold", "Gummy", "Galaxy"] },
+  { name: "Demon", rarity: "Epic", variants: ["Base", "Gold", "Gummy", "Galaxy", "Gem"] },
   { name: "Punk", rarity: "Legendary", variants: ["Base", "Gold", "Gummy", "Galaxy", "Cube"] },
   { name: "King", rarity: "Epic", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"] },
   { name: "Burnt Peanut", rarity: "Mythic", variants: ["Base"] },
   { name: "Vini Jr.", rarity: "Mythic", variants: ["Base"] },
-  { name: "Zero Point", rarity: "Mythic", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil", "Cube", "Quack"] },
+  { name: "Zero Point", rarity: "Mythic", variants: ["Base", "Gold", "Gummy", "Galaxy", "Gem", "Holofoil", "Cube", "Quack"] },
   { name: "Fishy", rarity: "Rare", variants: ["Base", "Gold", "Gummy", "Galaxy", "Cube"] },
   { name: "Striker", rarity: "Legendary", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"] },
-  { name: "Aura", rarity: "Legendary", variants: ["Base", "Gold", "Gummy", "Galaxy"] },
+  { name: "Aura", rarity: "Legendary", variants: ["Base", "Gold", "Gummy", "Galaxy", "Gem"] },
   { name: "Boss", rarity: "Legendary", variants: ["Base", "Gold", "Gummy", "Galaxy", "Cube"] },
-  { name: "Grim", rarity: "Mythic", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil", "Cube"] },
+  { name: "Grim", rarity: "Mythic", variants: ["Base", "Gold", "Gummy", "Galaxy", "Gem", "Holofoil", "Cube"] },
   { name: "Air", rarity: "Rare", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"] },
   { name: "Seven", rarity: "Legendary", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"] },
   { name: "Ironmouse", rarity: "Mythic", variants: ["Base"] },
@@ -183,7 +183,7 @@ export default function Home() {
               <ProgressRing value={counts.acquired} label="Acquired" tone="green" />
               <ProgressRing value={counts.mastered} label="Mastered" tone="gold" />
             </div>
-            <p className="update-stamp">UPDATED AUGUST 4, 2026 · PATCH V41.30</p>
+            <p className="update-stamp">UPDATED AUGUST 7, 2026 · PATCH V41.30</p>
           </div>
         </nav>
       </header>
