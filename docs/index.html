@@ -11,7 +11,7 @@
     <title>Fortnite Sprite Locker — Sprite Checklist</title>
     <link rel="icon" href="favicon.svg" />
     <link rel="stylesheet" href="styles.css" />
-    <script src="app.js?v=20260807-1" defer></script>
+    <script src="app.js?v=20260810-1" defer></script>
   </head>
   <body>
     <main>
@@ -39,11 +39,17 @@
 
       <section class="tracker" aria-label="Sprite checklist">
         <div class="filters" role="group" aria-label="Filter checklist">
-          <button class="active" data-filter="all">All</button>
-          <button data-filter="missing">Missing</button>
-          <button data-filter="acquired">Acquired</button>
-          <button data-filter="acquired-unmastered">Acquired / Not Mastered</button>
-          <button data-filter="mastered">Mastered</button>
+          <label class="select-filter status-filter">
+            <span>Status</span>
+            <select id="status-filter" aria-label="Filter checklist by collection status">
+              <option value="missing" selected>Missing</option>
+              <option value="not-mastered">Not Mastered</option>
+              <option value="acquired">Acquired</option>
+              <option value="acquired-unmastered">Acquired / Not Mastered</option>
+              <option value="mastered">Mastered</option>
+              <option value="all">All</option>
+            </select>
+          </label>
           <details class="multi-filter sprite-filter">
             <summary><span>Sprites</span><strong id="sprite-filter-label">All</strong></summary>
             <div class="filter-menu" id="sprite-filter-menu" role="group" aria-label="Filter by Sprites">

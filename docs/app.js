@@ -28,7 +28,7 @@ const SPRITES = [
 
 const TOTAL = SPRITES.reduce((sum, [, , variants]) => sum + variants.length, 0);
 const STORAGE_KEY = "sprite-locker-progress";
-let filter = "all";
+let filter = "missing";
 const selectedSprites = new Set();
 const selectedVariants = new Set();
 let query = "";
@@ -79,6 +79,7 @@ function render() {
       if (selectedVariants.size && !selectedVariants.has(variant)) return false;
       const state = stateFor(name, variant);
       if (filter === "missing") return !state.acquired;
+      if (filter === "not-mastered") return !state.mastered;
       if (filter === "acquired") return state.acquired;
       if (filter === "acquired-unmastered") return state.acquired && !state.mastered;
       if (filter === "mastered") return state.mastered;
@@ -129,11 +130,8 @@ function render() {
   updateCounts();
 }
 
-document.querySelector(".filters").addEventListener("click", (event) => {
-  const button = event.target.closest("[data-filter]");
-  if (!button) return;
-  filter = button.dataset.filter;
-  document.querySelectorAll("[data-filter]").forEach((item) => item.classList.toggle("active", item === button));
+document.querySelector("#status-filter").addEventListener("change", (event) => {
+  filter = event.target.value;
   render();
 });
 

@@ -60,6 +60,10 @@ h2 { margin-bottom: 0; font-family: var(--font-display), sans-serif; text-transf
 .filters { position: relative; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0 0 10px; }
 .filters button { white-space: nowrap; cursor: pointer; border: 1px solid #c8d0c8; background: transparent; color: var(--ink); border-radius: 999px; padding: 7px 12px; font-weight: 700; font-size: 12px; }
 .filters button.active { background: var(--ink); border-color: var(--ink); color: white; }
+.select-filter { min-height: 32px; display: flex; align-items: center; gap: 5px; border: 1px solid #c8d0c8; border-radius: 999px; padding: 0 8px 0 10px; color: var(--ink); background: var(--cream); }
+.select-filter > span { color: var(--muted); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; }
+.select-filter select { min-width: 112px; border: 0; outline: none; color: var(--ink); background: transparent; font-size: 11px; font-weight: 800; cursor: pointer; }
+.select-filter:focus-within { border-color: var(--ink); box-shadow: 0 0 0 1px var(--ink); }
 .multi-filter { position: relative; }
 .multi-filter summary { min-height: 32px; display: flex; align-items: center; gap: 5px; list-style: none; cursor: pointer; border: 1px solid #c8d0c8; border-radius: 999px; padding: 0 10px; color: var(--ink); background: var(--cream); font-size: 11px; }
 .multi-filter summary::-webkit-details-marker { display: none; }
@@ -126,6 +130,9 @@ footer p { margin: 0; text-align: right; }
   .tracker { padding: 6px 7px 10px; }
   .filters { gap: 4px; margin-bottom: 7px; }
   .filters button { padding: 6px 7px; font-size: 10px; }
+  .select-filter { min-height: 27px; gap: 3px; padding: 0 4px 0 7px; }
+  .select-filter > span { font-size: 9px; }
+  .select-filter select { min-width: 91px; max-width: 126px; font-size: 9px; }
   .multi-filter { position: static; }
   .multi-filter summary { min-height: 27px; gap: 3px; padding: 0 7px; font-size: 9px; }
   .multi-filter summary strong { max-width: 72px; font-size: 9px; }

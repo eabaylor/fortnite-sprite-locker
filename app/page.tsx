@@ -5,14 +5,15 @@ import { useEffect, useMemo, useState } from "react";
 type Variant = "Base" | "Gold" | "Gummy" | "Galaxy" | "Gem" | "Holofoil" | "Cube" | "Quack";
 type SpriteFamily = { name: string; rarity: string; variants: Variant[] };
 type Progress = Record<string, { acquired: boolean; mastered: boolean }>;
-type Filter = "all" | "missing" | "acquired" | "acquired-unmastered" | "mastered";
+type Filter = "all" | "missing" | "not-mastered" | "acquired" | "acquired-unmastered" | "mastered";
 
 const FILTERS: { value: Filter; label: string }[] = [
-  { value: "all", label: "All" },
   { value: "missing", label: "Missing" },
+  { value: "not-mastered", label: "Not Mastered" },
   { value: "acquired", label: "Acquired" },
   { value: "acquired-unmastered", label: "Acquired / Not Mastered" },
   { value: "mastered", label: "Mastered" },
+  { value: "all", label: "All" },
 ];
 
 const SPRITES: SpriteFamily[] = [
@@ -99,7 +100,7 @@ function MultiSelectFilter({
 
 export default function Home() {
   const [progress, setProgress] = useState<Progress>({});
-  const [filter, setFilter] = useState<Filter>("all");
+  const [filter, setFilter] = useState<Filter>("missing");
   const [selectedSprites, setSelectedSprites] = useState<string[]>([]);
   const [selectedVariants, setSelectedVariants] = useState<Variant[]>([]);
   const [query, setQuery] = useState("");
@@ -139,6 +140,7 @@ export default function Home() {
       if (selectedVariants.length && !selectedVariants.includes(variant)) return false;
       const state = progress[keyFor(sprite.name, variant)] ?? { acquired: false, mastered: false };
       if (filter === "missing") return !state.acquired;
+      if (filter === "not-mastered") return !state.mastered;
       if (filter === "acquired") return state.acquired;
       if (filter === "acquired-unmastered") return state.acquired && !state.mastered;
       if (filter === "mastered") return state.mastered;
@@ -190,11 +192,12 @@ export default function Home() {
 
       <section className="tracker" aria-label="Sprite checklist">
         <div className="filters" role="group" aria-label="Filter checklist">
-          {FILTERS.map((item) => (
-            <button key={item.value} className={filter === item.value ? "active" : ""} onClick={() => setFilter(item.value)}>
-              {item.label}
-            </button>
-          ))}
+          <label className="select-filter status-filter">
+            <span>Status</span>
+            <select value={filter} onChange={(event) => setFilter(event.target.value as Filter)} aria-label="Filter checklist by collection status">
+              {FILTERS.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}
+            </select>
+          </label>
           <MultiSelectFilter
             label="Sprites"
             items={SPRITES.map((sprite) => sprite.name)}
