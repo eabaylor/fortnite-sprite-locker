@@ -150,11 +150,15 @@ footer p { margin: 0; text-align: right; }
   .sprite-card { border-radius: 7px; padding: 3px; }
   .sprite-art { height: 54px; border-radius: 5px; }
   .sprite-card h4 { margin: 4px 0 3px; font-size: 8px; overflow: hidden; text-overflow: ellipsis; }
-  .check { justify-content: center; gap: 3px; min-height: 22px; font-size: 8px; letter-spacing: 0; }
-  .check input { width: 14px; height: 14px; border-radius: 3px; }
-  .check input::after { font-size: 9px; }
-  .long-label { display: none; }
-  .short-label { display: inline; }
+  .check { position: relative; justify-content: center; gap: 0; min-height: 22px; border: 1px solid #c7d0c8; border-radius: 4px; padding: 0 1px; color: var(--ink); background: #fff; font-size: 7px; font-weight: 900; letter-spacing: 0; line-height: 1; }
+  .check + .check { margin-top: 2px; }
+  .check input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+  .check:has(input:focus-visible) { outline: 2px solid var(--ink); outline-offset: 1px; }
+  .sprite-card.is-acquired .acquired-check,
+  .sprite-card.is-mastered .acquired-check { color: white; border-color: var(--green); background: var(--green); }
+  .sprite-card.is-mastered .mastered-check { color: #3d2c00; border-color: #db9e06; background: var(--gold); }
+  .long-label { display: inline; }
+  .short-label { display: none; }
   .sync-note { margin: 18px 12px 38px; }
   footer { display: block; }
   footer p { margin-top: 8px; text-align: left; line-height: 1.5; }
