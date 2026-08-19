@@ -28,8 +28,10 @@ a { color: inherit; }
 }
 
 nav { max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: minmax(220px, 330px) 1fr auto; align-items: center; gap: 16px; }
-.brand { display: block; width: 100%; text-decoration: none; }
+.brand-lockup { min-width: 0; display: flex; align-items: center; gap: 10px; }
+.brand { min-width: 0; flex: 1 1 auto; display: block; width: 100%; text-decoration: none; }
 .brand img { display: block; width: 100%; height: 76px; object-fit: contain; object-position: left center; }
+.season-badge { flex: none; max-width: 84px; margin: 0; padding: 5px 7px; border: 1px solid rgba(255,255,255,.28); border-radius: 7px; color: #fff5cf; background: rgba(5,41,31,.5); font-size: 9px; font-weight: 900; line-height: 1.2; letter-spacing: .06em; text-align: center; text-transform: uppercase; }
 .source-link { justify-self: center; font-size: 13px; text-decoration: none; color: #dcf7ec; border-bottom: 1px solid rgba(220,247,236,.55); }
 .header-status { display: flex; flex-direction: column; align-items: flex-end; }
 .update-stamp { margin: 4px 2px 0; color: #a8c7bb; font-size: 9px; font-weight: 800; letter-spacing: .1em; }
@@ -116,7 +118,9 @@ footer p { margin: 0; text-align: right; }
 @media (max-width: 760px) {
   .hero { padding: 4px 8px; }
   nav { grid-template-columns: minmax(125px, 43vw) 1fr; gap: 6px; }
-  .brand img { height: 58px; }
+  .brand-lockup { flex-direction: column; align-items: stretch; gap: 0; padding: 2px 0; }
+  .brand img { height: 46px; }
+  .season-badge { align-self: flex-start; max-width: none; padding: 3px 6px; font-size: 7px; white-space: nowrap; }
   .source-link { display: none; }
   .update-stamp { width: 100%; margin-top: 2px; font-size: 7px; letter-spacing: .05em; text-align: center; white-space: nowrap; }
   .progress-panel { width: 100%; justify-content: space-around; padding: 4px 5px; gap: 5px; }

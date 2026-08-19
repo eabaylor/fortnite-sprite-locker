@@ -7,6 +7,9 @@ type SpriteFamily = { name: string; rarity: string; variants: Variant[] };
 type Progress = Record<string, { acquired: boolean; mastered: boolean }>;
 type Filter = "all" | "missing" | "not-mastered" | "acquired" | "acquired-unmastered" | "mastered";
 
+const CURRENT_SEASON_ID = "chapter-7-season-3";
+const CURRENT_SEASON_LABEL = "Chapter 7 · Season 3";
+
 const FILTERS: { value: Filter; label: string }[] = [
   { value: "missing", label: "Missing" },
   { value: "not-mastered", label: "Not Mastered" },
@@ -176,9 +179,14 @@ export default function Home() {
     <main>
       <header className="hero">
         <nav>
-          <a className="brand" href="#top" aria-label="Fortnite Sprite Locker home">
-            <img src="/fortnite-sprite-locker-logo-transparent.png" alt="Fortnite Sprite Locker" width="1983" height="793" />
-          </a>
+          <div className="brand-lockup" data-season-id={CURRENT_SEASON_ID}>
+            <a className="brand" href="#top" aria-label="Fortnite Sprite Locker home">
+              <img src="/fortnite-sprite-locker-logo-transparent.png" alt="Fortnite Sprite Locker" width="1983" height="793" />
+            </a>
+            <p className="season-badge" aria-label={`Current Fortnite season: ${CURRENT_SEASON_LABEL}`}>
+              {CURRENT_SEASON_LABEL}
+            </p>
+          </div>
           <a className="source-link" href="https://fortnite.gg/sprites" target="_blank" rel="noreferrer">Live Sprite source ↗</a>
           <div className="header-status" id="top">
             <div className="progress-panel" aria-label="Collection progress">
