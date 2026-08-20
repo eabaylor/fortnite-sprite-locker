@@ -4,10 +4,12 @@
   "chapter": "Chapter 7",
   "season": "Season 4",
   "seasonTheme": "Override",
+  "imageBase": "sprites",
   "storageKey": "sprite-locker-progress-chapter-7-season-4",
+  "legacyStorageKeys": [],
   "updatedDate": "August 20, 2026",
   "patch": "v42.00",
-  "assetVersion": "20260820-5",
+  "assetVersion": "20260820-6",
   "families": [
     { "name": "Jackrabbit", "rarity": "Legendary", "variants": ["Base", "Gold", "Cheat Master"] },
     { "name": "Shadow", "rarity": "Epic", "variants": ["Base", "Cheat Master", "Gold"] },

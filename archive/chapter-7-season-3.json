@@ -1,6 +1,13 @@
 {
   "seasonId": "chapter-7-season-3",
   "seasonLabel": "Chapter 7 Season 3: Runners",
+  "chapter": "Chapter 7",
+  "season": "Season 3",
+  "seasonTheme": "Runners",
+  "imageBase": "seasons/chapter-7-season-3/sprites",
+  "storageKey": "sprite-locker-progress-chapter-7-season-3",
+  "legacyStorageKeys": ["sprite-locker-progress"],
+  "updatedDate": "August 20, 2026",
   "archivedOn": "2026-08-20",
   "patch": "v41.30",
   "totalVariants": 117,

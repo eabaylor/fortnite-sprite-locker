@@ -1,8 +1,7 @@
-const CATALOG = window.SPRITE_CATALOG;
-const SPRITES = CATALOG.families.map(({ name, rarity, variants }) => [name, rarity, variants]);
-const TOTAL = SPRITES.reduce((sum, [, , variants]) => sum + variants.length, 0);
-const ACTIVE_KEYS = new Set(SPRITES.flatMap(([name, , variants]) => variants.map((variant) => `${name}::${variant}`)));
-const STORAGE_KEY = CATALOG.storageKey;
+const BUNDLE = window.SPRITE_CATALOGS;
+const CATALOGS = BUNDLE.seasons;
+let season = CATALOGS.find((item) => item.seasonId === BUNDLE.defaultSeasonId)
+  || CATALOGS[0];
 let filter = "missing";
 const selectedSprites = new Set();
 const selectedVariants = new Set();
@@ -13,12 +12,16 @@ const keyFor = (name, variant) => `${name}::${variant}`;
 const slugFor = (name) => name.toLowerCase().replace(/\./g, "").replace(/\s+/g, "-");
 const variantSlugFor = (variant) => variant.toLowerCase().replace(/\s+/g, "-");
 const stateFor = (name, variant) => progress[keyFor(name, variant)] || { acquired: false, mastered: false };
+const sprites = () => season.families;
+const total = () => sprites().reduce((sum, family) => sum + family.variants.length, 0);
+const activeKeys = () => new Set(sprites().flatMap((family) => family.variants.map((variant) => keyFor(family.name, variant))));
 
 function sanitizeProgress(value) {
   if (!value || typeof value !== "object" || Array.isArray(value)) return {};
+  const keys = activeKeys();
   const clean = {};
   for (const [key, state] of Object.entries(value)) {
-    if (!ACTIVE_KEYS.has(key) || !state || typeof state !== "object" || Array.isArray(state)) continue;
+    if (!keys.has(key) || !state || typeof state !== "object" || Array.isArray(state)) continue;
     const mastered = state.mastered === true;
     const acquired = state.acquired === true || mastered;
     if (acquired || mastered) clean[key] = { acquired, mastered };
@@ -26,34 +29,53 @@ function sanitizeProgress(value) {
   return clean;
 }
 
-try {
-  progress = sanitizeProgress(JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"));
-} catch {
-  progress = {};
+function loadProgress() {
+  for (const key of [season.storageKey, ...(season.legacyStorageKeys || [])]) {
+    try {
+      const saved = localStorage.getItem(key);
+      if (!saved) continue;
+      const restored = sanitizeProgress(JSON.parse(saved));
+      if (key !== season.storageKey) localStorage.setItem(season.storageKey, JSON.stringify(restored));
+      return restored;
+    } catch {}
+  }
+  return {};
 }
 
+progress = loadProgress();
+
 function save() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+  localStorage.setItem(season.storageKey, JSON.stringify(progress));
 }
 
 function updateCounts() {
   let acquired = 0;
   let mastered = 0;
-  for (const [name, , variants] of SPRITES) {
-    for (const variant of variants) {
-      const state = stateFor(name, variant);
+  for (const family of sprites()) {
+    for (const variant of family.variants) {
+      const state = stateFor(family.name, variant);
       if (state.acquired) acquired += 1;
       if (state.mastered) mastered += 1;
     }
   }
   for (const [type, count] of [["acquired", acquired], ["mastered", mastered]]) {
-    const percent = Math.round((count / TOTAL) * 100);
+    const percent = Math.round((count / total()) * 100);
     document.querySelector(`#${type}-count`).textContent = count;
     const ring = document.querySelector(`#${type}-ring`);
     ring.style.setProperty("--progress", `${percent * 3.6}deg`);
     ring.querySelector("span").textContent = `${percent}%`;
   }
-  document.querySelectorAll(".total-count").forEach((node) => { node.textContent = TOTAL; });
+  document.querySelectorAll(".total-count").forEach((node) => { node.textContent = total(); });
+}
+
+function updateSeasonUi() {
+  document.querySelector(".brand-lockup").dataset.seasonId = season.seasonId;
+  document.querySelector("#season-select").value = season.seasonId;
+  document.querySelector("#season-chapter").textContent = season.chapter;
+  document.querySelector("#season-name").textContent = season.season;
+  document.querySelector("#season-theme").textContent = season.seasonTheme;
+  document.querySelector(".update-stamp").textContent = `UPDATED ${season.updatedDate.toUpperCase()} · PATCH ${season.patch.toUpperCase()}`;
+  document.querySelector(".tracker").setAttribute("aria-label", `${season.chapter} ${season.season} Sprite checklist`);
 }
 
 function render() {
@@ -61,7 +83,7 @@ function render() {
   list.replaceChildren();
   let shown = 0;
 
-  for (const [name, rarity, variants] of SPRITES) {
+  for (const { name, rarity, variants } of sprites()) {
     if (selectedSprites.size && !selectedSprites.has(name)) continue;
     if (!name.toLowerCase().includes(query.trim().toLowerCase())) continue;
     const visibleVariants = variants.filter((variant) => {
@@ -94,7 +116,7 @@ function render() {
       card.className = `sprite-card ${state.mastered ? "is-mastered" : state.acquired ? "is-acquired" : ""}`;
       card.innerHTML = `
         <div class="sprite-art ${variantSlugFor(variant)}">
-          <img src="sprites/${slugFor(name)}-${variantSlugFor(variant)}-256.webp" alt="${variant === "Base" ? "" : `${variant} `}${name} Sprite" width="256" height="256" loading="lazy" decoding="async" />
+          <img src="${season.imageBase}/${slugFor(name)}-${variantSlugFor(variant)}-256.webp" alt="${variant === "Base" ? "" : `${variant} `}${name} Sprite" width="256" height="256" loading="lazy" decoding="async" />
         </div>
         <h4>${variant}</h4>
         <label class="check acquired-check">
@@ -119,14 +141,21 @@ function render() {
   updateCounts();
 }
 
-function setupMultiFilter(menuId, labelId, items, selected) {
+function populateFilter(menuId, labelId, items, selected) {
   const menu = document.querySelector(`#${menuId}`);
-  const label = document.querySelector(`#${labelId}`);
+  menu.querySelectorAll("label").forEach((label) => label.remove());
   for (const item of items) {
     const option = document.createElement("label");
     option.innerHTML = `<input type="checkbox" value="${item}" /><span>${item}</span>`;
     menu.append(option);
   }
+  document.querySelector(`#${labelId}`).textContent = "All";
+  selected.clear();
+}
+
+function setupMultiFilter(menuId, labelId, selected) {
+  const menu = document.querySelector(`#${menuId}`);
+  const label = document.querySelector(`#${labelId}`);
   const updateLabel = () => {
     label.textContent = selected.size === 0 ? "All" : selected.size === 1 ? [...selected][0] : `${selected.size} selected`;
   };
@@ -146,6 +175,32 @@ function setupMultiFilter(menuId, labelId, items, selected) {
   });
 }
 
+function populateSeasonFilters() {
+  populateFilter("sprite-filter-menu", "sprite-filter-label", sprites().map(({ name }) => name), selectedSprites);
+  populateFilter("variant-filter-menu", "variant-filter-label", [...new Set(sprites().flatMap(({ variants }) => variants))], selectedVariants);
+}
+
+const seasonSelect = document.querySelector("#season-select");
+for (const catalog of CATALOGS) {
+  const option = document.createElement("option");
+  option.value = catalog.seasonId;
+  option.textContent = `${catalog.chapter} · ${catalog.season} — ${catalog.seasonTheme}`;
+  seasonSelect.append(option);
+}
+seasonSelect.addEventListener("change", () => {
+  const nextSeason = CATALOGS.find((item) => item.seasonId === seasonSelect.value);
+  if (!nextSeason) return;
+  season = nextSeason;
+  progress = loadProgress();
+  filter = "missing";
+  query = "";
+  document.querySelector("#status-filter").value = filter;
+  document.querySelector("#search").value = "";
+  populateSeasonFilters();
+  updateSeasonUi();
+  render();
+});
+
 document.querySelector("#status-filter").addEventListener("change", (event) => {
   filter = event.target.value;
   render();
@@ -156,8 +211,9 @@ document.querySelector("#search").addEventListener("input", (event) => {
   render();
 });
 
-setupMultiFilter("sprite-filter-menu", "sprite-filter-label", SPRITES.map(([name]) => name), selectedSprites);
-setupMultiFilter("variant-filter-menu", "variant-filter-label", ["Base", "Gold", "Cheat Master"], selectedVariants);
+setupMultiFilter("sprite-filter-menu", "sprite-filter-label", selectedSprites);
+setupMultiFilter("variant-filter-menu", "variant-filter-label", selectedVariants);
+populateSeasonFilters();
 
 document.querySelector("#clear-filters").addEventListener("click", () => {
   filter = "missing";
@@ -173,18 +229,18 @@ document.querySelector("#clear-filters").addEventListener("click", () => {
 });
 
 document.querySelector("#reset").addEventListener("click", () => {
-  if (!confirm("Clear every checkmark?")) return;
+  if (!confirm(`Clear every ${season.season} checkmark?`)) return;
   progress = {};
   save();
   render();
 });
 
 document.querySelector("#backup").addEventListener("click", () => {
-  const backup = { schemaVersion: 1, seasonId: CATALOG.seasonId, exportedAt: new Date().toISOString(), progress: sanitizeProgress(progress) };
+  const backup = { schemaVersion: 1, seasonId: season.seasonId, exportedAt: new Date().toISOString(), progress: sanitizeProgress(progress) };
   const url = URL.createObjectURL(new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" }));
   const link = document.createElement("a");
   link.href = url;
-  link.download = `fortnite-sprite-locker-${CATALOG.seasonId}.json`;
+  link.download = `fortnite-sprite-locker-${season.seasonId}.json`;
   link.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 });
@@ -196,7 +252,7 @@ restoreInput.addEventListener("change", async () => {
   if (!file) return;
   try {
     const backup = JSON.parse(await file.text());
-    if (backup.seasonId !== CATALOG.seasonId) throw new Error("This backup belongs to a different Fortnite season.");
+    if (backup.seasonId !== season.seasonId) throw new Error(`Select ${backup.seasonId || "the matching season"} before restoring this backup.`);
     progress = sanitizeProgress(backup.progress);
     save();
     render();
@@ -222,5 +278,6 @@ document.querySelector("#sprite-list").addEventListener("change", (event) => {
   render();
 });
 
+updateSeasonUi();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").catch(() => {});
 render();

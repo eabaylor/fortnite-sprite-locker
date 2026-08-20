@@ -31,12 +31,19 @@ nav { max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: m
 .brand-lockup { min-width: 0; display: flex; align-items: center; gap: 10px; }
 .brand { min-width: 0; flex: 1 1 auto; display: block; width: 100%; text-decoration: none; }
 .brand img { display: block; width: 100%; height: 76px; object-fit: contain; object-position: left center; }
-.season-badge { position: relative; isolation: isolate; flex: none; min-width: 92px; overflow: hidden; padding: 7px 11px 6px; border: 1px solid rgba(255,255,255,.62); clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%); color: white; background: linear-gradient(135deg, #7a32ff 0 48%, #12caa0 49% 100%); box-shadow: 0 0 0 2px rgba(10,35,30,.45), 0 5px 16px rgba(3,24,18,.28); font-weight: 900; line-height: 1; letter-spacing: .055em; text-align: center; text-transform: uppercase; }
+.season-badge { position: relative; isolation: isolate; flex: none; min-width: 106px; overflow: hidden; padding: 21px 11px 6px; border: 1px solid rgba(255,255,255,.72); clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%); color: white; background: linear-gradient(135deg, #7a32ff 0 48%, #12caa0 49% 100%); box-shadow: 0 0 0 2px rgba(10,35,30,.45), 0 5px 16px rgba(3,24,18,.28); cursor: pointer; font-weight: 900; line-height: 1; letter-spacing: .055em; text-align: center; text-transform: uppercase; }
 .season-badge::after { content: ""; position: absolute; z-index: -1; inset: -20% -40%; background: linear-gradient(115deg, transparent 38%, rgba(255,255,255,.42) 49%, transparent 60%); transform: translateX(-34%); }
-.season-badge span { display: block; }
+.season-badge > span { position: relative; z-index: 1; display: block; pointer-events: none; }
+.season-action { position: absolute !important; top: 0; right: 0; left: 0; min-height: 15px; display: flex !important; align-items: center; justify-content: center; gap: 4px; padding: 4px 8px 3px; color: #d8fff4; background: rgba(4,31,24,.82); font-size: 6px; letter-spacing: .13em; }
+.season-action > span { font-size: 9px; line-height: .6; }
 .season-chapter { font-size: 7px; opacity: .9; }
 .season-badge strong { display: block; margin: 2px 0 1px; font-family: var(--font-display), Impact, sans-serif; font-size: 15px; letter-spacing: -.02em; }
+.season-choice { display: flex !important; align-items: center; justify-content: center; gap: 4px; }
+.season-choice > span { font-size: 9px; }
 .season-theme { padding-top: 3px; border-top: 1px solid rgba(255,255,255,.5); font-size: 7px; letter-spacing: .14em; }
+.season-native { position: absolute; z-index: 3; inset: 0; width: 100%; height: 100%; cursor: pointer; opacity: 0; }
+.season-badge:hover { filter: brightness(1.08); }
+.season-badge:focus-within { outline: 2px solid white; outline-offset: 2px; }
 .source-link { justify-self: center; font-size: 13px; text-decoration: none; color: #dcf7ec; border-bottom: 1px solid rgba(220,247,236,.55); }
 .header-status { display: flex; flex-direction: column; align-items: flex-end; }
 .update-stamp { margin: 4px 2px 0; color: #a8c7bb; font-size: 9px; font-weight: 800; letter-spacing: .1em; }
@@ -129,7 +136,8 @@ footer p { margin: 0; text-align: right; }
   nav { grid-template-columns: minmax(125px, 43vw) 1fr; gap: 6px; }
   .brand-lockup { flex-direction: column; align-items: stretch; gap: 0; padding: 2px 0; }
   .brand img { height: 46px; }
-  .season-badge { align-self: flex-start; min-width: 86px; padding: 4px 9px 3px; white-space: nowrap; }
+  .season-badge { align-self: flex-start; min-width: 96px; padding: 17px 9px 3px; white-space: nowrap; }
+  .season-action { min-height: 13px; padding: 3px 6px 2px; font-size: 5px; }
   .season-chapter { font-size: 6px; }
   .season-badge strong { margin: 1px 0; font-size: 12px; }
   .season-theme { padding-top: 2px; font-size: 6px; }

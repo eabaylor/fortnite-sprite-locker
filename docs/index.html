@@ -11,9 +11,9 @@
     <title>Fortnite Sprite Locker — Sprite Checklist</title>
     <link rel="icon" href="favicon.svg" />
     <link rel="manifest" href="manifest.webmanifest" />
-    <link rel="stylesheet" href="styles.css?v=20260820-5" />
-    <script src="catalog.js?v=20260820-5" defer></script>
-    <script src="app.js?v=20260820-5" defer></script>
+    <link rel="stylesheet" href="styles.css?v=20260820-6" />
+    <script src="catalog.js?v=20260820-6" defer></script>
+    <script src="app.js?v=20260820-6" defer></script>
   </head>
   <body>
     <main>
@@ -23,11 +23,13 @@
             <a class="brand" href="#top" aria-label="Fortnite Sprite Locker home">
               <img src="fortnite-sprite-locker-logo-transparent.png" alt="Fortnite Sprite Locker" width="1983" height="793" />
             </a>
-            <div class="season-badge" aria-label="Current Fortnite season: Chapter 7, Season 4, Override">
-              <span class="season-chapter">Chapter 7</span>
-              <strong>Season 4</strong>
-              <span class="season-theme">Override</span>
-            </div>
+            <label class="season-badge" aria-label="Select Fortnite chapter and season">
+              <span class="season-action"><span aria-hidden="true">↕</span> Choose season</span>
+              <span class="season-chapter" id="season-chapter">Chapter 7</span>
+              <span class="season-choice"><strong id="season-name">Season 4</strong><span aria-hidden="true">▾</span></span>
+              <select class="season-native" id="season-select"></select>
+              <span class="season-theme" id="season-theme">Override</span>
+            </label>
           </div>
           <a class="source-link" href="https://fortnite.gg/sprites" target="_blank" rel="noreferrer">Live Sprite source ↗</a>
           <div class="header-status" id="top">
@@ -89,7 +91,7 @@
 
       <aside class="sync-note">
         <span class="lock">⌁</span>
-        <div><strong>Your checklist stays on this device</strong><p>Epic does not currently offer public access to a player’s Sprite collection. Use Backup before switching browsers or phones, then Restore to bring your progress with you.</p></div>
+        <div><strong>Each season saves separately on this device</strong><p>Switch seasons at any time without mixing checkmarks. Older progress is restored from the tracker’s previous saved data when available.</p></div>
       </aside>
 
       <footer>
