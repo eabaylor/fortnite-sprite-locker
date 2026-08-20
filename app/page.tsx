@@ -2,13 +2,14 @@
 
 import { useEffect, useMemo, useState } from "react";
 
-type Variant = "Base" | "Gold" | "Gummy" | "Galaxy" | "Gem" | "Holofoil" | "Cube" | "Quack";
+type Variant = "Base" | "Gold" | "Cheat Master";
 type SpriteFamily = { name: string; rarity: string; variants: Variant[] };
 type Progress = Record<string, { acquired: boolean; mastered: boolean }>;
 type Filter = "all" | "missing" | "not-mastered" | "acquired" | "acquired-unmastered" | "mastered";
 
-const CURRENT_SEASON_ID = "chapter-7-season-3";
-const CURRENT_SEASON_LABEL = "Chapter 7 · Season 3";
+const CURRENT_SEASON_ID = "chapter-7-season-4";
+const CURRENT_SEASON_LABEL = "Chapter 7 · Season 4";
+const STORAGE_KEY = "sprite-locker-progress-chapter-7-season-4";
 
 const FILTERS: { value: Filter; label: string }[] = [
   { value: "missing", label: "Missing" },
@@ -20,38 +21,26 @@ const FILTERS: { value: Filter; label: string }[] = [
 ];
 
 const SPRITES: SpriteFamily[] = [
-  { name: "Batman", rarity: "Mythic", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil", "Cube"] },
-  { name: "Water", rarity: "Rare", variants: ["Base", "Gold", "Gummy", "Galaxy", "Gem", "Holofoil", "Quack"] },
-  { name: "Earth", rarity: "Rare", variants: ["Base", "Gold", "Gummy", "Galaxy", "Gem", "Cube", "Quack"] },
-  { name: "Fire", rarity: "Rare", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil", "Cube", "Quack"] },
-  { name: "Duck", rarity: "Epic", variants: ["Base", "Gold", "Gummy", "Galaxy", "Gem"] },
-  { name: "Ghost", rarity: "Epic", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"] },
-  { name: "Dream", rarity: "Legendary", variants: ["Base", "Gold", "Gummy", "Galaxy", "Cube"] },
-  { name: "Demon", rarity: "Epic", variants: ["Base", "Gold", "Gummy", "Galaxy", "Gem"] },
-  { name: "Punk", rarity: "Legendary", variants: ["Base", "Gold", "Gummy", "Galaxy", "Cube"] },
-  { name: "King", rarity: "Epic", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"] },
-  { name: "Burnt Peanut", rarity: "Mythic", variants: ["Base"] },
-  { name: "Vini Jr.", rarity: "Mythic", variants: ["Base"] },
-  { name: "Zero Point", rarity: "Mythic", variants: ["Base", "Gold", "Gummy", "Galaxy", "Gem", "Holofoil", "Cube", "Quack"] },
-  { name: "Fishy", rarity: "Rare", variants: ["Base", "Gold", "Gummy", "Galaxy", "Cube"] },
-  { name: "Striker", rarity: "Legendary", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"] },
-  { name: "Aura", rarity: "Legendary", variants: ["Base", "Gold", "Gummy", "Galaxy", "Gem"] },
-  { name: "Boss", rarity: "Legendary", variants: ["Base", "Gold", "Gummy", "Galaxy", "Cube"] },
-  { name: "Grim", rarity: "Mythic", variants: ["Base", "Gold", "Gummy", "Galaxy", "Gem", "Holofoil", "Cube"] },
-  { name: "Air", rarity: "Rare", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"] },
-  { name: "Seven", rarity: "Legendary", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"] },
-  { name: "Ironmouse", rarity: "Mythic", variants: ["Base"] },
-  { name: "Pollo", rarity: "Mythic", variants: ["Base"] },
-  { name: "John Wick", rarity: "Mythic", variants: ["Base"] },
-  { name: "Llama", rarity: "Legendary", variants: ["Base", "Gold", "Gummy", "Galaxy", "Gem"] },
-  { name: "Peely", rarity: "Legendary", variants: ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"] },
+  { name: "Jackrabbit", rarity: "Legendary", variants: ["Base", "Gold", "Cheat Master"] },
+  { name: "Shadow", rarity: "Epic", variants: ["Base", "Cheat Master", "Gold"] },
+  { name: "Bush", rarity: "Rare", variants: ["Base", "Cheat Master", "Gold"] },
+  { name: "Tails", rarity: "Epic", variants: ["Base", "Cheat Master", "Gold"] },
+  { name: "Killswitch", rarity: "Epic", variants: ["Base", "Cheat Master", "Gold"] },
+  { name: "Adventure", rarity: "Rare", variants: ["Base", "Cheat Master", "Gold"] },
+  { name: "Klombo", rarity: "Mythic", variants: ["Base", "Cheat Master", "Gold"] },
+  { name: "Jonesy", rarity: "Rare", variants: ["Base", "Cheat Master", "Gold"] },
+  { name: "Sonic", rarity: "Epic", variants: ["Base", "Cheat Master", "Gold"] },
+  { name: "Crown", rarity: "Mythic", variants: ["Base", "Cheat Master", "Gold"] },
+  { name: "8-Bit", rarity: "Rare", variants: ["Base", "Cheat Master", "Gold"] },
+  { name: "Storm Scout", rarity: "Rare", variants: ["Base", "Cheat Master", "Gold"] },
 ];
 
 const TOTAL = SPRITES.reduce((sum, sprite) => sum + sprite.variants.length, 0);
 const keyFor = (name: string, variant: Variant) => `${name}::${variant}`;
 const imageFor = (name: string, variant: Variant) => {
   const slug = name.toLowerCase().replace(/\./g, "").replace(/\s+/g, "-");
-  return `/sprites/${slug}-${variant.toLowerCase()}-256.webp`;
+  const variantSlug = variant.toLowerCase().replace(/\s+/g, "-");
+  return `/sprites/${slug}-${variantSlug}-256.webp`;
 };
 
 function ProgressRing({ value, label, tone }: { value: number; label: string; tone: "green" | "gold" }) {
@@ -111,7 +100,7 @@ export default function Home() {
 
   useEffect(() => {
     try {
-      const saved = localStorage.getItem("sprite-locker-progress");
+      const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved) as Progress;
         setProgress(Object.fromEntries(
@@ -126,7 +115,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (ready) localStorage.setItem("sprite-locker-progress", JSON.stringify(progress));
+    if (ready) localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
   }, [progress, ready]);
 
   const counts = useMemo(() => {
@@ -193,7 +182,7 @@ export default function Home() {
               <ProgressRing value={counts.acquired} label="Acquired" tone="green" />
               <ProgressRing value={counts.mastered} label="Mastered" tone="gold" />
             </div>
-            <p className="update-stamp">UPDATED AUGUST 7, 2026 · PATCH V41.30</p>
+            <p className="update-stamp">UPDATED AUGUST 20, 2026 · PATCH V42.00</p>
           </div>
         </nav>
       </header>
@@ -216,7 +205,7 @@ export default function Home() {
           />
           <MultiSelectFilter
             label="Variants"
-            items={["Base", "Gold", "Gummy", "Galaxy", "Gem", "Holofoil", "Cube", "Quack"]}
+            items={["Base", "Gold", "Cheat Master"]}
             selected={selectedVariants}
             onToggle={toggleVariantFilter}
             onClear={() => setSelectedVariants([])}
@@ -243,7 +232,7 @@ export default function Home() {
                   const state = progress[key] ?? { acquired: false, mastered: false };
                   return (
                     <article className={`sprite-card ${state.mastered ? "is-mastered" : state.acquired ? "is-acquired" : ""}`} key={variant}>
-                      <div className={`sprite-art ${variant.toLowerCase()}`}>
+                      <div className={`sprite-art ${variant.toLowerCase().replace(/\s+/g, "-")}`}>
                         <img
                           src={imageFor(sprite.name, variant)}
                           alt={`${variant === "Base" ? "" : `${variant} `}${sprite.name} Sprite`}

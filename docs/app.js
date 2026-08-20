@@ -1,33 +1,20 @@
 const SPRITES = [
-  ["Batman", "Mythic", ["Base", "Gold", "Gummy", "Galaxy", "Holofoil", "Cube"]],
-  ["Water", "Rare", ["Base", "Gold", "Gummy", "Galaxy", "Gem", "Holofoil", "Quack"]],
-  ["Earth", "Rare", ["Base", "Gold", "Gummy", "Galaxy", "Gem", "Cube", "Quack"]],
-  ["Fire", "Rare", ["Base", "Gold", "Gummy", "Galaxy", "Holofoil", "Cube", "Quack"]],
-  ["Duck", "Epic", ["Base", "Gold", "Gummy", "Galaxy", "Gem"]],
-  ["Ghost", "Epic", ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"]],
-  ["Dream", "Legendary", ["Base", "Gold", "Gummy", "Galaxy", "Cube"]],
-  ["Demon", "Epic", ["Base", "Gold", "Gummy", "Galaxy", "Gem"]],
-  ["Punk", "Legendary", ["Base", "Gold", "Gummy", "Galaxy", "Cube"]],
-  ["King", "Epic", ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"]],
-  ["Burnt Peanut", "Mythic", ["Base"]],
-  ["Vini Jr.", "Mythic", ["Base"]],
-  ["Zero Point", "Mythic", ["Base", "Gold", "Gummy", "Galaxy", "Gem", "Holofoil", "Cube", "Quack"]],
-  ["Fishy", "Rare", ["Base", "Gold", "Gummy", "Galaxy", "Cube"]],
-  ["Striker", "Legendary", ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"]],
-  ["Aura", "Legendary", ["Base", "Gold", "Gummy", "Galaxy", "Gem"]],
-  ["Boss", "Legendary", ["Base", "Gold", "Gummy", "Galaxy", "Cube"]],
-  ["Grim", "Mythic", ["Base", "Gold", "Gummy", "Galaxy", "Gem", "Holofoil", "Cube"]],
-  ["Air", "Rare", ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"]],
-  ["Seven", "Legendary", ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"]],
-  ["Ironmouse", "Mythic", ["Base"]],
-  ["Pollo", "Mythic", ["Base"]],
-  ["John Wick", "Mythic", ["Base"]],
-  ["Llama", "Legendary", ["Base", "Gold", "Gummy", "Galaxy", "Gem"]],
-  ["Peely", "Legendary", ["Base", "Gold", "Gummy", "Galaxy", "Holofoil"]],
+  ["Jackrabbit", "Legendary", ["Base", "Gold", "Cheat Master"]],
+  ["Shadow", "Epic", ["Base", "Cheat Master", "Gold"]],
+  ["Bush", "Rare", ["Base", "Cheat Master", "Gold"]],
+  ["Tails", "Epic", ["Base", "Cheat Master", "Gold"]],
+  ["Killswitch", "Epic", ["Base", "Cheat Master", "Gold"]],
+  ["Adventure", "Rare", ["Base", "Cheat Master", "Gold"]],
+  ["Klombo", "Mythic", ["Base", "Cheat Master", "Gold"]],
+  ["Jonesy", "Rare", ["Base", "Cheat Master", "Gold"]],
+  ["Sonic", "Epic", ["Base", "Cheat Master", "Gold"]],
+  ["Crown", "Mythic", ["Base", "Cheat Master", "Gold"]],
+  ["8-Bit", "Rare", ["Base", "Cheat Master", "Gold"]],
+  ["Storm Scout", "Rare", ["Base", "Cheat Master", "Gold"]],
 ];
 
 const TOTAL = SPRITES.reduce((sum, [, , variants]) => sum + variants.length, 0);
-const STORAGE_KEY = "sprite-locker-progress";
+const STORAGE_KEY = "sprite-locker-progress-chapter-7-season-4";
 let filter = "missing";
 const selectedSprites = new Set();
 const selectedVariants = new Set();
@@ -45,6 +32,7 @@ try {
 
 const keyFor = (name, variant) => `${name}::${variant}`;
 const slugFor = (name) => name.toLowerCase().replace(/\./g, "").replace(/\s+/g, "-");
+const variantSlugFor = (variant) => variant.toLowerCase().replace(/\s+/g, "-");
 const stateFor = (name, variant) => progress[keyFor(name, variant)] || { acquired: false, mastered: false };
 
 function save() {
@@ -104,8 +92,8 @@ function render() {
       const card = document.createElement("article");
       card.className = `sprite-card ${state.mastered ? "is-mastered" : state.acquired ? "is-acquired" : ""}`;
       card.innerHTML = `
-        <div class="sprite-art ${variant.toLowerCase()}">
-          <img src="sprites/${slugFor(name)}-${variant.toLowerCase()}-256.webp" alt="${variant === "Base" ? "" : `${variant} `}${name} Sprite" width="256" height="256" loading="lazy" />
+        <div class="sprite-art ${variantSlugFor(variant)}">
+          <img src="sprites/${slugFor(name)}-${variantSlugFor(variant)}-256.webp" alt="${variant === "Base" ? "" : `${variant} `}${name} Sprite" width="256" height="256" loading="lazy" />
         </div>
         <h4>${variant}</h4>
         <label class="check acquired-check">
@@ -172,7 +160,7 @@ function setupMultiFilter(menuId, labelId, items, selected) {
 }
 
 setupMultiFilter("sprite-filter-menu", "sprite-filter-label", SPRITES.map(([name]) => name), selectedSprites);
-setupMultiFilter("variant-filter-menu", "variant-filter-label", ["Base", "Gold", "Gummy", "Galaxy", "Gem", "Holofoil", "Cube", "Quack"], selectedVariants);
+setupMultiFilter("variant-filter-menu", "variant-filter-label", ["Base", "Gold", "Cheat Master"], selectedVariants);
 
 document.querySelector("#reset").addEventListener("click", () => {
   if (!confirm("Clear every checkmark?")) return;
