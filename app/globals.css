@@ -94,8 +94,8 @@ h2 { margin-bottom: 0; font-family: var(--font-display), sans-serif; text-transf
 .sprite-card { min-width: 0; border: 1px solid #d6ddd5; border-radius: 12px; padding: 7px; background: rgba(255,253,246,.72); transition: transform .18s, border-color .18s, background .18s; }
 .sprite-card.is-acquired { border-color: #60b89e; background: #edf9f4; }
 .sprite-card.is-mastered { border-color: #dfad2c; background: #fff8dc; box-shadow: inset 0 0 0 1px #f3cf62; }
-.sprite-art { position: relative; height: 88px; border-radius: 8px; display: grid; place-items: center; overflow: hidden; background: radial-gradient(circle at 50% 45%, #fff 0, #eef1e8 60%, #e1e6dc 100%); }
-.sprite-art img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 7px 6px rgba(12,44,34,.18)); }
+.sprite-art { position: relative; height: clamp(112px, 14vw, 180px); border-radius: 8px; display: grid; place-items: center; overflow: hidden; background: radial-gradient(circle at 50% 45%, #fff 0, #eef1e8 60%, #e1e6dc 100%); }
+.sprite-art img { width: 100%; height: 100%; padding: 6px; object-fit: contain; object-position: center; filter: drop-shadow(0 7px 6px rgba(12,44,34,.18)); }
 .sprite-card h4 { margin: 8px 0 7px; font-size: 13px; }
 .check { display: flex; align-items: center; gap: 7px; min-height: 29px; color: var(--muted); font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; cursor: pointer; }
 .check input { appearance: none; width: 17px; height: 17px; margin: 0; border: 1.5px solid #91a097; border-radius: 4px; background: white; display: grid; place-items: center; }
@@ -152,7 +152,8 @@ footer p { margin: 0; text-align: right; }
   .row-label a { font-size: 8px; }
   .variant-strip { gap: 3px; padding: 6px 0 6px 3px; }
   .sprite-card { border-radius: 7px; padding: 3px; }
-  .sprite-art { height: 54px; border-radius: 5px; }
+  .sprite-art { height: auto; aspect-ratio: 1; border-radius: 5px; }
+  .sprite-art img { padding: 3px; }
   .sprite-card h4 { margin: 4px 0 3px; font-size: 8px; overflow: hidden; text-overflow: ellipsis; }
   .check { position: relative; justify-content: center; gap: 0; min-height: 22px; border: 1px solid #c7d0c8; border-radius: 4px; padding: 0 1px; color: var(--ink); background: #fff; font-size: 7px; font-weight: 900; letter-spacing: 0; line-height: 1; }
   .check + .check { margin-top: 2px; }
