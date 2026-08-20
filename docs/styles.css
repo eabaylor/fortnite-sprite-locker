@@ -29,7 +29,12 @@ nav { max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: m
 .brand-lockup { min-width: 0; display: flex; align-items: center; gap: 10px; }
 .brand { min-width: 0; flex: 1 1 auto; display: block; width: 100%; text-decoration: none; }
 .brand img { display: block; width: 100%; height: 76px; object-fit: contain; object-position: left center; }
-.season-badge { flex: none; max-width: 84px; margin: 0; padding: 5px 7px; border: 1px solid rgba(255,255,255,.28); border-radius: 7px; color: #fff5cf; background: rgba(5,41,31,.5); font-size: 9px; font-weight: 900; line-height: 1.2; letter-spacing: .06em; text-align: center; text-transform: uppercase; }
+.season-badge { position: relative; isolation: isolate; flex: none; min-width: 92px; overflow: hidden; padding: 7px 11px 6px; border: 1px solid rgba(255,255,255,.62); clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%); color: white; background: linear-gradient(135deg, #7a32ff 0 48%, #12caa0 49% 100%); box-shadow: 0 0 0 2px rgba(10,35,30,.45), 0 5px 16px rgba(3,24,18,.28); font-weight: 900; line-height: 1; letter-spacing: .055em; text-align: center; text-transform: uppercase; }
+.season-badge::after { content: ""; position: absolute; z-index: -1; inset: -20% -40%; background: linear-gradient(115deg, transparent 38%, rgba(255,255,255,.42) 49%, transparent 60%); transform: translateX(-34%); }
+.season-badge span { display: block; }
+.season-chapter { font-size: 7px; opacity: .9; }
+.season-badge strong { display: block; margin: 2px 0 1px; font-family: Impact, "Arial Black", sans-serif; font-size: 15px; letter-spacing: -.02em; }
+.season-theme { padding-top: 3px; border-top: 1px solid rgba(255,255,255,.5); font-size: 7px; letter-spacing: .14em; }
 .source-link { justify-self: center; font-size: 13px; text-decoration: none; color: #dcf7ec; border-bottom: 1px solid rgba(220,247,236,.55); }
 .header-status { display: flex; flex-direction: column; align-items: flex-end; }
 .update-stamp { margin: 4px 2px 0; color: #a8c7bb; font-size: 9px; font-weight: 800; letter-spacing: .1em; }
@@ -77,7 +82,11 @@ h2 { margin-bottom: 0; font-family: Impact, "Arial Black", sans-serif; text-tran
 .filter-menu label:hover { background: #edf1eb; }
 .filter-menu input { width: 16px; height: 16px; margin: 0; accent-color: var(--green-dark); }
 .filters .filter-menu-clear { width: 100%; margin-bottom: 4px; border-radius: 7px; padding: 6px; color: var(--green-dark); border-color: #b8d4c9; }
-.filters .reset { margin-left: auto; color: #8c554d; border-color: #d7bbb5; }
+.filters .clear-filters { color: var(--green-dark); border-color: #a9ccbf; }
+.data-actions { margin-left: auto; display: flex; align-items: center; gap: 4px; }
+.filters .data-actions button { padding-inline: 9px; }
+.filters .reset { color: #8c554d; border-color: #d7bbb5; }
+.visually-hidden { position: absolute !important; width: 1px !important; height: 1px !important; overflow: hidden !important; clip: rect(0 0 0 0) !important; clip-path: inset(50%) !important; white-space: nowrap !important; }
 .sprite-list { border-top: 2px solid var(--ink); }
 .sprite-row { display: grid; grid-template-columns: 122px minmax(0, 1fr); min-height: 190px; border-bottom: 1px solid #cfd6ce; }
 .row-label { position: sticky; left: 0; z-index: 2; align-self: stretch; padding: 22px 14px 16px 0; background: var(--cream); }
@@ -118,7 +127,10 @@ footer p { margin: 0; text-align: right; }
   nav { grid-template-columns: minmax(125px, 43vw) 1fr; gap: 6px; }
   .brand-lockup { flex-direction: column; align-items: stretch; gap: 0; padding: 2px 0; }
   .brand img { height: 46px; }
-  .season-badge { align-self: flex-start; max-width: none; padding: 3px 6px; font-size: 7px; white-space: nowrap; }
+  .season-badge { align-self: flex-start; min-width: 86px; padding: 4px 9px 3px; white-space: nowrap; }
+  .season-chapter { font-size: 6px; }
+  .season-badge strong { margin: 1px 0; font-size: 12px; }
+  .season-theme { padding-top: 2px; font-size: 6px; }
   .source-link { display: none; }
   .update-stamp { width: 100%; margin-top: 2px; font-size: 7px; letter-spacing: .05em; text-align: center; white-space: nowrap; }
   .progress-panel { width: 100%; justify-content: space-around; padding: 4px 5px; gap: 5px; }
@@ -139,7 +151,7 @@ footer p { margin: 0; text-align: right; }
   .multi-filter summary { min-height: 27px; gap: 3px; padding: 0 7px; font-size: 9px; }
   .multi-filter summary strong { max-width: 72px; font-size: 9px; }
   .filter-menu, .variant-filter .filter-menu { top: 100%; left: 0; right: 0; width: auto; min-width: 0; max-height: 45vh; }
-  .filters .reset { margin-left: 0; }
+  .data-actions { margin-left: 0; gap: 3px; }
   .search { flex: 1 1 72px; min-width: 72px; max-width: none; gap: 3px; padding: 4px 1px; }
   .search span { font-size: 16px; }
   .search input { min-width: 0; font-size: 10px; }

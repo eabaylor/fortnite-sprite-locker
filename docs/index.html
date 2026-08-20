@@ -10,8 +10,10 @@
     <meta property="og:image" content="og.png" />
     <title>Fortnite Sprite Locker — Sprite Checklist</title>
     <link rel="icon" href="favicon.svg" />
-    <link rel="stylesheet" href="styles.css?v=20260820-4" />
-    <script src="app.js?v=20260820-1" defer></script>
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="stylesheet" href="styles.css?v=20260820-5" />
+    <script src="catalog.js?v=20260820-5" defer></script>
+    <script src="app.js?v=20260820-5" defer></script>
   </head>
   <body>
     <main>
@@ -21,7 +23,11 @@
             <a class="brand" href="#top" aria-label="Fortnite Sprite Locker home">
               <img src="fortnite-sprite-locker-logo-transparent.png" alt="Fortnite Sprite Locker" width="1983" height="793" />
             </a>
-            <p class="season-badge" aria-label="Current Fortnite season: Chapter 7 · Season 4">Chapter 7 · Season 4</p>
+            <div class="season-badge" aria-label="Current Fortnite season: Chapter 7, Season 4, Override">
+              <span class="season-chapter">Chapter 7</span>
+              <strong>Season 4</strong>
+              <span class="season-theme">Override</span>
+            </div>
           </div>
           <a class="source-link" href="https://fortnite.gg/sprites" target="_blank" rel="noreferrer">Live Sprite source ↗</a>
           <div class="header-status" id="top">
@@ -65,7 +71,13 @@
               <button type="button" class="filter-menu-clear" data-clear-selection>Show all</button>
             </div>
           </details>
-          <button class="reset" id="reset">Reset</button>
+          <button class="clear-filters" id="clear-filters">Clear filters</button>
+          <div class="data-actions" aria-label="Checklist data">
+            <button type="button" id="backup">Backup</button>
+            <button type="button" id="restore">Restore</button>
+            <input class="visually-hidden" type="file" id="restore-input" accept="application/json,.json" aria-label="Restore checklist backup" />
+            <button class="reset" id="reset">Reset</button>
+          </div>
           <label class="search">
             <span>⌕</span>
             <input id="search" placeholder="Find a Sprite…" aria-label="Find a Sprite" />
@@ -77,7 +89,7 @@
 
       <aside class="sync-note">
         <span class="lock">⌁</span>
-        <div><strong>About Fortnite account sync</strong><p>Epic does not currently offer public access to a player’s Sprite collection, so automatic live syncing isn’t available. Your checklist stays private in this browser.</p></div>
+        <div><strong>Your checklist stays on this device</strong><p>Epic does not currently offer public access to a player’s Sprite collection. Use Backup before switching browsers or phones, then Restore to bring your progress with you.</p></div>
       </aside>
 
       <footer>

@@ -1,15 +1,19 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import Image from "next/image";
+import catalog from "@/data/catalog.json";
 
 type Variant = "Base" | "Gold" | "Cheat Master";
 type SpriteFamily = { name: string; rarity: string; variants: Variant[] };
-type Progress = Record<string, { acquired: boolean; mastered: boolean }>;
+type SpriteState = { acquired: boolean; mastered: boolean };
+type Progress = Record<string, SpriteState>;
 type Filter = "all" | "missing" | "not-mastered" | "acquired" | "acquired-unmastered" | "mastered";
 
-const CURRENT_SEASON_ID = "chapter-7-season-4";
-const CURRENT_SEASON_LABEL = "Chapter 7 · Season 4";
-const STORAGE_KEY = "sprite-locker-progress-chapter-7-season-4";
+const SPRITES = catalog.families as SpriteFamily[];
+const TOTAL = SPRITES.reduce((sum, sprite) => sum + sprite.variants.length, 0);
+const ACTIVE_KEYS = new Set(SPRITES.flatMap((sprite) => sprite.variants.map((variant) => `${sprite.name}::${variant}`)));
+const VARIANTS: Variant[] = ["Base", "Gold", "Cheat Master"];
 
 const FILTERS: { value: Filter; label: string }[] = [
   { value: "missing", label: "Missing" },
@@ -20,28 +24,25 @@ const FILTERS: { value: Filter; label: string }[] = [
   { value: "all", label: "All" },
 ];
 
-const SPRITES: SpriteFamily[] = [
-  { name: "Jackrabbit", rarity: "Legendary", variants: ["Base", "Gold", "Cheat Master"] },
-  { name: "Shadow", rarity: "Epic", variants: ["Base", "Cheat Master", "Gold"] },
-  { name: "Bush", rarity: "Rare", variants: ["Base", "Cheat Master", "Gold"] },
-  { name: "Tails", rarity: "Epic", variants: ["Base", "Cheat Master", "Gold"] },
-  { name: "Killswitch", rarity: "Epic", variants: ["Base", "Cheat Master", "Gold"] },
-  { name: "Adventure", rarity: "Rare", variants: ["Base", "Cheat Master", "Gold"] },
-  { name: "Klombo", rarity: "Mythic", variants: ["Base", "Cheat Master", "Gold"] },
-  { name: "Jonesy", rarity: "Rare", variants: ["Base", "Cheat Master", "Gold"] },
-  { name: "Sonic", rarity: "Epic", variants: ["Base", "Cheat Master", "Gold"] },
-  { name: "Crown", rarity: "Mythic", variants: ["Base", "Cheat Master", "Gold"] },
-  { name: "8-Bit", rarity: "Rare", variants: ["Base", "Cheat Master", "Gold"] },
-  { name: "Storm Scout", rarity: "Rare", variants: ["Base", "Cheat Master", "Gold"] },
-];
-
-const TOTAL = SPRITES.reduce((sum, sprite) => sum + sprite.variants.length, 0);
 const keyFor = (name: string, variant: Variant) => `${name}::${variant}`;
 const imageFor = (name: string, variant: Variant) => {
   const slug = name.toLowerCase().replace(/\./g, "").replace(/\s+/g, "-");
   const variantSlug = variant.toLowerCase().replace(/\s+/g, "-");
   return `/sprites/${slug}-${variantSlug}-256.webp`;
 };
+
+function sanitizeProgress(value: unknown): Progress {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return {};
+  const clean: Progress = {};
+  for (const [key, state] of Object.entries(value)) {
+    if (!ACTIVE_KEYS.has(key) || !state || typeof state !== "object" || Array.isArray(state)) continue;
+    const raw = state as Partial<SpriteState>;
+    const mastered = raw.mastered === true;
+    const acquired = raw.acquired === true || mastered;
+    if (acquired || mastered) clean[key] = { acquired, mastered };
+  }
+  return clean;
+}
 
 function ProgressRing({ value, label, tone }: { value: number; label: string; tone: "green" | "gold" }) {
   const percent = Math.round((value / TOTAL) * 100);
@@ -58,14 +59,7 @@ function ProgressRing({ value, label, tone }: { value: number; label: string; to
   );
 }
 
-function MultiSelectFilter({
-  label,
-  items,
-  selected,
-  onToggle,
-  onClear,
-  className = "",
-}: {
+function MultiSelectFilter({ label, items, selected, onToggle, onClear, className = "" }: {
   label: string;
   items: readonly string[];
   selected: readonly string[];
@@ -97,33 +91,36 @@ export default function Home() {
   const [selectedVariants, setSelectedVariants] = useState<Variant[]>([]);
   const [query, setQuery] = useState("");
   const [ready, setReady] = useState(false);
+  const restoreInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    let savedProgress: Progress = {};
     try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved) as Progress;
-        setProgress(Object.fromEntries(
-          Object.entries(parsed).map(([key, state]) => [
-            key,
-            state.mastered ? { ...state, acquired: true } : state,
-          ]),
-        ));
-      }
+      const saved = localStorage.getItem(catalog.storageKey);
+      if (saved) savedProgress = sanitizeProgress(JSON.parse(saved));
     } catch {}
-    setReady(true);
+    queueMicrotask(() => {
+      setProgress(savedProgress);
+      setReady(true);
+    });
+    if ("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js").catch(() => {});
   }, []);
 
   useEffect(() => {
-    if (ready) localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+    if (ready) localStorage.setItem(catalog.storageKey, JSON.stringify(progress));
   }, [progress, ready]);
 
   const counts = useMemo(() => {
-    const states = Object.values(progress);
-    return {
-      acquired: states.filter((item) => item.acquired).length,
-      mastered: states.filter((item) => item.mastered).length,
-    };
+    let acquired = 0;
+    let mastered = 0;
+    for (const sprite of SPRITES) {
+      for (const variant of sprite.variants) {
+        const state = progress[keyFor(sprite.name, variant)];
+        if (state?.acquired) acquired += 1;
+        if (state?.mastered) mastered += 1;
+      }
+    }
+    return { acquired, mastered };
   }, [progress]);
 
   const visible = useMemo(() => SPRITES.map((sprite) => ({
@@ -141,7 +138,7 @@ export default function Home() {
   })).filter((sprite) => (
     sprite.variants.length
     && (!selectedSprites.length || selectedSprites.includes(sprite.name))
-    && sprite.name.toLowerCase().includes(query.toLowerCase())
+    && sprite.name.toLowerCase().includes(query.trim().toLowerCase())
   )), [filter, progress, query, selectedSprites, selectedVariants]);
 
   function toggleSpriteFilter(name: string) {
@@ -153,6 +150,13 @@ export default function Home() {
     setSelectedVariants((current) => current.includes(typedVariant) ? current.filter((item) => item !== typedVariant) : [...current, typedVariant]);
   }
 
+  function clearFilters() {
+    setFilter("missing");
+    setSelectedSprites([]);
+    setSelectedVariants([]);
+    setQuery("");
+  }
+
   function toggle(name: string, variant: Variant, field: "acquired" | "mastered") {
     const key = keyFor(name, variant);
     setProgress((current) => {
@@ -160,21 +164,51 @@ export default function Home() {
       const next = { ...old, [field]: !old[field] };
       if (field === "mastered" && next.mastered) next.acquired = true;
       if (field === "acquired" && !next.acquired) next.mastered = false;
-      return { ...current, [key]: next };
+      const updated = { ...current };
+      if (!next.acquired && !next.mastered) delete updated[key];
+      else updated[key] = next;
+      return updated;
     });
+  }
+
+  function backupProgress() {
+    const backup = { schemaVersion: 1, seasonId: catalog.seasonId, exportedAt: new Date().toISOString(), progress: sanitizeProgress(progress) };
+    const url = URL.createObjectURL(new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" }));
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `fortnite-sprite-locker-${catalog.seasonId}.json`;
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  async function restoreProgress(file?: File) {
+    if (!file) return;
+    try {
+      const backup = JSON.parse(await file.text()) as { seasonId?: string; progress?: unknown };
+      if (backup.seasonId !== catalog.seasonId) throw new Error("This backup belongs to a different Fortnite season.");
+      const restored = sanitizeProgress(backup.progress);
+      setProgress(restored);
+      alert(`Restored ${Object.keys(restored).length} saved Sprite entries.`);
+    } catch (error) {
+      alert(error instanceof Error ? error.message : "That backup file could not be restored.");
+    } finally {
+      if (restoreInput.current) restoreInput.current.value = "";
+    }
   }
 
   return (
     <main>
       <header className="hero">
         <nav>
-          <div className="brand-lockup" data-season-id={CURRENT_SEASON_ID}>
+          <div className="brand-lockup" data-season-id={catalog.seasonId}>
             <a className="brand" href="#top" aria-label="Fortnite Sprite Locker home">
-              <img src="/fortnite-sprite-locker-logo-transparent.png" alt="Fortnite Sprite Locker" width="1983" height="793" />
+              <Image src="/fortnite-sprite-locker-logo-transparent.png" alt="Fortnite Sprite Locker" width={1983} height={793} priority sizes="(max-width: 760px) 43vw, 330px" unoptimized />
             </a>
-            <p className="season-badge" aria-label={`Current Fortnite season: ${CURRENT_SEASON_LABEL}`}>
-              {CURRENT_SEASON_LABEL}
-            </p>
+            <div className="season-badge" aria-label={`Current Fortnite season: ${catalog.chapter}, ${catalog.season}, ${catalog.seasonTheme}`}>
+              <span className="season-chapter">{catalog.chapter}</span>
+              <strong>{catalog.season}</strong>
+              <span className="season-theme">{catalog.seasonTheme}</span>
+            </div>
           </div>
           <a className="source-link" href="https://fortnite.gg/sprites" target="_blank" rel="noreferrer">Live Sprite source ↗</a>
           <div className="header-status" id="top">
@@ -182,7 +216,7 @@ export default function Home() {
               <ProgressRing value={counts.acquired} label="Acquired" tone="green" />
               <ProgressRing value={counts.mastered} label="Mastered" tone="gold" />
             </div>
-            <p className="update-stamp">UPDATED AUGUST 20, 2026 · PATCH V42.00</p>
+            <p className="update-stamp">UPDATED {catalog.updatedDate.toUpperCase()} · PATCH {catalog.patch.toUpperCase()}</p>
           </div>
         </nav>
       </header>
@@ -195,23 +229,15 @@ export default function Home() {
               {FILTERS.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}
             </select>
           </label>
-          <MultiSelectFilter
-            label="Sprites"
-            items={SPRITES.map((sprite) => sprite.name)}
-            selected={selectedSprites}
-            onToggle={toggleSpriteFilter}
-            onClear={() => setSelectedSprites([])}
-            className="sprite-filter"
-          />
-          <MultiSelectFilter
-            label="Variants"
-            items={["Base", "Gold", "Cheat Master"]}
-            selected={selectedVariants}
-            onToggle={toggleVariantFilter}
-            onClear={() => setSelectedVariants([])}
-            className="variant-filter"
-          />
-          <button className="reset" onClick={() => { if (confirm("Clear every checkmark?")) setProgress({}); }}>Reset</button>
+          <MultiSelectFilter label="Sprites" items={SPRITES.map((sprite) => sprite.name)} selected={selectedSprites} onToggle={toggleSpriteFilter} onClear={() => setSelectedSprites([])} className="sprite-filter" />
+          <MultiSelectFilter label="Variants" items={VARIANTS} selected={selectedVariants} onToggle={toggleVariantFilter} onClear={() => setSelectedVariants([])} className="variant-filter" />
+          <button className="clear-filters" onClick={clearFilters}>Clear filters</button>
+          <div className="data-actions" aria-label="Checklist data">
+            <button type="button" onClick={backupProgress}>Backup</button>
+            <button type="button" onClick={() => restoreInput.current?.click()}>Restore</button>
+            <input ref={restoreInput} className="visually-hidden" type="file" accept="application/json,.json" onChange={(event) => restoreProgress(event.target.files?.[0])} aria-label="Restore checklist backup" />
+            <button className="reset" onClick={() => { if (confirm("Clear every checkmark?")) setProgress({}); }}>Reset</button>
+          </div>
           <label className="search">
             <span>⌕</span>
             <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Find a Sprite…" aria-label="Find a Sprite" />
@@ -233,13 +259,7 @@ export default function Home() {
                   return (
                     <article className={`sprite-card ${state.mastered ? "is-mastered" : state.acquired ? "is-acquired" : ""}`} key={variant}>
                       <div className={`sprite-art ${variant.toLowerCase().replace(/\s+/g, "-")}`}>
-                        <img
-                          src={imageFor(sprite.name, variant)}
-                          alt={`${variant === "Base" ? "" : `${variant} `}${sprite.name} Sprite`}
-                          width="256"
-                          height="256"
-                          loading="lazy"
-                        />
+                        <Image src={imageFor(sprite.name, variant)} alt={`${variant === "Base" ? "" : `${variant} `}${sprite.name} Sprite`} width={256} height={256} loading="lazy" sizes="(max-width: 760px) calc((100vw - 82px) / 3), 30vw" unoptimized />
                       </div>
                       <h4>{variant}</h4>
                       <label className="check acquired-check">
@@ -262,7 +282,7 @@ export default function Home() {
 
       <aside className="sync-note">
         <span className="lock">⌁</span>
-        <div><strong>About Fortnite account sync</strong><p>Epic does not currently offer public access to a player’s Sprite collection, so automatic live syncing isn’t available. Your checklist stays private in this browser.</p></div>
+        <div><strong>Your checklist stays on this device</strong><p>Epic does not currently offer public access to a player’s Sprite collection. Use Backup before switching browsers or phones, then Restore to bring your progress with you.</p></div>
       </aside>
 
       <footer>
