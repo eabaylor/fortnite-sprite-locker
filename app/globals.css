@@ -81,7 +81,7 @@ h2 { margin-bottom: 0; font-family: var(--font-display), sans-serif; text-transf
 .filters .filter-menu-clear { width: 100%; margin-bottom: 4px; border-radius: 7px; padding: 6px; color: var(--green-dark); border-color: #b8d4c9; }
 .filters .reset { margin-left: auto; color: #8c554d; border-color: #d7bbb5; }
 .sprite-list { border-top: 2px solid var(--ink); }
-.sprite-row { display: grid; grid-template-columns: 122px 1fr; min-height: 190px; border-bottom: 1px solid #cfd6ce; }
+.sprite-row { display: grid; grid-template-columns: 122px minmax(0, 1fr); min-height: 190px; border-bottom: 1px solid #cfd6ce; }
 .row-label { position: sticky; left: 0; z-index: 2; align-self: stretch; padding: 22px 14px 16px 0; background: var(--cream); }
 .rarity { display: inline-block; border-radius: 3px; margin-bottom: 10px; padding: 4px 7px; color: white; background: #64748b; font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .1em; }
 .rarity.rare { background: #1685c3; }
@@ -90,7 +90,7 @@ h2 { margin-bottom: 0; font-family: var(--font-display), sans-serif; text-transf
 .rarity.mythic { background: #bc8b13; }
 .row-label h3 { margin-bottom: 7px; font-family: var(--font-display), sans-serif; font-size: 21px; letter-spacing: -.035em; }
 .row-label a { color: var(--muted); font-size: 11px; font-weight: 700; text-decoration: none; }
-.variant-strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; padding: 10px 2px 10px 8px; overflow: visible; }
+.variant-strip { min-width: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; padding: 10px 2px 10px 8px; overflow: visible; }
 .sprite-card { min-width: 0; border: 1px solid #d6ddd5; border-radius: 12px; padding: 7px; background: rgba(255,253,246,.72); transition: transform .18s, border-color .18s, background .18s; }
 .sprite-card.is-acquired { border-color: #60b89e; background: #edf9f4; }
 .sprite-card.is-mastered { border-color: #dfad2c; background: #fff8dc; box-shadow: inset 0 0 0 1px #f3cf62; }
@@ -145,7 +145,7 @@ footer p { margin: 0; text-align: right; }
   .search { flex: 1 1 72px; min-width: 72px; max-width: none; gap: 3px; padding: 4px 1px; }
   .search span { font-size: 16px; }
   .search input { min-width: 0; font-size: 10px; }
-  .sprite-row { grid-template-columns: 72px 1fr; min-height: 139px; }
+  .sprite-row { grid-template-columns: 72px minmax(0, 1fr); min-height: 139px; }
   .row-label { padding: 9px 4px 8px 0; }
   .rarity { margin-bottom: 6px; padding: 3px 4px; font-size: 7px; letter-spacing: .04em; }
   .row-label h3 { margin-bottom: 4px; font-size: 13px; overflow-wrap: anywhere; }
