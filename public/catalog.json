@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-season-4",
-  "assetVersion": "20260820-6",
+  "assetVersion": "20260821-1",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -12,16 +12,15 @@
       "imageBase": "sprites",
       "storageKey": "sprite-locker-progress-chapter-7-season-4",
       "legacyStorageKeys": [],
-      "updatedDate": "August 20, 2026",
+      "updatedDate": "August 21, 2026",
       "patch": "v42.00",
-      "assetVersion": "20260820-6",
+      "assetVersion": "20260821-1",
       "families": [
         {
           "name": "Jackrabbit",
           "rarity": "Legendary",
           "variants": [
             "Base",
-            "Gold",
             "Cheat Master"
           ]
         },
@@ -30,8 +29,7 @@
           "rarity": "Epic",
           "variants": [
             "Base",
-            "Cheat Master",
-            "Gold"
+            "Cheat Master"
           ]
         },
         {
@@ -39,8 +37,7 @@
           "rarity": "Rare",
           "variants": [
             "Base",
-            "Cheat Master",
-            "Gold"
+            "Cheat Master"
           ]
         },
         {
@@ -48,8 +45,7 @@
           "rarity": "Epic",
           "variants": [
             "Base",
-            "Cheat Master",
-            "Gold"
+            "Cheat Master"
           ]
         },
         {
@@ -57,8 +53,7 @@
           "rarity": "Epic",
           "variants": [
             "Base",
-            "Cheat Master",
-            "Gold"
+            "Cheat Master"
           ]
         },
         {
@@ -66,8 +61,7 @@
           "rarity": "Rare",
           "variants": [
             "Base",
-            "Cheat Master",
-            "Gold"
+            "Cheat Master"
           ]
         },
         {
@@ -75,8 +69,7 @@
           "rarity": "Mythic",
           "variants": [
             "Base",
-            "Cheat Master",
-            "Gold"
+            "Cheat Master"
           ]
         },
         {
@@ -84,8 +77,7 @@
           "rarity": "Rare",
           "variants": [
             "Base",
-            "Cheat Master",
-            "Gold"
+            "Cheat Master"
           ]
         },
         {
@@ -93,8 +85,7 @@
           "rarity": "Epic",
           "variants": [
             "Base",
-            "Cheat Master",
-            "Gold"
+            "Cheat Master"
           ]
         },
         {
@@ -102,8 +93,7 @@
           "rarity": "Mythic",
           "variants": [
             "Base",
-            "Cheat Master",
-            "Gold"
+            "Cheat Master"
           ]
         },
         {
@@ -111,17 +101,7 @@
           "rarity": "Rare",
           "variants": [
             "Base",
-            "Cheat Master",
-            "Gold"
-          ]
-        },
-        {
-          "name": "Storm Scout",
-          "rarity": "Rare",
-          "variants": [
-            "Base",
-            "Cheat Master",
-            "Gold"
+            "Cheat Master"
           ]
         }
       ]
