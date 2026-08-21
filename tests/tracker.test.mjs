@@ -30,6 +30,7 @@ test("catalog has unique active entries and matching artwork", async () => {
   assert.equal(catalog.seasonId, "chapter-7-season-4");
   assert.equal(catalog.storageKey, "sprite-locker-progress-chapter-7-season-4");
   assert.equal(entries.length, 22);
+  assert.equal(catalog.whatsNew.items.length, 3);
 
   const keys = entries.map(({ family, variant }) => `${family.name}::${variant}`);
   assert.equal(new Set(keys).size, keys.length);
@@ -85,6 +86,7 @@ test("server renders the real tracker with current season and all cards", async 
   assert.match(html, /Clear filters/);
   assert.match(html, /Backup/);
   assert.match(html, /Restore/);
+  assert.match(html, /What’s New/);
   assert.equal((html.match(/class="sprite-card /g) ?? []).length, 22);
   assert.doesNotMatch(html, /Your site is taking shape|Building your site/);
 });
@@ -111,6 +113,9 @@ test("static build is generated from the shared catalog", async () => {
   assert.match(page, /legacyStorageKeys/);
   assert.match(app, /seasonId === BUNDLE\.defaultSeasonId/);
   assert.match(page, /const initialSeason = CATALOGS\[0\]/);
+  assert.match(app, /sprite-locker-last-seen-release/);
+  assert.match(page, /sprite-locker-last-seen-release/);
+  assert.match(index, /id="whats-new-backdrop"/);
   assert.doesNotMatch(app, /sprite-locker-selected-season/);
   assert.doesNotMatch(page, /sprite-locker-selected-season/);
   assert.match(app, /field === "mastered" && next\.mastered\) next\.acquired = true/);
@@ -129,5 +134,6 @@ test("mobile layout keeps three variants inside the viewport", async () => {
     assert.match(css, /\.sprite-art img[^}]+object-fit:\s*contain/s);
     assert.match(css, /@media \(max-width: 760px\)/);
     assert.doesNotMatch(css, /\.variant-strip[^}]+overflow-x:\s*(auto|scroll)/s);
+    assert.match(css, /\.whats-new-card/);
   }
 });

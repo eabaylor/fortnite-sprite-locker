@@ -1,5 +1,7 @@
 const BUNDLE = window.SPRITE_CATALOGS;
 const CATALOGS = BUNDLE.seasons;
+const RELEASE_VERSION = BUNDLE.assetVersion;
+const WHATS_NEW_STORAGE_KEY = "sprite-locker-last-seen-release";
 let season = CATALOGS.find((item) => item.seasonId === BUNDLE.defaultSeasonId)
   || CATALOGS[0];
 let filter = "missing";
@@ -180,6 +182,43 @@ function populateSeasonFilters() {
   populateFilter("variant-filter-menu", "variant-filter-label", [...new Set(sprites().flatMap(({ variants }) => variants))], selectedVariants);
 }
 
+const whatsNew = CATALOGS.find((item) => item.seasonId === BUNDLE.defaultSeasonId)?.whatsNew || {
+  title: "Sprite catalog updated",
+  intro: "The tracker has been refreshed with the latest released Sprites.",
+  items: [],
+};
+const whatsNewBackdrop = document.querySelector("#whats-new-backdrop");
+const whatsNewClose = document.querySelector("#whats-new-close");
+document.querySelector("#whats-new-title").textContent = whatsNew.title;
+document.querySelector("#whats-new-intro").textContent = whatsNew.intro || "";
+document.querySelector("#whats-new-kicker").textContent = `Tracker update · ${season.updatedDate}`;
+document.querySelector("#whats-new-items").replaceChildren(...whatsNew.items.map((item) => {
+  const entry = document.createElement("li");
+  entry.textContent = item;
+  return entry;
+}));
+
+function openWhatsNew() {
+  whatsNewBackdrop.hidden = false;
+  document.body.classList.add("modal-open");
+  queueMicrotask(() => whatsNewClose.focus());
+}
+
+function closeWhatsNew() {
+  whatsNewBackdrop.hidden = true;
+  document.body.classList.remove("modal-open");
+  try { localStorage.setItem(WHATS_NEW_STORAGE_KEY, RELEASE_VERSION); } catch {}
+}
+
+document.querySelector("#whats-new-trigger").addEventListener("click", openWhatsNew);
+whatsNewClose.addEventListener("click", closeWhatsNew);
+whatsNewBackdrop.addEventListener("click", (event) => {
+  if (event.target === whatsNewBackdrop) closeWhatsNew();
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && !whatsNewBackdrop.hidden) closeWhatsNew();
+});
+
 const seasonSelect = document.querySelector("#season-select");
 for (const catalog of CATALOGS) {
   const option = document.createElement("option");
@@ -281,3 +320,8 @@ document.querySelector("#sprite-list").addEventListener("change", (event) => {
 updateSeasonUi();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").catch(() => {});
 render();
+try {
+  if (localStorage.getItem(WHATS_NEW_STORAGE_KEY) !== RELEASE_VERSION) openWhatsNew();
+} catch {
+  openWhatsNew();
+}

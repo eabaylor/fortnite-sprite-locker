@@ -9,7 +9,16 @@
   "legacyStorageKeys": [],
   "updatedDate": "August 21, 2026",
   "patch": "v42.00",
-  "assetVersion": "20260821-1",
+  "assetVersion": "20260821-2",
+  "whatsNew": {
+    "title": "Season 4 catalog updated",
+    "intro": "Here’s what changed in this release:",
+    "items": [
+      "The checklist now shows only the 22 Sprite variants currently released in Season 4.",
+      "Gold variants and Storm Scout stay hidden until they are officially active.",
+      "A What’s New message will appear once on your device after future tracker updates."
+    ]
+  },
   "families": [
     { "name": "Jackrabbit", "rarity": "Legendary", "variants": ["Base", "Cheat Master"] },
     { "name": "Shadow", "rarity": "Epic", "variants": ["Base", "Cheat Master"] },

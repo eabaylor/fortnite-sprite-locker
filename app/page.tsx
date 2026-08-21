@@ -16,6 +16,8 @@ type SeasonCatalog = {
   legacyStorageKeys?: string[];
   updatedDate: string;
   patch: string;
+  assetVersion?: string;
+  whatsNew?: { title: string; intro?: string; items: string[] };
   families: SpriteFamily[];
 };
 type SpriteState = { acquired: boolean; mastered: boolean };
@@ -24,6 +26,9 @@ type Filter = "all" | "missing" | "not-mastered" | "acquired" | "acquired-unmast
 
 const CATALOGS = [currentCatalog, previousCatalog] as SeasonCatalog[];
 const DEFAULT_SEASON_ID = currentCatalog.seasonId;
+const RELEASE_VERSION = currentCatalog.assetVersion;
+const WHATS_NEW = currentCatalog.whatsNew;
+const WHATS_NEW_STORAGE_KEY = "sprite-locker-last-seen-release";
 
 const FILTERS: { value: Filter; label: string }[] = [
   { value: "missing", label: "Missing" },
@@ -121,7 +126,9 @@ export default function Home() {
   const [selectedVariants, setSelectedVariants] = useState<string[]>([]);
   const [query, setQuery] = useState("");
   const [ready, setReady] = useState(false);
+  const [whatsNewOpen, setWhatsNewOpen] = useState(false);
   const restoreInput = useRef<HTMLInputElement>(null);
+  const whatsNewClose = useRef<HTMLButtonElement>(null);
 
   const activeSeason = CATALOGS.find((season) => season.seasonId === selectedSeasonId) ?? CATALOGS[0];
   const sprites = activeSeason.families;
@@ -135,9 +142,28 @@ export default function Home() {
       setSelectedSeasonId(initialSeason.seasonId);
       setProgress(savedProgress);
       setReady(true);
+      try {
+        if (localStorage.getItem(WHATS_NEW_STORAGE_KEY) !== RELEASE_VERSION) setWhatsNewOpen(true);
+      } catch {
+        setWhatsNewOpen(true);
+      }
     });
     if ("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js").catch(() => {});
   }, []);
+
+  useEffect(() => {
+    if (!whatsNewOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") closeWhatsNew();
+    };
+    document.body.classList.add("modal-open");
+    document.addEventListener("keydown", onKeyDown);
+    queueMicrotask(() => whatsNewClose.current?.focus());
+    return () => {
+      document.body.classList.remove("modal-open");
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [whatsNewOpen]);
 
   useEffect(() => {
     if (ready) localStorage.setItem(activeSeason.storageKey, JSON.stringify(progress));
@@ -198,6 +224,13 @@ export default function Home() {
     setSelectedSprites([]);
     setSelectedVariants([]);
     setQuery("");
+  }
+
+  function closeWhatsNew() {
+    setWhatsNewOpen(false);
+    try {
+      localStorage.setItem(WHATS_NEW_STORAGE_KEY, RELEASE_VERSION);
+    } catch {}
   }
 
   function toggle(name: string, variant: string, field: "acquired" | "mastered") {
@@ -279,6 +312,7 @@ export default function Home() {
           <MultiSelectFilter label="Sprites" items={sprites.map((sprite) => sprite.name)} selected={selectedSprites} onToggle={toggleSpriteFilter} onClear={() => setSelectedSprites([])} className="sprite-filter" />
           <MultiSelectFilter label="Variants" items={variants} selected={selectedVariants} onToggle={toggleVariantFilter} onClear={() => setSelectedVariants([])} className="variant-filter" />
           <button className="clear-filters" onClick={clearFilters}>Clear filters</button>
+          <button className="whats-new-trigger" type="button" onClick={() => setWhatsNewOpen(true)}>What’s New</button>
           <div className="data-actions" aria-label="Checklist data">
             <button type="button" onClick={backupProgress}>Backup</button>
             <button type="button" onClick={() => restoreInput.current?.click()}>Restore</button>
@@ -336,6 +370,18 @@ export default function Home() {
         <span>FORTNITE SPRITE LOCKER · FAN-MADE CHECKLIST</span>
         <p>Not affiliated with or endorsed by Epic Games. Fortnite is a trademark of Epic Games, Inc.</p>
       </footer>
+
+      {whatsNewOpen && (
+        <div className="whats-new-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) closeWhatsNew(); }}>
+          <section className="whats-new-card" role="dialog" aria-modal="true" aria-labelledby="whats-new-title">
+            <span className="whats-new-kicker">Tracker update · {currentCatalog.updatedDate}</span>
+            <h2 id="whats-new-title">{WHATS_NEW.title}</h2>
+            {WHATS_NEW.intro && <p>{WHATS_NEW.intro}</p>}
+            <ul>{WHATS_NEW.items.map((item) => <li key={item}>{item}</li>)}</ul>
+            <button ref={whatsNewClose} type="button" onClick={closeWhatsNew}>Got it — show my checklist</button>
+          </section>
+        </div>
+      )}
     </main>
   );
 }

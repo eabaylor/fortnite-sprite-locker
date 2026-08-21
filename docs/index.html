@@ -11,9 +11,9 @@
     <title>Fortnite Sprite Locker — Sprite Checklist</title>
     <link rel="icon" href="favicon.svg" />
     <link rel="manifest" href="manifest.webmanifest" />
-    <link rel="stylesheet" href="styles.css?v=20260821-1" />
-    <script src="catalog.js?v=20260821-1" defer></script>
-    <script src="app.js?v=20260821-1" defer></script>
+    <link rel="stylesheet" href="styles.css?v=20260821-2" />
+    <script src="catalog.js?v=20260821-2" defer></script>
+    <script src="app.js?v=20260821-2" defer></script>
   </head>
   <body>
     <main>
@@ -74,6 +74,7 @@
             </div>
           </details>
           <button class="clear-filters" id="clear-filters">Clear filters</button>
+          <button class="whats-new-trigger" id="whats-new-trigger" type="button">What’s New</button>
           <div class="data-actions" aria-label="Checklist data">
             <button type="button" id="backup">Backup</button>
             <button type="button" id="restore">Restore</button>
@@ -98,6 +99,16 @@
         <span>FORTNITE SPRITE LOCKER · FAN-MADE CHECKLIST</span>
         <p>Not affiliated with or endorsed by Epic Games. Fortnite is a trademark of Epic Games, Inc.</p>
       </footer>
+
+      <div class="whats-new-backdrop" id="whats-new-backdrop" role="presentation" hidden>
+        <section class="whats-new-card" role="dialog" aria-modal="true" aria-labelledby="whats-new-title">
+          <span class="whats-new-kicker" id="whats-new-kicker"></span>
+          <h2 id="whats-new-title"></h2>
+          <p id="whats-new-intro"></p>
+          <ul id="whats-new-items"></ul>
+          <button id="whats-new-close" type="button">Got it — show my checklist</button>
+        </section>
+      </div>
     </main>
   </body>
 </html>
