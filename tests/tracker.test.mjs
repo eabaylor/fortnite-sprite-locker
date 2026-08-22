@@ -29,7 +29,7 @@ async function render() {
 test("catalog has unique active entries and matching artwork", async () => {
   assert.equal(catalog.seasonId, "chapter-7-season-4");
   assert.equal(catalog.storageKey, "sprite-locker-progress-chapter-7-season-4");
-  assert.equal(entries.length, 22);
+  assert.equal(entries.length, 33);
   assert.equal(catalog.whatsNew.items.length, 3);
 
   const keys = entries.map(({ family, variant }) => `${family.name}::${variant}`);
@@ -87,7 +87,7 @@ test("server renders the real tracker with current season and all cards", async 
   assert.match(html, /Backup/);
   assert.match(html, /Restore/);
   assert.match(html, /What’s New/);
-  assert.equal((html.match(/class="sprite-card /g) ?? []).length, 22);
+  assert.equal((html.match(/class="sprite-card /g) ?? []).length, 33);
   assert.doesNotMatch(html, /Your site is taking shape|Building your site/);
 });
 

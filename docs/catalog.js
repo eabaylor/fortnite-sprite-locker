@@ -1,7 +1,7 @@
 window.SPRITE_CATALOGS = {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-season-4",
-  "assetVersion": "20260821-2",
+  "assetVersion": "20260822-1",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -12,16 +12,16 @@ window.SPRITE_CATALOGS = {
       "imageBase": "sprites",
       "storageKey": "sprite-locker-progress-chapter-7-season-4",
       "legacyStorageKeys": [],
-      "updatedDate": "August 21, 2026",
+      "updatedDate": "August 22, 2026",
       "patch": "v42.00",
-      "assetVersion": "20260821-2",
+      "assetVersion": "20260822-1",
       "whatsNew": {
-        "title": "Season 4 catalog updated",
-        "intro": "Here’s what changed in this release:",
+        "title": "11 Gold variants are live",
+        "intro": "Golden Hours has expanded the Season 4 checklist:",
         "items": [
-          "The checklist now shows only the 22 Sprite variants currently released in Season 4.",
-          "Gold variants and Storm Scout stay hidden until they are officially active.",
-          "A What’s New message will appear once on your device after future tracker updates."
+          "Gold variants are now available for all 11 released Season 4 Sprite families.",
+          "The current-season checklist has grown from 22 to 33 released variants.",
+          "Your existing Season 4 checkmarks remain saved on this device."
         ]
       },
       "families": [
@@ -30,7 +30,8 @@ window.SPRITE_CATALOGS = {
           "rarity": "Legendary",
           "variants": [
             "Base",
-            "Cheat Master"
+            "Cheat Master",
+            "Gold"
           ]
         },
         {
@@ -38,7 +39,8 @@ window.SPRITE_CATALOGS = {
           "rarity": "Epic",
           "variants": [
             "Base",
-            "Cheat Master"
+            "Cheat Master",
+            "Gold"
           ]
         },
         {
@@ -46,7 +48,8 @@ window.SPRITE_CATALOGS = {
           "rarity": "Rare",
           "variants": [
             "Base",
-            "Cheat Master"
+            "Cheat Master",
+            "Gold"
           ]
         },
         {
@@ -54,7 +57,8 @@ window.SPRITE_CATALOGS = {
           "rarity": "Epic",
           "variants": [
             "Base",
-            "Cheat Master"
+            "Cheat Master",
+            "Gold"
           ]
         },
         {
@@ -62,7 +66,8 @@ window.SPRITE_CATALOGS = {
           "rarity": "Epic",
           "variants": [
             "Base",
-            "Cheat Master"
+            "Cheat Master",
+            "Gold"
           ]
         },
         {
@@ -70,7 +75,8 @@ window.SPRITE_CATALOGS = {
           "rarity": "Rare",
           "variants": [
             "Base",
-            "Cheat Master"
+            "Cheat Master",
+            "Gold"
           ]
         },
         {
@@ -78,7 +84,8 @@ window.SPRITE_CATALOGS = {
           "rarity": "Mythic",
           "variants": [
             "Base",
-            "Cheat Master"
+            "Cheat Master",
+            "Gold"
           ]
         },
         {
@@ -86,7 +93,8 @@ window.SPRITE_CATALOGS = {
           "rarity": "Rare",
           "variants": [
             "Base",
-            "Cheat Master"
+            "Cheat Master",
+            "Gold"
           ]
         },
         {
@@ -94,7 +102,8 @@ window.SPRITE_CATALOGS = {
           "rarity": "Epic",
           "variants": [
             "Base",
-            "Cheat Master"
+            "Cheat Master",
+            "Gold"
           ]
         },
         {
@@ -102,7 +111,8 @@ window.SPRITE_CATALOGS = {
           "rarity": "Mythic",
           "variants": [
             "Base",
-            "Cheat Master"
+            "Cheat Master",
+            "Gold"
           ]
         },
         {
@@ -110,7 +120,8 @@ window.SPRITE_CATALOGS = {
           "rarity": "Rare",
           "variants": [
             "Base",
-            "Cheat Master"
+            "Cheat Master",
+            "Gold"
           ]
         }
       ]
