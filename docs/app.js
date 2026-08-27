@@ -274,10 +274,14 @@ function renderCodeGuide() {
     button.setAttribute("aria-selected", String(active));
   });
   codeGuideList.replaceChildren();
-  if (codeGuideView === "sprites") for (const unlock of unlockCodes()) {
+  if (codeGuideView === "sprites") for (const unlock of [...unlockCodes()].sort((left, right) => {
+    const leftUsed = left.useType === "one-time" && left.rewards.every((reward) => stateFor(reward.name, reward.variant).acquired);
+    const rightUsed = right.useType === "one-time" && right.rewards.every((reward) => stateFor(reward.name, reward.variant).acquired);
+    return Number(leftUsed) - Number(rightUsed);
+  })) {
     const redeemed = unlock.rewards.every((reward) => stateFor(reward.name, reward.variant).acquired);
     const entry = document.createElement("article");
-    entry.className = `code-entry ${focusedCode === unlock.code ? "is-focused" : ""}`;
+    entry.className = `code-entry ${redeemed && unlock.useType === "one-time" ? "is-used" : ""} ${focusedCode === unlock.code ? "is-focused" : ""}`;
 
     const rewards = document.createElement("div");
     rewards.className = "code-rewards";
@@ -297,7 +301,8 @@ function renderCodeGuide() {
     const copy = document.createElement("button");
     copy.type = "button";
     copy.dataset.copyCode = unlock.code;
-    copy.textContent = "Copy";
+    copy.disabled = redeemed && unlock.useType === "one-time";
+    copy.textContent = copy.disabled ? "Used" : "Copy";
     codeRow.append(code, copy);
 
     entry.append(rewards, codeRow);
@@ -330,10 +335,14 @@ function renderCodeGuide() {
     entry.append(footer);
     codeGuideList.append(entry);
   }
-  if (codeGuideView === "other") for (const item of otherAdminCodes()) {
+  if (codeGuideView === "other") for (const item of [...otherAdminCodes()].sort((left, right) => {
+    const leftUsed = left.useType === "one-time" && redeemedAdminCodes.includes(left.code);
+    const rightUsed = right.useType === "one-time" && redeemedAdminCodes.includes(right.code);
+    return Number(leftUsed) - Number(rightUsed);
+  })) {
     const used = redeemedAdminCodes.includes(item.code);
     const entry = document.createElement("article");
-    entry.className = "code-entry";
+    entry.className = `code-entry ${used && item.useType === "one-time" ? "is-used" : ""}`;
 
     const rewards = document.createElement("div");
     rewards.className = "code-rewards";
@@ -359,7 +368,8 @@ function renderCodeGuide() {
     const copy = document.createElement("button");
     copy.type = "button";
     copy.dataset.copyCode = item.code;
-    copy.textContent = "Copy";
+    copy.disabled = used && item.useType === "one-time";
+    copy.textContent = copy.disabled ? "Used" : "Copy";
     codeRow.append(code, copy);
 
     const footer = document.createElement("div");

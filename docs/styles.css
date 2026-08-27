@@ -168,6 +168,7 @@ footer p { margin: 0; text-align: right; }
 .code-guide-tabs button span { display: inline-grid; min-width: 18px; height: 18px; margin-left: 4px; place-items: center; border-radius: 999px; color: inherit; background: rgba(255,255,255,.18); font-size: 9px; }
 .code-guide-list { display: grid; gap: 10px; }
 .code-entry { display: grid; grid-template-columns: minmax(180px, 1fr) minmax(210px, .9fr); gap: 8px 14px; align-items: center; border: 1px solid #d6ddd5; border-radius: 14px; padding: 10px; background: #faf8ef; }
+.code-entry.is-used { border-color: #cfd3ce; background: #e7e9e5; filter: grayscale(.82); opacity: .62; }
 .code-entry.is-focused { border-color: #d39b0d; box-shadow: 0 0 0 2px rgba(244,185,39,.32); }
 .code-rewards { display: grid; gap: 6px; }
 .code-reward { min-width: 0; display: flex; align-items: center; gap: 9px; }
@@ -180,6 +181,7 @@ footer p { margin: 0; text-align: right; }
 .code-value-row { min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 6px; border: 1px solid #c8d0c8; border-radius: 10px; padding: 5px 5px 5px 11px; background: white; }
 .code-value-row code { min-width: 0; overflow: hidden; color: #073f30; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 13px; font-weight: 900; text-overflow: ellipsis; white-space: nowrap; }
 .code-value-row button { cursor: pointer; border: 0; border-radius: 7px; padding: 8px 11px; color: white; background: var(--green-dark); font-size: 10px; font-weight: 900; }
+.code-value-row button:disabled { cursor: default; color: #69716d; background: #d2d5d1; }
 .code-requirement { grid-column: 1 / -1; margin: 0; border-radius: 8px; padding: 8px 10px; color: #684900; background: #fff3c9; font-size: 11px; line-height: 1.4; }
 .code-entry-footer { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 9px; font-weight: 700; }
 .code-entry-footer a { color: var(--green-dark); }

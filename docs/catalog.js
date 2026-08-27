@@ -1,7 +1,7 @@
 window.SPRITE_CATALOGS = {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-season-4",
-  "assetVersion": "20260827-2",
+  "assetVersion": "20260827-3",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -14,14 +14,14 @@ window.SPRITE_CATALOGS = {
       "legacyStorageKeys": [],
       "updatedDate": "August 27, 2026",
       "patch": "v42.00",
-      "assetVersion": "20260827-2",
+      "assetVersion": "20260827-3",
       "whatsNew": {
-        "title": "The complete Admin Panel guide",
-        "intro": "All of this season’s currently active lobby codes now live inside the tracker:",
+        "title": "Used codes organize themselves",
+        "intro": "The Admin Panel guide is easier to scan after you start redeeming rewards:",
         "items": [
-          "Open Admin Panel Codes to browse 7 Sprite unlocks and 15 other rewards.",
-          "Every code is labeled one-time or reusable, and one-time non-Sprite rewards can be marked used.",
-          "Tap the Fortnite Sprite Locker logo whenever you want to reopen What’s New."
+          "Redeemed one-time codes are greyed out and automatically move below codes you can still use.",
+          "Reusable lobby-transformation codes remain active and easy to find.",
+          "The daily refresh now checks for new, changed, and expired Admin Panel codes as well as new Sprites."
         ]
       },
       "unlockCodes": [

@@ -148,8 +148,11 @@ test("static build is generated from the shared catalog", async () => {
   assert.match(app, /data-redeem-code/);
   assert.match(app, /data-mark-admin-code/);
   assert.match(app, /sprite-locker-redeemed-admin-codes-/);
+  assert.match(app, /Number\(leftUsed\) - Number\(rightUsed\)/);
+  assert.match(app, /entry\.className = `code-entry \$\{used && item\.useType === "one-time" \? "is-used"/);
   assert.match(page, /Mark redeemed/);
   assert.match(page, /Mark used/);
+  assert.match(page, /disabled=\{used && item\.useType === "one-time"\}/);
   assert.doesNotMatch(app, /sprite-locker-selected-season/);
   assert.doesNotMatch(page, /sprite-locker-selected-season/);
   assert.match(app, /field === "mastered" && next\.mastered\) next\.acquired = true/);
@@ -170,6 +173,8 @@ test("mobile layout keeps three variants inside the viewport", async () => {
     assert.doesNotMatch(css, /\.variant-strip[^}]+overflow-x:\s*(auto|scroll)/s);
     assert.match(css, /\.whats-new-card/);
     assert.match(css, /\.code-guide-card/);
+    assert.match(css, /\.code-entry\.is-used/);
+    assert.match(css, /\.code-value-row button:disabled/);
     assert.match(css, /@media \(max-width: 760px\)[\s\S]+\.code-entry \{[^}]+grid-template-columns:\s*minmax\(0, 1fr\)/);
   }
 });

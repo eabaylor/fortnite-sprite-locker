@@ -506,10 +506,14 @@ export default function Home() {
               <button type="button" role="tab" aria-selected={codeGuideView === "other"} className={codeGuideView === "other" ? "active" : ""} onClick={() => setCodeGuideView("other")}>Other rewards <span>{otherAdminCodes.length}</span></button>
             </div>
             <div className="code-guide-list" role="tabpanel">
-              {codeGuideView === "sprites" && unlockCodes.map((unlock) => {
+              {codeGuideView === "sprites" && [...unlockCodes].sort((left, right) => {
+                const leftUsed = left.useType === "one-time" && left.rewards.every((reward) => progress[keyFor(reward.name, reward.variant)]?.acquired);
+                const rightUsed = right.useType === "one-time" && right.rewards.every((reward) => progress[keyFor(reward.name, reward.variant)]?.acquired);
+                return Number(leftUsed) - Number(rightUsed);
+              }).map((unlock) => {
                 const redeemed = unlock.rewards.every((reward) => progress[keyFor(reward.name, reward.variant)]?.acquired);
                 return (
-                  <article className={`code-entry ${focusedCode === unlock.code ? "is-focused" : ""}`} key={unlock.code}>
+                  <article className={`code-entry ${redeemed && unlock.useType === "one-time" ? "is-used" : ""} ${focusedCode === unlock.code ? "is-focused" : ""}`} key={unlock.code}>
                     <div className="code-rewards">
                       {unlock.rewards.map((reward) => (
                         <div className="code-reward" key={`${reward.name}-${reward.variant}`}>
@@ -520,7 +524,7 @@ export default function Home() {
                     </div>
                     <div className="code-value-row">
                       <code>{unlock.code}</code>
-                      <button type="button" onClick={() => copyCode(unlock.code)}>{copiedCode === unlock.code ? "Copied!" : "Copy"}</button>
+                      <button type="button" disabled={redeemed && unlock.useType === "one-time"} onClick={() => copyCode(unlock.code)}>{redeemed && unlock.useType === "one-time" ? "Used" : copiedCode === unlock.code ? "Copied!" : "Copy"}</button>
                     </div>
                     {unlock.requirement && <p className="code-requirement"><strong>Requirement:</strong> {unlock.requirement}</p>}
                     <div className="code-entry-footer">
@@ -532,10 +536,14 @@ export default function Home() {
                   </article>
                 );
               })}
-              {codeGuideView === "other" && otherAdminCodes.map((item) => {
+              {codeGuideView === "other" && [...otherAdminCodes].sort((left, right) => {
+                const leftUsed = left.useType === "one-time" && redeemedAdminCodes.includes(left.code);
+                const rightUsed = right.useType === "one-time" && redeemedAdminCodes.includes(right.code);
+                return Number(leftUsed) - Number(rightUsed);
+              }).map((item) => {
                 const used = redeemedAdminCodes.includes(item.code);
                 return (
-                  <article className="code-entry" key={item.code}>
+                  <article className={`code-entry ${used && item.useType === "one-time" ? "is-used" : ""}`} key={item.code}>
                     <div className="code-rewards">
                       <div className="code-reward code-reward-generic">
                         <span className="code-reward-icon" aria-hidden="true">{item.category === "XP" ? "XP" : item.category === "Sprite Dust" ? "✦" : item.category === "Loading Screen" ? "▣" : item.category === "Lobby Effect" ? "↻" : "⌁"}</span>
@@ -544,7 +552,7 @@ export default function Home() {
                     </div>
                     <div className="code-value-row">
                       <code>{item.code}</code>
-                      <button type="button" onClick={() => copyCode(item.code)}>{copiedCode === item.code ? "Copied!" : "Copy"}</button>
+                      <button type="button" disabled={used && item.useType === "one-time"} onClick={() => copyCode(item.code)}>{used && item.useType === "one-time" ? "Used" : copiedCode === item.code ? "Copied!" : "Copy"}</button>
                     </div>
                     <div className="code-entry-footer">
                       <strong className={`code-use-type ${item.useType}`}>{item.useType === "reusable" ? "Reusable" : "One-time per account"}</strong>
