@@ -34,6 +34,14 @@ test("catalog has unique active entries and matching artwork", async () => {
 
   const keys = entries.map(({ family, variant }) => `${family.name}::${variant}`);
   assert.equal(new Set(keys).size, keys.length);
+  assert.equal(catalog.unlockCodes.length, 7);
+  assert.equal(new Set(catalog.unlockCodes.map(({ code }) => code.toLowerCase())).size, catalog.unlockCodes.length);
+  for (const unlock of catalog.unlockCodes) {
+    assert.ok(unlock.verifiedDate);
+    assert.match(unlock.sourceUrl, /^https:\/\//);
+    assert.ok(unlock.rewards.length > 0);
+    for (const reward of unlock.rewards) assert.ok(keys.includes(`${reward.name}::${reward.variant}`), `${unlock.code} has an unknown reward`);
+  }
 
   const expected = entries.map(({ family, variant }) => `${slug(family.name)}-${slug(variant)}-256.webp`).sort();
   const [publicFiles, docsFiles] = await Promise.all([
@@ -87,6 +95,7 @@ test("server renders the real tracker with current season and all cards", async 
   assert.match(html, /Backup/);
   assert.match(html, /Restore/);
   assert.match(html, /What’s New/);
+  assert.match(html, /Sprite Codes/);
   assert.equal((html.match(/class="sprite-card /g) ?? []).length, 33);
   assert.doesNotMatch(html, /Your site is taking shape|Building your site/);
 });
@@ -116,6 +125,10 @@ test("static build is generated from the shared catalog", async () => {
   assert.match(app, /sprite-locker-last-seen-release/);
   assert.match(page, /sprite-locker-last-seen-release/);
   assert.match(index, /id="whats-new-backdrop"/);
+  assert.match(index, /id="code-guide-backdrop"/);
+  assert.match(app, /navigator\.clipboard/);
+  assert.match(app, /data-redeem-code/);
+  assert.match(page, /Mark redeemed/);
   assert.doesNotMatch(app, /sprite-locker-selected-season/);
   assert.doesNotMatch(page, /sprite-locker-selected-season/);
   assert.match(app, /field === "mastered" && next\.mastered\) next\.acquired = true/);
@@ -135,5 +148,7 @@ test("mobile layout keeps three variants inside the viewport", async () => {
     assert.match(css, /@media \(max-width: 760px\)/);
     assert.doesNotMatch(css, /\.variant-strip[^}]+overflow-x:\s*(auto|scroll)/s);
     assert.match(css, /\.whats-new-card/);
+    assert.match(css, /\.code-guide-card/);
+    assert.match(css, /@media \(max-width: 760px\)[\s\S]+\.code-entry \{[^}]+grid-template-columns:\s*minmax\(0, 1fr\)/);
   }
 });

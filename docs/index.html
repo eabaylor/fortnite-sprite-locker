@@ -11,9 +11,9 @@
     <title>Fortnite Sprite Locker — Sprite Checklist</title>
     <link rel="icon" href="favicon.svg" />
     <link rel="manifest" href="manifest.webmanifest" />
-    <link rel="stylesheet" href="styles.css?v=20260822-1" />
-    <script src="catalog.js?v=20260822-1" defer></script>
-    <script src="app.js?v=20260822-1" defer></script>
+    <link rel="stylesheet" href="styles.css?v=20260827-1" />
+    <script src="catalog.js?v=20260827-1" defer></script>
+    <script src="app.js?v=20260827-1" defer></script>
   </head>
   <body>
     <main>
@@ -43,7 +43,7 @@
                 <div><strong><span id="mastered-count">0</span><small> / <span class="total-count">33</span></small></strong><span>Mastered</span></div>
               </div>
             </div>
-            <p class="update-stamp">UPDATED AUGUST 22, 2026 · PATCH V42.00</p>
+            <p class="update-stamp">UPDATED AUGUST 27, 2026 · PATCH V42.00</p>
           </div>
         </nav>
       </header>
@@ -74,6 +74,7 @@
             </div>
           </details>
           <button class="clear-filters" id="clear-filters">Clear filters</button>
+          <button class="code-guide-trigger" id="code-guide-trigger" type="button">Sprite Codes <span id="code-guide-count">0</span></button>
           <button class="whats-new-trigger" id="whats-new-trigger" type="button">What’s New</button>
           <div class="data-actions" aria-label="Checklist data">
             <button type="button" id="backup">Backup</button>
@@ -107,6 +108,21 @@
           <p id="whats-new-intro"></p>
           <ul id="whats-new-items"></ul>
           <button id="whats-new-close" type="button">Got it — show my checklist</button>
+        </section>
+      </div>
+
+      <div class="code-guide-backdrop" id="code-guide-backdrop" role="presentation" hidden>
+        <section class="code-guide-card" role="dialog" aria-modal="true" aria-labelledby="code-guide-title">
+          <header class="code-guide-header">
+            <div>
+              <span id="code-guide-season"></span>
+              <h2 id="code-guide-title">Sprite Unlock Codes</h2>
+              <p>In the Battle Royale lobby, open <strong>…/Admin Panel</strong>, enter a code, then return here to mark its reward acquired.</p>
+            </div>
+            <button class="code-guide-close" id="code-guide-close" type="button" aria-label="Close Sprite unlock codes">×</button>
+          </header>
+          <div class="code-guide-list" id="code-guide-list"></div>
+          <p class="code-guide-note">Codes are stored in this tracker for offline access after your first visit. If Fortnite says a code is unavailable, restart the game and confirm any listed requirement is complete.</p>
         </section>
       </div>
     </main>

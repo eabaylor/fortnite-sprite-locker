@@ -6,6 +6,14 @@ import currentCatalog from "@/data/catalog.json";
 import previousCatalog from "@/archive/chapter-7-season-3.json";
 
 type SpriteFamily = { name: string; rarity: string; variants: string[] };
+type UnlockReward = { name: string; variant: string };
+type UnlockCode = {
+  code: string;
+  rewards: UnlockReward[];
+  requirement?: string;
+  verifiedDate: string;
+  sourceUrl: string;
+};
 type SeasonCatalog = {
   seasonId: string;
   chapter: string;
@@ -18,6 +26,7 @@ type SeasonCatalog = {
   patch: string;
   assetVersion?: string;
   whatsNew?: { title: string; intro?: string; items: string[] };
+  unlockCodes?: UnlockCode[];
   families: SpriteFamily[];
 };
 type SpriteState = { acquired: boolean; mastered: boolean };
@@ -127,13 +136,18 @@ export default function Home() {
   const [query, setQuery] = useState("");
   const [ready, setReady] = useState(false);
   const [whatsNewOpen, setWhatsNewOpen] = useState(false);
+  const [codeGuideOpen, setCodeGuideOpen] = useState(false);
+  const [focusedCode, setFocusedCode] = useState<string | null>(null);
+  const [copiedCode, setCopiedCode] = useState<string | null>(null);
   const restoreInput = useRef<HTMLInputElement>(null);
   const whatsNewClose = useRef<HTMLButtonElement>(null);
+  const codeGuideClose = useRef<HTMLButtonElement>(null);
 
   const activeSeason = CATALOGS.find((season) => season.seasonId === selectedSeasonId) ?? CATALOGS[0];
   const sprites = activeSeason.families;
   const total = sprites.reduce((sum, sprite) => sum + sprite.variants.length, 0);
   const variants = [...new Set(sprites.flatMap((sprite) => sprite.variants))];
+  const unlockCodes = activeSeason.unlockCodes ?? [];
 
   useEffect(() => {
     const initialSeason = CATALOGS[0];
@@ -164,6 +178,20 @@ export default function Home() {
       document.removeEventListener("keydown", onKeyDown);
     };
   }, [whatsNewOpen]);
+
+  useEffect(() => {
+    if (!codeGuideOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setCodeGuideOpen(false);
+    };
+    document.body.classList.add("modal-open");
+    document.addEventListener("keydown", onKeyDown);
+    queueMicrotask(() => codeGuideClose.current?.focus());
+    return () => {
+      document.body.classList.remove("modal-open");
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [codeGuideOpen]);
 
   useEffect(() => {
     if (ready) localStorage.setItem(activeSeason.storageKey, JSON.stringify(progress));
@@ -209,6 +237,7 @@ export default function Home() {
     setSelectedSprites([]);
     setSelectedVariants([]);
     setQuery("");
+    setCodeGuideOpen(false);
   }
 
   function toggleSpriteFilter(name: string) {
@@ -231,6 +260,34 @@ export default function Home() {
     try {
       localStorage.setItem(WHATS_NEW_STORAGE_KEY, RELEASE_VERSION);
     } catch {}
+  }
+
+  function openCodeGuide(code?: string) {
+    setFocusedCode(code ?? null);
+    setCopiedCode(null);
+    setCodeGuideOpen(true);
+  }
+
+  async function copyCode(code: string) {
+    try {
+      await navigator.clipboard.writeText(code);
+      setCopiedCode(code);
+      window.setTimeout(() => setCopiedCode((current) => current === code ? null : current), 1800);
+    } catch {
+      setCopiedCode(null);
+    }
+  }
+
+  function redeemCode(unlock: UnlockCode) {
+    setProgress((current) => {
+      const updated = { ...current };
+      for (const reward of unlock.rewards) {
+        const key = keyFor(reward.name, reward.variant);
+        const old = updated[key] ?? { acquired: false, mastered: false };
+        updated[key] = { ...old, acquired: true };
+      }
+      return updated;
+    });
   }
 
   function toggle(name: string, variant: string, field: "acquired" | "mastered") {
@@ -312,6 +369,11 @@ export default function Home() {
           <MultiSelectFilter label="Sprites" items={sprites.map((sprite) => sprite.name)} selected={selectedSprites} onToggle={toggleSpriteFilter} onClear={() => setSelectedSprites([])} className="sprite-filter" />
           <MultiSelectFilter label="Variants" items={variants} selected={selectedVariants} onToggle={toggleVariantFilter} onClear={() => setSelectedVariants([])} className="variant-filter" />
           <button className="clear-filters" onClick={clearFilters}>Clear filters</button>
+          {!!unlockCodes.length && (
+            <button className="code-guide-trigger" type="button" onClick={() => openCodeGuide()}>
+              Sprite Codes <span>{unlockCodes.length}</span>
+            </button>
+          )}
           <button className="whats-new-trigger" type="button" onClick={() => setWhatsNewOpen(true)}>What’s New</button>
           <div className="data-actions" aria-label="Checklist data">
             <button type="button" onClick={backupProgress}>Backup</button>
@@ -337,10 +399,16 @@ export default function Home() {
                 {sprite.variants.map((variant) => {
                   const key = keyFor(sprite.name, variant);
                   const state = progress[key] ?? { acquired: false, mastered: false };
+                  const unlock = unlockCodes.find((item) => item.rewards.some((reward) => reward.name === sprite.name && reward.variant === variant));
                   return (
                     <article className={`sprite-card ${state.mastered ? "is-mastered" : state.acquired ? "is-acquired" : ""}`} key={variant}>
                       <div className={`sprite-art ${variant.toLowerCase().replace(/\s+/g, "-")}`}>
                         <Image src={imageFor(activeSeason, sprite.name, variant)} alt={`${variant === "Base" ? "" : `${variant} `}${sprite.name} Sprite`} width={256} height={256} loading="lazy" sizes="(max-width: 760px) calc((100vw - 82px) / 3), 30vw" unoptimized />
+                        {unlock && (
+                          <button className="code-unlock-badge" type="button" onClick={() => openCodeGuide(unlock.code)} aria-label={`View unlock code for ${sprite.name} ${variant}`}>
+                            Code unlock
+                          </button>
+                        )}
                       </div>
                       <h4>{variant}</h4>
                       <label className="check acquired-check">
@@ -379,6 +447,49 @@ export default function Home() {
             {WHATS_NEW.intro && <p>{WHATS_NEW.intro}</p>}
             <ul>{WHATS_NEW.items.map((item) => <li key={item}>{item}</li>)}</ul>
             <button ref={whatsNewClose} type="button" onClick={closeWhatsNew}>Got it — show my checklist</button>
+          </section>
+        </div>
+      )}
+
+      {codeGuideOpen && !!unlockCodes.length && (
+        <div className="code-guide-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setCodeGuideOpen(false); }}>
+          <section className="code-guide-card" role="dialog" aria-modal="true" aria-labelledby="code-guide-title">
+            <header className="code-guide-header">
+              <div>
+                <span>Chapter 7 · Season 4</span>
+                <h2 id="code-guide-title">Sprite Unlock Codes</h2>
+                <p>In the Battle Royale lobby, open <strong>…/Admin Panel</strong>, enter a code, then return here to mark its reward acquired.</p>
+              </div>
+              <button ref={codeGuideClose} className="code-guide-close" type="button" onClick={() => setCodeGuideOpen(false)} aria-label="Close Sprite unlock codes">×</button>
+            </header>
+            <div className="code-guide-list">
+              {unlockCodes.map((unlock) => {
+                const redeemed = unlock.rewards.every((reward) => progress[keyFor(reward.name, reward.variant)]?.acquired);
+                return (
+                  <article className={`code-entry ${focusedCode === unlock.code ? "is-focused" : ""}`} key={unlock.code}>
+                    <div className="code-rewards">
+                      {unlock.rewards.map((reward) => (
+                        <div className="code-reward" key={`${reward.name}-${reward.variant}`}>
+                          <span className="code-reward-art"><Image src={imageFor(activeSeason, reward.name, reward.variant)} alt="" width={56} height={56} unoptimized /></span>
+                          <span><strong>{reward.variant} {reward.name}</strong><small>Sprite</small></span>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="code-value-row">
+                      <code>{unlock.code}</code>
+                      <button type="button" onClick={() => copyCode(unlock.code)}>{copiedCode === unlock.code ? "Copied!" : "Copy"}</button>
+                    </div>
+                    {unlock.requirement && <p className="code-requirement"><strong>Requirement:</strong> {unlock.requirement}</p>}
+                    <div className="code-entry-footer">
+                      <span>Verified {unlock.verifiedDate}</span>
+                      <a href={unlock.sourceUrl} target="_blank" rel="noreferrer">source ↗</a>
+                      <button className="redeem-code" type="button" disabled={redeemed} onClick={() => redeemCode(unlock)}>{redeemed ? "✓ Acquired" : "Mark redeemed"}</button>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+            <p className="code-guide-note">Codes are stored in this tracker for offline access after your first visit. If Fortnite says a code is unavailable, restart the game and confirm any listed requirement is complete.</p>
           </section>
         </div>
       )}

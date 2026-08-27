@@ -9,12 +9,15 @@ const selectedSprites = new Set();
 const selectedVariants = new Set();
 let query = "";
 let progress = {};
+let focusedCode = null;
 
 const keyFor = (name, variant) => `${name}::${variant}`;
 const slugFor = (name) => name.toLowerCase().replace(/\./g, "").replace(/\s+/g, "-");
 const variantSlugFor = (variant) => variant.toLowerCase().replace(/\s+/g, "-");
 const stateFor = (name, variant) => progress[keyFor(name, variant)] || { acquired: false, mastered: false };
 const sprites = () => season.families;
+const unlockCodes = () => season.unlockCodes || [];
+const unlockFor = (name, variant) => unlockCodes().find((item) => item.rewards.some((reward) => reward.name === name && reward.variant === variant));
 const total = () => sprites().reduce((sum, family) => sum + family.variants.length, 0);
 const activeKeys = () => new Set(sprites().flatMap((family) => family.variants.map((variant) => keyFor(family.name, variant))));
 
@@ -78,6 +81,9 @@ function updateSeasonUi() {
   document.querySelector("#season-theme").textContent = season.seasonTheme;
   document.querySelector(".update-stamp").textContent = `UPDATED ${season.updatedDate.toUpperCase()} · PATCH ${season.patch.toUpperCase()}`;
   document.querySelector(".tracker").setAttribute("aria-label", `${season.chapter} ${season.season} Sprite checklist`);
+  const codeTrigger = document.querySelector("#code-guide-trigger");
+  codeTrigger.hidden = unlockCodes().length === 0;
+  document.querySelector("#code-guide-count").textContent = unlockCodes().length;
 }
 
 function render() {
@@ -114,6 +120,7 @@ function render() {
 
     for (const variant of visibleVariants) {
       const state = stateFor(name, variant);
+      const unlock = unlockFor(name, variant);
       const card = document.createElement("article");
       card.className = `sprite-card ${state.mastered ? "is-mastered" : state.acquired ? "is-acquired" : ""}`;
       card.innerHTML = `
@@ -129,6 +136,15 @@ function render() {
           <input type="checkbox" data-name="${name}" data-variant="${variant}" data-field="mastered" aria-label="${name} ${variant} mastered" ${state.mastered ? "checked" : ""} />
           <span><span class="long-label">Mastered</span><span class="short-label">M</span></span>
         </label>`;
+      if (unlock) {
+        const badge = document.createElement("button");
+        badge.className = "code-unlock-badge";
+        badge.type = "button";
+        badge.textContent = "Code unlock";
+        badge.setAttribute("aria-label", `View unlock code for ${name} ${variant}`);
+        badge.addEventListener("click", () => openCodeGuide(unlock.code));
+        card.querySelector(".sprite-art").append(badge);
+      }
       strip.append(card);
     }
     list.append(row);
@@ -219,6 +235,128 @@ document.addEventListener("keydown", (event) => {
   if (event.key === "Escape" && !whatsNewBackdrop.hidden) closeWhatsNew();
 });
 
+const codeGuideBackdrop = document.querySelector("#code-guide-backdrop");
+const codeGuideClose = document.querySelector("#code-guide-close");
+const codeGuideList = document.querySelector("#code-guide-list");
+
+function renderCodeGuide() {
+  document.querySelector("#code-guide-season").textContent = `${season.chapter} · ${season.season}`;
+  codeGuideList.replaceChildren();
+  for (const unlock of unlockCodes()) {
+    const redeemed = unlock.rewards.every((reward) => stateFor(reward.name, reward.variant).acquired);
+    const entry = document.createElement("article");
+    entry.className = `code-entry ${focusedCode === unlock.code ? "is-focused" : ""}`;
+
+    const rewards = document.createElement("div");
+    rewards.className = "code-rewards";
+    for (const reward of unlock.rewards) {
+      const item = document.createElement("div");
+      item.className = "code-reward";
+      item.innerHTML = `
+        <span class="code-reward-art"><img src="${season.imageBase}/${slugFor(reward.name)}-${variantSlugFor(reward.variant)}-256.webp" alt="" width="56" height="56" /></span>
+        <span><strong>${reward.variant} ${reward.name}</strong><small>Sprite</small></span>`;
+      rewards.append(item);
+    }
+
+    const codeRow = document.createElement("div");
+    codeRow.className = "code-value-row";
+    const code = document.createElement("code");
+    code.textContent = unlock.code;
+    const copy = document.createElement("button");
+    copy.type = "button";
+    copy.dataset.copyCode = unlock.code;
+    copy.textContent = "Copy";
+    codeRow.append(code, copy);
+
+    entry.append(rewards, codeRow);
+    if (unlock.requirement) {
+      const requirement = document.createElement("p");
+      requirement.className = "code-requirement";
+      requirement.innerHTML = `<strong>Requirement:</strong> ${unlock.requirement}`;
+      entry.append(requirement);
+    }
+
+    const footer = document.createElement("div");
+    footer.className = "code-entry-footer";
+    const verified = document.createElement("span");
+    verified.textContent = `Verified ${unlock.verifiedDate}`;
+    const source = document.createElement("a");
+    source.href = unlock.sourceUrl;
+    source.target = "_blank";
+    source.rel = "noreferrer";
+    source.textContent = "source ↗";
+    const redeem = document.createElement("button");
+    redeem.className = "redeem-code";
+    redeem.type = "button";
+    redeem.dataset.redeemCode = unlock.code;
+    redeem.disabled = redeemed;
+    redeem.textContent = redeemed ? "✓ Acquired" : "Mark redeemed";
+    footer.append(verified, source, redeem);
+    entry.append(footer);
+    codeGuideList.append(entry);
+  }
+}
+
+function openCodeGuide(code = null) {
+  focusedCode = code;
+  renderCodeGuide();
+  codeGuideBackdrop.hidden = false;
+  document.body.classList.add("modal-open");
+  queueMicrotask(() => codeGuideClose.focus());
+}
+
+function closeCodeGuide() {
+  codeGuideBackdrop.hidden = true;
+  focusedCode = null;
+  document.body.classList.remove("modal-open");
+}
+
+async function copyCodeText(value) {
+  if (navigator.clipboard?.writeText) return navigator.clipboard.writeText(value);
+  const field = document.createElement("textarea");
+  field.value = value;
+  field.setAttribute("readonly", "");
+  field.style.position = "fixed";
+  field.style.opacity = "0";
+  document.body.append(field);
+  field.select();
+  document.execCommand("copy");
+  field.remove();
+}
+
+document.querySelector("#code-guide-trigger").addEventListener("click", () => openCodeGuide());
+codeGuideClose.addEventListener("click", closeCodeGuide);
+codeGuideBackdrop.addEventListener("click", (event) => {
+  if (event.target === codeGuideBackdrop) closeCodeGuide();
+});
+codeGuideList.addEventListener("click", async (event) => {
+  const copy = event.target.closest("[data-copy-code]");
+  if (copy) {
+    try {
+      await copyCodeText(copy.dataset.copyCode);
+      copy.textContent = "Copied!";
+      setTimeout(() => { copy.textContent = "Copy"; }, 1800);
+    } catch {
+      copy.textContent = "Copy failed";
+    }
+    return;
+  }
+  const redeem = event.target.closest("[data-redeem-code]");
+  if (!redeem) return;
+  const unlock = unlockCodes().find((item) => item.code === redeem.dataset.redeemCode);
+  if (!unlock) return;
+  for (const reward of unlock.rewards) {
+    const key = keyFor(reward.name, reward.variant);
+    progress[key] = { ...stateFor(reward.name, reward.variant), acquired: true };
+  }
+  save();
+  render();
+  renderCodeGuide();
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && !codeGuideBackdrop.hidden) closeCodeGuide();
+});
+
 const seasonSelect = document.querySelector("#season-select");
 for (const catalog of CATALOGS) {
   const option = document.createElement("option");
@@ -233,6 +371,7 @@ seasonSelect.addEventListener("change", () => {
   progress = loadProgress();
   filter = "missing";
   query = "";
+  closeCodeGuide();
   document.querySelector("#status-filter").value = filter;
   document.querySelector("#search").value = "";
   populateSeasonFilters();

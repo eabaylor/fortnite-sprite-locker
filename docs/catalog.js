@@ -1,7 +1,7 @@
 window.SPRITE_CATALOGS = {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-season-4",
-  "assetVersion": "20260822-1",
+  "assetVersion": "20260827-1",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -12,18 +12,98 @@ window.SPRITE_CATALOGS = {
       "imageBase": "sprites",
       "storageKey": "sprite-locker-progress-chapter-7-season-4",
       "legacyStorageKeys": [],
-      "updatedDate": "August 22, 2026",
+      "updatedDate": "August 27, 2026",
       "patch": "v42.00",
-      "assetVersion": "20260822-1",
+      "assetVersion": "20260827-1",
       "whatsNew": {
-        "title": "11 Gold variants are live",
-        "intro": "Golden Hours has expanded the Season 4 checklist:",
+        "title": "Sprite unlock codes are built in",
+        "intro": "The tracker now keeps this season’s Admin Panel rewards close at hand:",
         "items": [
-          "Gold variants are now available for all 11 released Season 4 Sprite families.",
-          "The current-season checklist has grown from 22 to 33 released variants.",
-          "Your existing Season 4 checkmarks remain saved on this device."
+          "Open Sprite Codes to copy all 7 verified Sprite reward codes without leaving the tracker.",
+          "Tap CODE UNLOCK on supported Sprite cards to jump straight to the correct code.",
+          "Mark a code redeemed to automatically check its Sprite as acquired."
         ]
       },
+      "unlockCodes": [
+        {
+          "code": "JonesyIsGolden",
+          "rewards": [
+            {
+              "name": "Jonesy",
+              "variant": "Gold"
+            }
+          ],
+          "verifiedDate": "August 27, 2026",
+          "sourceUrl": "https://www.gamesradar.com/games/fortnite/fortnite-lobby-hack-codes/"
+        },
+        {
+          "code": "GatherAndCraft",
+          "rewards": [
+            {
+              "name": "Bush",
+              "variant": "Cheat Master"
+            }
+          ],
+          "requirement": "Complete all Wrixel (Ziggy) Part 1 Story Quests before redeeming.",
+          "verifiedDate": "August 27, 2026",
+          "sourceUrl": "https://www.gamesradar.com/games/fortnite/fortnite-lobby-hack-codes/"
+        },
+        {
+          "code": "Play4All",
+          "rewards": [
+            {
+              "name": "Jonesy",
+              "variant": "Cheat Master"
+            }
+          ],
+          "verifiedDate": "August 27, 2026",
+          "sourceUrl": "https://progameguides.com/fortnite/fortnite-admin-panel-codes/"
+        },
+        {
+          "code": "GottaGoFast",
+          "rewards": [
+            {
+              "name": "Sonic",
+              "variant": "Cheat Master"
+            }
+          ],
+          "verifiedDate": "August 27, 2026",
+          "sourceUrl": "https://www.gamesradar.com/games/fortnite/fortnite-lobby-hack-codes/"
+        },
+        {
+          "code": "IWannaFlyHigh",
+          "rewards": [
+            {
+              "name": "Tails",
+              "variant": "Cheat Master"
+            }
+          ],
+          "verifiedDate": "August 27, 2026",
+          "sourceUrl": "https://www.gamesradar.com/games/fortnite/fortnite-lobby-hack-codes/"
+        },
+        {
+          "code": "8BitBlast",
+          "rewards": [
+            {
+              "name": "8-Bit",
+              "variant": "Cheat Master"
+            }
+          ],
+          "verifiedDate": "August 27, 2026",
+          "sourceUrl": "https://www.gamesradar.com/games/fortnite/fortnite-lobby-hack-codes/"
+        },
+        {
+          "code": "Born2Play",
+          "rewards": [
+            {
+              "name": "Adventure",
+              "variant": "Cheat Master"
+            }
+          ],
+          "verifiedDate": "August 27, 2026",
+          "sourceUrl": "https://www.gamesradar.com/games/fortnite/fortnite-lobby-hack-codes/"
+        }
+      ],
       "families": [
         {
           "name": "Jackrabbit",
