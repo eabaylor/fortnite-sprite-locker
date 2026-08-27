@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-season-4",
-  "assetVersion": "20260827-1",
+  "assetVersion": "20260827-2",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -14,14 +14,14 @@
       "legacyStorageKeys": [],
       "updatedDate": "August 27, 2026",
       "patch": "v42.00",
-      "assetVersion": "20260827-1",
+      "assetVersion": "20260827-2",
       "whatsNew": {
-        "title": "Sprite unlock codes are built in",
-        "intro": "The tracker now keeps this season’s Admin Panel rewards close at hand:",
+        "title": "The complete Admin Panel guide",
+        "intro": "All of this season’s currently active lobby codes now live inside the tracker:",
         "items": [
-          "Open Sprite Codes to copy all 7 verified Sprite reward codes without leaving the tracker.",
-          "Tap CODE UNLOCK on supported Sprite cards to jump straight to the correct code.",
-          "Mark a code redeemed to automatically check its Sprite as acquired."
+          "Open Admin Panel Codes to browse 7 Sprite unlocks and 15 other rewards.",
+          "Every code is labeled one-time or reusable, and one-time non-Sprite rewards can be marked used.",
+          "Tap the Fortnite Sprite Locker logo whenever you want to reopen What’s New."
         ]
       },
       "unlockCodes": [
@@ -33,6 +33,7 @@
               "variant": "Gold"
             }
           ],
+          "useType": "one-time",
           "verifiedDate": "August 27, 2026",
           "sourceUrl": "https://www.gamesradar.com/games/fortnite/fortnite-lobby-hack-codes/"
         },
@@ -44,6 +45,7 @@
               "variant": "Cheat Master"
             }
           ],
+          "useType": "one-time",
           "requirement": "Complete all Wrixel (Ziggy) Part 1 Story Quests before redeeming.",
           "verifiedDate": "August 27, 2026",
           "sourceUrl": "https://www.gamesradar.com/games/fortnite/fortnite-lobby-hack-codes/"
@@ -56,6 +58,7 @@
               "variant": "Cheat Master"
             }
           ],
+          "useType": "one-time",
           "verifiedDate": "August 27, 2026",
           "sourceUrl": "https://progameguides.com/fortnite/fortnite-admin-panel-codes/"
         },
@@ -67,6 +70,7 @@
               "variant": "Cheat Master"
             }
           ],
+          "useType": "one-time",
           "verifiedDate": "August 27, 2026",
           "sourceUrl": "https://www.gamesradar.com/games/fortnite/fortnite-lobby-hack-codes/"
         },
@@ -78,6 +82,7 @@
               "variant": "Cheat Master"
             }
           ],
+          "useType": "one-time",
           "verifiedDate": "August 27, 2026",
           "sourceUrl": "https://www.gamesradar.com/games/fortnite/fortnite-lobby-hack-codes/"
         },
@@ -89,6 +94,7 @@
               "variant": "Cheat Master"
             }
           ],
+          "useType": "one-time",
           "verifiedDate": "August 27, 2026",
           "sourceUrl": "https://www.gamesradar.com/games/fortnite/fortnite-lobby-hack-codes/"
         },
@@ -100,8 +106,131 @@
               "variant": "Cheat Master"
             }
           ],
+          "useType": "one-time",
           "verifiedDate": "August 27, 2026",
           "sourceUrl": "https://www.gamesradar.com/games/fortnite/fortnite-lobby-hack-codes/"
+        }
+      ],
+      "otherAdminCodes": [
+        {
+          "code": "H0p0nVC",
+          "reward": "2,000 Sprite Dust",
+          "category": "Sprite Dust",
+          "useType": "one-time",
+          "verifiedDate": "August 27, 2026",
+          "sourceUrl": "https://progameguides.com/fortnite/fortnite-admin-panel-codes/"
+        },
+        {
+          "code": "OverrideXP",
+          "reward": "40,000 XP",
+          "category": "XP",
+          "useType": "one-time",
+          "verifiedDate": "August 27, 2026",
+          "sourceUrl": "https://www.pcgamesn.com/fortnite/lobby-hack-codes"
+        },
+        {
+          "code": "Magilume",
+          "reward": "2,000 Sprite Dust",
+          "category": "Sprite Dust",
+          "useType": "one-time",
+          "verifiedDate": "August 27, 2026",
+          "sourceUrl": "https://progameguides.com/fortnite/fortnite-admin-panel-codes/"
+        },
+        {
+          "code": "Perlimpinpin",
+          "reward": "2,000 Sprite Dust",
+          "category": "Sprite Dust",
+          "useType": "one-time",
+          "verifiedDate": "August 27, 2026",
+          "sourceUrl": "https://progameguides.com/fortnite/fortnite-admin-panel-codes/"
+        },
+        {
+          "code": "Chispambo",
+          "reward": "2,000 Sprite Dust",
+          "category": "Sprite Dust",
+          "useType": "one-time",
+          "verifiedDate": "August 27, 2026",
+          "sourceUrl": "https://progameguides.com/fortnite/fortnite-admin-panel-codes/"
+        },
+        {
+          "code": "Abgestaubt",
+          "reward": "2,000 Sprite Dust",
+          "category": "Sprite Dust",
+          "useType": "one-time",
+          "verifiedDate": "August 27, 2026",
+          "sourceUrl": "https://progameguides.com/fortnite/fortnite-admin-panel-codes/"
+        },
+        {
+          "code": "O2OVERRIDE",
+          "reward": "5 Portable Extractors and 1 Llama Supply Drop",
+          "category": "Gizmos",
+          "useType": "one-time",
+          "verifiedDate": "August 27, 2026",
+          "sourceUrl": "https://www.pcgamesn.com/fortnite/lobby-hack-codes"
+        },
+        {
+          "code": "PerfectOrder",
+          "reward": "4 Spicy Tacos",
+          "category": "Gizmos",
+          "useType": "one-time",
+          "verifiedDate": "August 27, 2026",
+          "sourceUrl": "https://www.pcgamesn.com/fortnite/lobby-hack-codes"
+        },
+        {
+          "code": "TakeYourHeart",
+          "reward": "2 Extraction Accelerators",
+          "category": "Gizmos",
+          "useType": "one-time",
+          "verifiedDate": "August 27, 2026",
+          "sourceUrl": "https://www.pcgamesn.com/fortnite/lobby-hack-codes"
+        },
+        {
+          "code": "SurviveTheNight",
+          "reward": "2 Cheat Code Locators",
+          "category": "Gizmos",
+          "useType": "one-time",
+          "verifiedDate": "August 27, 2026",
+          "sourceUrl": "https://www.pcgamesn.com/fortnite/lobby-hack-codes"
+        },
+        {
+          "code": "FindItChat",
+          "reward": "2 Cheat Code Locators",
+          "category": "Gizmos",
+          "useType": "one-time",
+          "verifiedDate": "August 27, 2026",
+          "sourceUrl": "https://www.pcgamesn.com/fortnite/lobby-hack-codes"
+        },
+        {
+          "code": "REACHYOURIMPOSSIBLE",
+          "reward": "Block Party Loading Screen",
+          "category": "Loading Screen",
+          "useType": "one-time",
+          "verifiedDate": "August 27, 2026",
+          "sourceUrl": "https://progameguides.com/fortnite/fortnite-admin-panel-codes/"
+        },
+        {
+          "code": "BeMoreAlien",
+          "reward": "Override Ready Loading Screen",
+          "category": "Loading Screen",
+          "useType": "one-time",
+          "verifiedDate": "August 27, 2026",
+          "sourceUrl": "https://progameguides.com/fortnite/fortnite-admin-panel-codes/"
+        },
+        {
+          "code": "LetsBlockAndRoll",
+          "reward": "Temporarily transform into a Tetris block in the lobby",
+          "category": "Lobby Effect",
+          "useType": "reusable",
+          "verifiedDate": "August 27, 2026",
+          "sourceUrl": "https://allthings.how/fortnite-admin-panel-codes/"
+        },
+        {
+          "code": "DontBlockMe",
+          "reward": "Temporarily change the Tetris block lobby transformation",
+          "category": "Lobby Effect",
+          "useType": "reusable",
+          "verifiedDate": "August 27, 2026",
+          "sourceUrl": "https://allthings.how/fortnite-admin-panel-codes/"
         }
       ],
       "families": [

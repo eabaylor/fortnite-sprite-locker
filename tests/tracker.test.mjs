@@ -37,10 +37,23 @@ test("catalog has unique active entries and matching artwork", async () => {
   assert.equal(catalog.unlockCodes.length, 7);
   assert.equal(new Set(catalog.unlockCodes.map(({ code }) => code.toLowerCase())).size, catalog.unlockCodes.length);
   for (const unlock of catalog.unlockCodes) {
+    assert.equal(unlock.useType, "one-time");
     assert.ok(unlock.verifiedDate);
     assert.match(unlock.sourceUrl, /^https:\/\//);
     assert.ok(unlock.rewards.length > 0);
     for (const reward of unlock.rewards) assert.ok(keys.includes(`${reward.name}::${reward.variant}`), `${unlock.code} has an unknown reward`);
+  }
+  assert.equal(catalog.otherAdminCodes.length, 15);
+  const allAdminCodes = [...catalog.unlockCodes, ...catalog.otherAdminCodes];
+  assert.equal(allAdminCodes.length, 22);
+  assert.equal(new Set(allAdminCodes.map(({ code }) => code.toLowerCase())).size, allAdminCodes.length);
+  assert.equal(catalog.otherAdminCodes.filter(({ useType }) => useType === "reusable").length, 2);
+  for (const item of catalog.otherAdminCodes) {
+    assert.ok(item.reward);
+    assert.ok(item.category);
+    assert.ok(["one-time", "reusable"].includes(item.useType));
+    assert.ok(item.verifiedDate);
+    assert.match(item.sourceUrl, /^https:\/\//);
   }
 
   const expected = entries.map(({ family, variant }) => `${slug(family.name)}-${slug(variant)}-256.webp`).sort();
@@ -96,6 +109,8 @@ test("server renders the real tracker with current season and all cards", async 
   assert.match(html, /Restore/);
   assert.match(html, /What’s New/);
   assert.match(html, /Sprite Codes/);
+  assert.match(html, /Other Codes/);
+  assert.doesNotMatch(html, /class="whats-new-trigger"/);
   assert.equal((html.match(/class="sprite-card /g) ?? []).length, 33);
   assert.doesNotMatch(html, /Your site is taking shape|Building your site/);
 });
@@ -125,10 +140,16 @@ test("static build is generated from the shared catalog", async () => {
   assert.match(app, /sprite-locker-last-seen-release/);
   assert.match(page, /sprite-locker-last-seen-release/);
   assert.match(index, /id="whats-new-backdrop"/);
+  assert.match(index, /id="brand-whats-new"/);
+  assert.doesNotMatch(index, /id="whats-new-trigger"/);
   assert.match(index, /id="code-guide-backdrop"/);
+  assert.match(index, /id="other-codes-trigger"/);
   assert.match(app, /navigator\.clipboard/);
   assert.match(app, /data-redeem-code/);
+  assert.match(app, /data-mark-admin-code/);
+  assert.match(app, /sprite-locker-redeemed-admin-codes-/);
   assert.match(page, /Mark redeemed/);
+  assert.match(page, /Mark used/);
   assert.doesNotMatch(app, /sprite-locker-selected-season/);
   assert.doesNotMatch(page, /sprite-locker-selected-season/);
   assert.match(app, /field === "mastered" && next\.mastered\) next\.acquired = true/);

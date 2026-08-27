@@ -10,6 +10,8 @@ const selectedVariants = new Set();
 let query = "";
 let progress = {};
 let focusedCode = null;
+let codeGuideView = "sprites";
+let redeemedAdminCodes = [];
 
 const keyFor = (name, variant) => `${name}::${variant}`;
 const slugFor = (name) => name.toLowerCase().replace(/\./g, "").replace(/\s+/g, "-");
@@ -17,6 +19,7 @@ const variantSlugFor = (variant) => variant.toLowerCase().replace(/\s+/g, "-");
 const stateFor = (name, variant) => progress[keyFor(name, variant)] || { acquired: false, mastered: false };
 const sprites = () => season.families;
 const unlockCodes = () => season.unlockCodes || [];
+const otherAdminCodes = () => season.otherAdminCodes || [];
 const unlockFor = (name, variant) => unlockCodes().find((item) => item.rewards.some((reward) => reward.name === name && reward.variant === variant));
 const total = () => sprites().reduce((sum, family) => sum + family.variants.length, 0);
 const activeKeys = () => new Set(sprites().flatMap((family) => family.variants.map((variant) => keyFor(family.name, variant))));
@@ -49,8 +52,27 @@ function loadProgress() {
 
 progress = loadProgress();
 
+function adminCodeStorageKey() {
+  return `sprite-locker-redeemed-admin-codes-${season.seasonId}`;
+}
+
+function loadRedeemedAdminCodes() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(adminCodeStorageKey()) || "[]");
+    return Array.isArray(saved) ? saved.filter((code) => typeof code === "string") : [];
+  } catch {
+    return [];
+  }
+}
+
+redeemedAdminCodes = loadRedeemedAdminCodes();
+
 function save() {
   localStorage.setItem(season.storageKey, JSON.stringify(progress));
+}
+
+function saveRedeemedAdminCodes() {
+  localStorage.setItem(adminCodeStorageKey(), JSON.stringify(redeemedAdminCodes));
 }
 
 function updateCounts() {
@@ -84,6 +106,11 @@ function updateSeasonUi() {
   const codeTrigger = document.querySelector("#code-guide-trigger");
   codeTrigger.hidden = unlockCodes().length === 0;
   document.querySelector("#code-guide-count").textContent = unlockCodes().length;
+  const otherTrigger = document.querySelector("#other-codes-trigger");
+  otherTrigger.hidden = otherAdminCodes().length === 0;
+  document.querySelector("#other-codes-count").textContent = otherAdminCodes().length;
+  document.querySelector("#sprite-code-tab-count").textContent = unlockCodes().length;
+  document.querySelector("#other-code-tab-count").textContent = otherAdminCodes().length;
 }
 
 function render() {
@@ -226,7 +253,7 @@ function closeWhatsNew() {
   try { localStorage.setItem(WHATS_NEW_STORAGE_KEY, RELEASE_VERSION); } catch {}
 }
 
-document.querySelector("#whats-new-trigger").addEventListener("click", openWhatsNew);
+document.querySelector("#brand-whats-new").addEventListener("click", openWhatsNew);
 whatsNewClose.addEventListener("click", closeWhatsNew);
 whatsNewBackdrop.addEventListener("click", (event) => {
   if (event.target === whatsNewBackdrop) closeWhatsNew();
@@ -241,8 +268,13 @@ const codeGuideList = document.querySelector("#code-guide-list");
 
 function renderCodeGuide() {
   document.querySelector("#code-guide-season").textContent = `${season.chapter} · ${season.season}`;
+  document.querySelectorAll("[data-code-view]").forEach((button) => {
+    const active = button.dataset.codeView === codeGuideView;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-selected", String(active));
+  });
   codeGuideList.replaceChildren();
-  for (const unlock of unlockCodes()) {
+  if (codeGuideView === "sprites") for (const unlock of unlockCodes()) {
     const redeemed = unlock.rewards.every((reward) => stateFor(reward.name, reward.variant).acquired);
     const entry = document.createElement("article");
     entry.className = `code-entry ${focusedCode === unlock.code ? "is-focused" : ""}`;
@@ -278,6 +310,9 @@ function renderCodeGuide() {
 
     const footer = document.createElement("div");
     footer.className = "code-entry-footer";
+    const useType = document.createElement("strong");
+    useType.className = `code-use-type ${unlock.useType}`;
+    useType.textContent = unlock.useType === "reusable" ? "Reusable" : "One-time per account";
     const verified = document.createElement("span");
     verified.textContent = `Verified ${unlock.verifiedDate}`;
     const source = document.createElement("a");
@@ -291,14 +326,72 @@ function renderCodeGuide() {
     redeem.dataset.redeemCode = unlock.code;
     redeem.disabled = redeemed;
     redeem.textContent = redeemed ? "✓ Acquired" : "Mark redeemed";
-    footer.append(verified, source, redeem);
+    footer.append(useType, verified, source, redeem);
     entry.append(footer);
+    codeGuideList.append(entry);
+  }
+  if (codeGuideView === "other") for (const item of otherAdminCodes()) {
+    const used = redeemedAdminCodes.includes(item.code);
+    const entry = document.createElement("article");
+    entry.className = "code-entry";
+
+    const rewards = document.createElement("div");
+    rewards.className = "code-rewards";
+    const reward = document.createElement("div");
+    reward.className = "code-reward code-reward-generic";
+    const icon = document.createElement("span");
+    icon.className = "code-reward-icon";
+    icon.setAttribute("aria-hidden", "true");
+    icon.textContent = item.category === "XP" ? "XP" : item.category === "Sprite Dust" ? "✦" : item.category === "Loading Screen" ? "▣" : item.category === "Lobby Effect" ? "↻" : "⌁";
+    const description = document.createElement("span");
+    const rewardName = document.createElement("strong");
+    rewardName.textContent = item.reward;
+    const category = document.createElement("small");
+    category.textContent = item.category;
+    description.append(rewardName, category);
+    reward.append(icon, description);
+    rewards.append(reward);
+
+    const codeRow = document.createElement("div");
+    codeRow.className = "code-value-row";
+    const code = document.createElement("code");
+    code.textContent = item.code;
+    const copy = document.createElement("button");
+    copy.type = "button";
+    copy.dataset.copyCode = item.code;
+    copy.textContent = "Copy";
+    codeRow.append(code, copy);
+
+    const footer = document.createElement("div");
+    footer.className = "code-entry-footer";
+    const useType = document.createElement("strong");
+    useType.className = `code-use-type ${item.useType}`;
+    useType.textContent = item.useType === "reusable" ? "Reusable" : "One-time per account";
+    const verified = document.createElement("span");
+    verified.textContent = `Verified ${item.verifiedDate}`;
+    const source = document.createElement("a");
+    source.href = item.sourceUrl;
+    source.target = "_blank";
+    source.rel = "noreferrer";
+    source.textContent = "source ↗";
+    footer.append(useType, verified, source);
+    if (item.useType === "one-time") {
+      const markUsed = document.createElement("button");
+      markUsed.className = "redeem-code";
+      markUsed.type = "button";
+      markUsed.dataset.markAdminCode = item.code;
+      markUsed.disabled = used;
+      markUsed.textContent = used ? "✓ Used" : "Mark used";
+      footer.append(markUsed);
+    }
+    entry.append(rewards, codeRow, footer);
     codeGuideList.append(entry);
   }
 }
 
-function openCodeGuide(code = null) {
+function openCodeGuide(code = null, view = "sprites") {
   focusedCode = code;
+  codeGuideView = view;
   renderCodeGuide();
   codeGuideBackdrop.hidden = false;
   document.body.classList.add("modal-open");
@@ -325,6 +418,14 @@ async function copyCodeText(value) {
 }
 
 document.querySelector("#code-guide-trigger").addEventListener("click", () => openCodeGuide());
+document.querySelector("#other-codes-trigger").addEventListener("click", () => openCodeGuide(null, "other"));
+document.querySelector(".code-guide-tabs").addEventListener("click", (event) => {
+  const tab = event.target.closest("[data-code-view]");
+  if (!tab) return;
+  codeGuideView = tab.dataset.codeView;
+  focusedCode = null;
+  renderCodeGuide();
+});
 codeGuideClose.addEventListener("click", closeCodeGuide);
 codeGuideBackdrop.addEventListener("click", (event) => {
   if (event.target === codeGuideBackdrop) closeCodeGuide();
@@ -342,15 +443,22 @@ codeGuideList.addEventListener("click", async (event) => {
     return;
   }
   const redeem = event.target.closest("[data-redeem-code]");
-  if (!redeem) return;
-  const unlock = unlockCodes().find((item) => item.code === redeem.dataset.redeemCode);
-  if (!unlock) return;
-  for (const reward of unlock.rewards) {
-    const key = keyFor(reward.name, reward.variant);
-    progress[key] = { ...stateFor(reward.name, reward.variant), acquired: true };
+  if (redeem) {
+    const unlock = unlockCodes().find((item) => item.code === redeem.dataset.redeemCode);
+    if (!unlock) return;
+    for (const reward of unlock.rewards) {
+      const key = keyFor(reward.name, reward.variant);
+      progress[key] = { ...stateFor(reward.name, reward.variant), acquired: true };
+    }
+    save();
+    render();
+    renderCodeGuide();
+    return;
   }
-  save();
-  render();
+  const markUsed = event.target.closest("[data-mark-admin-code]");
+  if (!markUsed || redeemedAdminCodes.includes(markUsed.dataset.markAdminCode)) return;
+  redeemedAdminCodes.push(markUsed.dataset.markAdminCode);
+  saveRedeemedAdminCodes();
   renderCodeGuide();
 });
 document.addEventListener("keydown", (event) => {
@@ -369,6 +477,7 @@ seasonSelect.addEventListener("change", () => {
   if (!nextSeason) return;
   season = nextSeason;
   progress = loadProgress();
+  redeemedAdminCodes = loadRedeemedAdminCodes();
   filter = "missing";
   query = "";
   closeCodeGuide();

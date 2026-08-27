@@ -10,7 +10,16 @@ type UnlockReward = { name: string; variant: string };
 type UnlockCode = {
   code: string;
   rewards: UnlockReward[];
+  useType: "one-time" | "reusable";
   requirement?: string;
+  verifiedDate: string;
+  sourceUrl: string;
+};
+type OtherAdminCode = {
+  code: string;
+  reward: string;
+  category: string;
+  useType: "one-time" | "reusable";
   verifiedDate: string;
   sourceUrl: string;
 };
@@ -27,6 +36,7 @@ type SeasonCatalog = {
   assetVersion?: string;
   whatsNew?: { title: string; intro?: string; items: string[] };
   unlockCodes?: UnlockCode[];
+  otherAdminCodes?: OtherAdminCode[];
   families: SpriteFamily[];
 };
 type SpriteState = { acquired: boolean; mastered: boolean };
@@ -137,8 +147,10 @@ export default function Home() {
   const [ready, setReady] = useState(false);
   const [whatsNewOpen, setWhatsNewOpen] = useState(false);
   const [codeGuideOpen, setCodeGuideOpen] = useState(false);
+  const [codeGuideView, setCodeGuideView] = useState<"sprites" | "other">("sprites");
   const [focusedCode, setFocusedCode] = useState<string | null>(null);
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
+  const [redeemedAdminCodes, setRedeemedAdminCodes] = useState<string[]>([]);
   const restoreInput = useRef<HTMLInputElement>(null);
   const whatsNewClose = useRef<HTMLButtonElement>(null);
   const codeGuideClose = useRef<HTMLButtonElement>(null);
@@ -148,6 +160,8 @@ export default function Home() {
   const total = sprites.reduce((sum, sprite) => sum + sprite.variants.length, 0);
   const variants = [...new Set(sprites.flatMap((sprite) => sprite.variants))];
   const unlockCodes = activeSeason.unlockCodes ?? [];
+  const otherAdminCodes = activeSeason.otherAdminCodes ?? [];
+  const adminCodeStorageKey = `sprite-locker-redeemed-admin-codes-${activeSeason.seasonId}`;
 
   useEffect(() => {
     const initialSeason = CATALOGS[0];
@@ -155,6 +169,12 @@ export default function Home() {
     queueMicrotask(() => {
       setSelectedSeasonId(initialSeason.seasonId);
       setProgress(savedProgress);
+      try {
+        const savedCodes = JSON.parse(localStorage.getItem(`sprite-locker-redeemed-admin-codes-${initialSeason.seasonId}`) ?? "[]");
+        setRedeemedAdminCodes(Array.isArray(savedCodes) ? savedCodes.filter((code): code is string => typeof code === "string") : []);
+      } catch {
+        setRedeemedAdminCodes([]);
+      }
       setReady(true);
       try {
         if (localStorage.getItem(WHATS_NEW_STORAGE_KEY) !== RELEASE_VERSION) setWhatsNewOpen(true);
@@ -197,6 +217,10 @@ export default function Home() {
     if (ready) localStorage.setItem(activeSeason.storageKey, JSON.stringify(progress));
   }, [activeSeason.storageKey, progress, ready]);
 
+  useEffect(() => {
+    if (ready) localStorage.setItem(adminCodeStorageKey, JSON.stringify(redeemedAdminCodes));
+  }, [adminCodeStorageKey, ready, redeemedAdminCodes]);
+
   const counts = useMemo(() => {
     let acquired = 0;
     let mastered = 0;
@@ -233,6 +257,12 @@ export default function Home() {
     if (!nextSeason) return;
     setSelectedSeasonId(nextSeason.seasonId);
     setProgress(loadProgress(nextSeason));
+    try {
+      const savedCodes = JSON.parse(localStorage.getItem(`sprite-locker-redeemed-admin-codes-${nextSeason.seasonId}`) ?? "[]");
+      setRedeemedAdminCodes(Array.isArray(savedCodes) ? savedCodes.filter((code): code is string => typeof code === "string") : []);
+    } catch {
+      setRedeemedAdminCodes([]);
+    }
     setFilter("missing");
     setSelectedSprites([]);
     setSelectedVariants([]);
@@ -262,8 +292,9 @@ export default function Home() {
     } catch {}
   }
 
-  function openCodeGuide(code?: string) {
+  function openCodeGuide(code?: string, view: "sprites" | "other" = "sprites") {
     setFocusedCode(code ?? null);
+    setCodeGuideView(view);
     setCopiedCode(null);
     setCodeGuideOpen(true);
   }
@@ -288,6 +319,10 @@ export default function Home() {
       }
       return updated;
     });
+  }
+
+  function markAdminCodeUsed(code: string) {
+    setRedeemedAdminCodes((current) => current.includes(code) ? current : [...current, code]);
   }
 
   function toggle(name: string, variant: string, field: "acquired" | "mastered") {
@@ -334,9 +369,9 @@ export default function Home() {
       <header className="hero">
         <nav>
           <div className="brand-lockup" data-season-id={activeSeason.seasonId}>
-            <a className="brand" href="#top" aria-label="Fortnite Sprite Locker home">
+            <button className="brand" type="button" onClick={() => setWhatsNewOpen(true)} aria-label="Open What’s New" title="Open What’s New">
               <Image src="/fortnite-sprite-locker-logo-transparent.png" alt="Fortnite Sprite Locker" width={1983} height={793} priority sizes="(max-width: 760px) 43vw, 330px" unoptimized />
-            </a>
+            </button>
             <label className="season-badge" aria-label="Select Fortnite chapter and season">
               <span className="season-action"><span aria-hidden="true">↕</span> Choose season</span>
               <span className="season-chapter">{activeSeason.chapter}</span>
@@ -374,7 +409,11 @@ export default function Home() {
               Sprite Codes <span>{unlockCodes.length}</span>
             </button>
           )}
-          <button className="whats-new-trigger" type="button" onClick={() => setWhatsNewOpen(true)}>What’s New</button>
+          {!!otherAdminCodes.length && (
+            <button className="other-codes-trigger" type="button" onClick={() => openCodeGuide(undefined, "other")}>
+              Other Codes <span>{otherAdminCodes.length}</span>
+            </button>
+          )}
           <div className="data-actions" aria-label="Checklist data">
             <button type="button" onClick={backupProgress}>Backup</button>
             <button type="button" onClick={() => restoreInput.current?.click()}>Restore</button>
@@ -451,19 +490,23 @@ export default function Home() {
         </div>
       )}
 
-      {codeGuideOpen && !!unlockCodes.length && (
+      {codeGuideOpen && !!(unlockCodes.length || otherAdminCodes.length) && (
         <div className="code-guide-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setCodeGuideOpen(false); }}>
           <section className="code-guide-card" role="dialog" aria-modal="true" aria-labelledby="code-guide-title">
             <header className="code-guide-header">
               <div>
                 <span>Chapter 7 · Season 4</span>
-                <h2 id="code-guide-title">Sprite Unlock Codes</h2>
-                <p>In the Battle Royale lobby, open <strong>…/Admin Panel</strong>, enter a code, then return here to mark its reward acquired.</p>
+                <h2 id="code-guide-title">Admin Panel Codes</h2>
+                <p>In the Battle Royale lobby, open <strong>…/Admin Panel</strong>, enter a code, and submit it. Reward codes work once per account; the two lobby transformations are reusable.</p>
               </div>
-              <button ref={codeGuideClose} className="code-guide-close" type="button" onClick={() => setCodeGuideOpen(false)} aria-label="Close Sprite unlock codes">×</button>
+              <button ref={codeGuideClose} className="code-guide-close" type="button" onClick={() => setCodeGuideOpen(false)} aria-label="Close Admin Panel codes">×</button>
             </header>
-            <div className="code-guide-list">
-              {unlockCodes.map((unlock) => {
+            <div className="code-guide-tabs" role="tablist" aria-label="Admin Panel code categories">
+              <button type="button" role="tab" aria-selected={codeGuideView === "sprites"} className={codeGuideView === "sprites" ? "active" : ""} onClick={() => setCodeGuideView("sprites")}>Sprite unlocks <span>{unlockCodes.length}</span></button>
+              <button type="button" role="tab" aria-selected={codeGuideView === "other"} className={codeGuideView === "other" ? "active" : ""} onClick={() => setCodeGuideView("other")}>Other rewards <span>{otherAdminCodes.length}</span></button>
+            </div>
+            <div className="code-guide-list" role="tabpanel">
+              {codeGuideView === "sprites" && unlockCodes.map((unlock) => {
                 const redeemed = unlock.rewards.every((reward) => progress[keyFor(reward.name, reward.variant)]?.acquired);
                 return (
                   <article className={`code-entry ${focusedCode === unlock.code ? "is-focused" : ""}`} key={unlock.code}>
@@ -481,6 +524,7 @@ export default function Home() {
                     </div>
                     {unlock.requirement && <p className="code-requirement"><strong>Requirement:</strong> {unlock.requirement}</p>}
                     <div className="code-entry-footer">
+                      <strong className={`code-use-type ${unlock.useType}`}>{unlock.useType === "reusable" ? "Reusable" : "One-time per account"}</strong>
                       <span>Verified {unlock.verifiedDate}</span>
                       <a href={unlock.sourceUrl} target="_blank" rel="noreferrer">source ↗</a>
                       <button className="redeem-code" type="button" disabled={redeemed} onClick={() => redeemCode(unlock)}>{redeemed ? "✓ Acquired" : "Mark redeemed"}</button>
@@ -488,8 +532,31 @@ export default function Home() {
                   </article>
                 );
               })}
+              {codeGuideView === "other" && otherAdminCodes.map((item) => {
+                const used = redeemedAdminCodes.includes(item.code);
+                return (
+                  <article className="code-entry" key={item.code}>
+                    <div className="code-rewards">
+                      <div className="code-reward code-reward-generic">
+                        <span className="code-reward-icon" aria-hidden="true">{item.category === "XP" ? "XP" : item.category === "Sprite Dust" ? "✦" : item.category === "Loading Screen" ? "▣" : item.category === "Lobby Effect" ? "↻" : "⌁"}</span>
+                        <span><strong>{item.reward}</strong><small>{item.category}</small></span>
+                      </div>
+                    </div>
+                    <div className="code-value-row">
+                      <code>{item.code}</code>
+                      <button type="button" onClick={() => copyCode(item.code)}>{copiedCode === item.code ? "Copied!" : "Copy"}</button>
+                    </div>
+                    <div className="code-entry-footer">
+                      <strong className={`code-use-type ${item.useType}`}>{item.useType === "reusable" ? "Reusable" : "One-time per account"}</strong>
+                      <span>Verified {item.verifiedDate}</span>
+                      <a href={item.sourceUrl} target="_blank" rel="noreferrer">source ↗</a>
+                      {item.useType === "one-time" && <button className="redeem-code" type="button" disabled={used} onClick={() => markAdminCodeUsed(item.code)}>{used ? "✓ Used" : "Mark used"}</button>}
+                    </div>
+                  </article>
+                );
+              })}
             </div>
-            <p className="code-guide-note">Codes are stored in this tracker for offline access after your first visit. If Fortnite says a code is unavailable, restart the game and confirm any listed requirement is complete.</p>
+            <p className="code-guide-note">Codes are stored in this tracker for offline access after your first visit. “One-time” means once per Fortnite account—not once per day. If a valid code is rejected, restart the game and confirm any listed requirement is complete.</p>
           </section>
         </div>
       )}

@@ -11,18 +11,18 @@
     <title>Fortnite Sprite Locker — Sprite Checklist</title>
     <link rel="icon" href="favicon.svg" />
     <link rel="manifest" href="manifest.webmanifest" />
-    <link rel="stylesheet" href="styles.css?v=20260827-1" />
-    <script src="catalog.js?v=20260827-1" defer></script>
-    <script src="app.js?v=20260827-1" defer></script>
+    <link rel="stylesheet" href="styles.css?v=20260827-2" />
+    <script src="catalog.js?v=20260827-2" defer></script>
+    <script src="app.js?v=20260827-2" defer></script>
   </head>
   <body>
     <main>
       <header class="hero">
         <nav>
           <div class="brand-lockup" data-season-id="chapter-7-season-4">
-            <a class="brand" href="#top" aria-label="Fortnite Sprite Locker home">
+            <button class="brand" id="brand-whats-new" type="button" aria-label="Open What’s New" title="Open What’s New">
               <img src="fortnite-sprite-locker-logo-transparent.png" alt="Fortnite Sprite Locker" width="1983" height="793" />
-            </a>
+            </button>
             <label class="season-badge" aria-label="Select Fortnite chapter and season">
               <span class="season-action"><span aria-hidden="true">↕</span> Choose season</span>
               <span class="season-chapter" id="season-chapter">Chapter 7</span>
@@ -75,7 +75,7 @@
           </details>
           <button class="clear-filters" id="clear-filters">Clear filters</button>
           <button class="code-guide-trigger" id="code-guide-trigger" type="button">Sprite Codes <span id="code-guide-count">0</span></button>
-          <button class="whats-new-trigger" id="whats-new-trigger" type="button">What’s New</button>
+          <button class="other-codes-trigger" id="other-codes-trigger" type="button">Other Codes <span id="other-codes-count">0</span></button>
           <div class="data-actions" aria-label="Checklist data">
             <button type="button" id="backup">Backup</button>
             <button type="button" id="restore">Restore</button>
@@ -116,13 +116,17 @@
           <header class="code-guide-header">
             <div>
               <span id="code-guide-season"></span>
-              <h2 id="code-guide-title">Sprite Unlock Codes</h2>
-              <p>In the Battle Royale lobby, open <strong>…/Admin Panel</strong>, enter a code, then return here to mark its reward acquired.</p>
+              <h2 id="code-guide-title">Admin Panel Codes</h2>
+              <p>In the Battle Royale lobby, open <strong>…/Admin Panel</strong>, enter a code, and submit it. Reward codes work once per account; the two lobby transformations are reusable.</p>
             </div>
-            <button class="code-guide-close" id="code-guide-close" type="button" aria-label="Close Sprite unlock codes">×</button>
+            <button class="code-guide-close" id="code-guide-close" type="button" aria-label="Close Admin Panel codes">×</button>
           </header>
+          <div class="code-guide-tabs" role="tablist" aria-label="Admin Panel code categories">
+            <button type="button" role="tab" data-code-view="sprites">Sprite unlocks <span id="sprite-code-tab-count">0</span></button>
+            <button type="button" role="tab" data-code-view="other">Other rewards <span id="other-code-tab-count">0</span></button>
+          </div>
           <div class="code-guide-list" id="code-guide-list"></div>
-          <p class="code-guide-note">Codes are stored in this tracker for offline access after your first visit. If Fortnite says a code is unavailable, restart the game and confirm any listed requirement is complete.</p>
+          <p class="code-guide-note">Codes are stored in this tracker for offline access after your first visit. “One-time” means once per Fortnite account—not once per day. If a valid code is rejected, restart the game and confirm any listed requirement is complete.</p>
         </section>
       </div>
     </main>
