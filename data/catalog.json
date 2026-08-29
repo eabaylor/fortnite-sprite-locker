@@ -9,14 +9,15 @@
   "legacyStorageKeys": [],
   "updatedDate": "August 29, 2026",
   "patch": "v42.00",
-  "assetVersion": "20260829-1",
+  "assetVersion": "20260829-2",
   "whatsNew": {
-    "title": "Header menu visibility fixed",
-    "intro": "The checklist options now remain fully visible when opened:",
+    "title": "Mobile usability upgraded",
+    "intro": "The tracker is easier to use on small screens and stays current while it is open:",
     "items": [
-      "The three-dot menu can extend below the header without being cut off.",
-      "Backup, Restore, and Reset remain easy to reach on mobile.",
-      "The menu stays layered above the Sprite filters and checklist."
+      "A new-release notice now appears when a newer tracker version is published.",
+      "Phone controls are larger and the 320px-wide header no longer overflows.",
+      "Keyboard navigation now includes a checklist shortcut and improved popup focus.",
+      "The static and hosted builds now share one generated stylesheet."
     ]
   },
   "unlockCodes": [

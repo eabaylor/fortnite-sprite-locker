@@ -30,7 +30,7 @@ test("catalog has unique active entries and matching artwork", async () => {
   assert.equal(catalog.seasonId, "chapter-7-season-4");
   assert.equal(catalog.storageKey, "sprite-locker-progress-chapter-7-season-4");
   assert.equal(entries.length, 33);
-  assert.equal(catalog.whatsNew.items.length, 3);
+  assert.equal(catalog.whatsNew.items.length, 4);
 
   const keys = entries.map(({ family, variant }) => `${family.name}::${variant}`);
   assert.equal(new Set(keys).size, keys.length);
@@ -118,13 +118,17 @@ test("server renders the real tracker with current season and all cards", async 
 });
 
 test("static build is generated from the shared catalog", async () => {
-  const [generated, index, app, page, manifest, serviceWorker] = await Promise.all([
+  const [generated, index, app, page, manifest, serviceWorker, staticVersion, hostedVersion, appCss, staticCss] = await Promise.all([
     readFile(new URL("docs/catalog.js", root), "utf8"),
     readFile(new URL("docs/index.html", root), "utf8"),
     readFile(new URL("docs/app.js", root), "utf8"),
     readFile(new URL("app/page.tsx", root), "utf8"),
     readFile(new URL("docs/manifest.webmanifest", root), "utf8"),
     readFile(new URL("docs/sw.js", root), "utf8"),
+    readFile(new URL("docs/version.json", root), "utf8"),
+    readFile(new URL("public/version.json", root), "utf8"),
+    readFile(new URL("app/globals.css", root), "utf8"),
+    readFile(new URL("docs/styles.css", root), "utf8"),
   ]);
 
   assert.equal(generated, `window.SPRITE_CATALOGS = ${JSON.stringify(bundle, null, 2)};\n`);
@@ -157,7 +161,7 @@ test("static build is generated from the shared catalog", async () => {
   assert.match(app, /sprite-locker-redeemed-admin-codes-/);
   assert.match(app, /syncProgressFromStorage/);
   assert.match(app, /menu\.open && !menu\.contains\(event\.target\)/);
-  assert.match(app, /window\.addEventListener\("focus", syncProgressFromStorage\)/);
+  assert.match(app, /window\.addEventListener\("focus", \(\) =>/);
   assert.match(app, /progress = loadProgress\(\);\s*filter = event\.target\.value/s);
   assert.match(app, /Number\(leftUsed\) - Number\(rightUsed\)/);
   assert.match(app, /entry\.className = `code-entry \$\{used && item\.useType === "one-time" \? "is-used"/);
@@ -172,6 +176,21 @@ test("static build is generated from the shared catalog", async () => {
   assert.match(page, /field === "mastered" && next\.mastered\) next\.acquired = true/);
   assert.equal(JSON.parse(manifest).start_url, "./");
   assert.match(serviceWorker, /caches\.open/);
+  assert.match(serviceWorker, /version\.json/);
+  assert.deepEqual(JSON.parse(staticVersion), { assetVersion: catalog.assetVersion, updatedDate: catalog.updatedDate });
+  assert.equal(hostedVersion, staticVersion);
+  assert.equal(staticCss, appCss
+    .replace(/^@import "tailwindcss";\r?\n\r?\n/, "")
+    .replaceAll("var(--font-body), sans-serif", '"Segoe UI", Arial, sans-serif')
+    .replaceAll("var(--font-display), Impact, sans-serif", 'Impact, "Arial Black", sans-serif')
+    .replaceAll("var(--font-display), sans-serif", 'Impact, "Arial Black", sans-serif'));
+  assert.match(index, /class="skip-link"/);
+  assert.match(index, /<h1 class="visually-hidden">/);
+  assert.match(index, /id="update-notice"/);
+  assert.match(app, /checkForUpdate/);
+  assert.match(app, /keepFocusInDialog/);
+  assert.match(page, /keepFocusInDialog/);
+  assert.match(page, /updateAvailable/);
 });
 
 test("mobile layout keeps three variants inside the viewport", async () => {
@@ -191,6 +210,10 @@ test("mobile layout keeps three variants inside the viewport", async () => {
     assert.match(css, /\.code-guide-card/);
     assert.match(css, /\.code-entry\.is-used/);
     assert.match(css, /\.code-value-row button:disabled/);
+    assert.match(css, /\.check \{[^}]*min-height:\s*40px/s);
+    assert.match(css, /\.search input \{[^}]*font-size:\s*16px/s);
+    assert.match(css, /\.update-notice/);
+    assert.match(css, /\.skip-link/);
     assert.match(css, /@media \(max-width: 760px\)[\s\S]+\.code-entry \{[^}]+grid-template-columns:\s*minmax\(0, 1fr\)/);
   }
 });

@@ -2,6 +2,7 @@ const BUNDLE = window.SPRITE_CATALOGS;
 const CATALOGS = BUNDLE.seasons;
 const RELEASE_VERSION = BUNDLE.assetVersion;
 const WHATS_NEW_STORAGE_KEY = "sprite-locker-last-seen-release";
+const FOCUSABLE_SELECTOR = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), summary, [tabindex]:not([tabindex="-1"])';
 let season = CATALOGS.find((item) => item.seasonId === BUNDLE.defaultSeasonId)
   || CATALOGS[0];
 let filter = "missing";
@@ -12,6 +13,23 @@ let progress = {};
 let focusedCode = null;
 let codeGuideView = "sprites";
 let redeemedAdminCodes = [];
+let whatsNewReturnFocus = null;
+let codeGuideReturnFocus = null;
+
+function keepFocusInDialog(event, dialog) {
+  if (event.key !== "Tab" || !dialog) return;
+  const focusable = [...dialog.querySelectorAll(FOCUSABLE_SELECTOR)].filter((item) => !item.hidden && item.offsetParent !== null);
+  if (!focusable.length) return;
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
+}
 
 const keyFor = (name, variant) => `${name}::${variant}`;
 const slugFor = (name) => name.toLowerCase().replace(/\./g, "").replace(/\s+/g, "-");
@@ -102,7 +120,7 @@ function updateSeasonUi() {
   document.querySelector("#season-name").textContent = season.season;
   document.querySelector("#season-theme").textContent = season.seasonTheme;
   document.querySelector(".update-stamp").textContent = `UPDATED ${season.updatedDate.toUpperCase()} · PATCH ${season.patch.toUpperCase()}`;
-  document.querySelector(".tracker").setAttribute("aria-label", `${season.chapter} ${season.season} Sprite checklist`);
+  document.querySelector("#checklist-heading").textContent = `${season.chapter} ${season.season} Sprite checklist`;
   const adminCodeTrigger = document.querySelector("#admin-codes-trigger");
   adminCodeTrigger.hidden = unlockCodes().length + otherAdminCodes().length === 0;
   document.querySelector("#admin-codes-count").textContent = unlockCodes().length + otherAdminCodes().length;
@@ -239,6 +257,7 @@ document.querySelector("#whats-new-items").replaceChildren(...whatsNew.items.map
 }));
 
 function openWhatsNew() {
+  whatsNewReturnFocus = document.activeElement instanceof HTMLElement && document.activeElement !== document.body ? document.activeElement : null;
   whatsNewBackdrop.hidden = false;
   document.body.classList.add("modal-open");
   queueMicrotask(() => whatsNewClose.focus());
@@ -248,6 +267,9 @@ function closeWhatsNew() {
   whatsNewBackdrop.hidden = true;
   document.body.classList.remove("modal-open");
   try { localStorage.setItem(WHATS_NEW_STORAGE_KEY, RELEASE_VERSION); } catch {}
+  const returnTarget = whatsNewReturnFocus;
+  whatsNewReturnFocus = null;
+  queueMicrotask(() => returnTarget?.focus());
 }
 
 document.querySelector("#brand-whats-new").addEventListener("click", openWhatsNew);
@@ -256,7 +278,9 @@ whatsNewBackdrop.addEventListener("click", (event) => {
   if (event.target === whatsNewBackdrop) closeWhatsNew();
 });
 document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape" && !whatsNewBackdrop.hidden) closeWhatsNew();
+  if (whatsNewBackdrop.hidden) return;
+  if (event.key === "Escape") closeWhatsNew();
+  else keepFocusInDialog(event, whatsNewBackdrop.querySelector('[role="dialog"]'));
 });
 
 const codeGuideBackdrop = document.querySelector("#code-guide-backdrop");
@@ -397,6 +421,7 @@ function renderCodeGuide() {
 }
 
 function openCodeGuide(code = null, view = "sprites") {
+  codeGuideReturnFocus = document.activeElement instanceof HTMLElement && document.activeElement !== document.body ? document.activeElement : null;
   focusedCode = code;
   codeGuideView = view;
   renderCodeGuide();
@@ -409,6 +434,9 @@ function closeCodeGuide() {
   codeGuideBackdrop.hidden = true;
   focusedCode = null;
   document.body.classList.remove("modal-open");
+  const returnTarget = codeGuideReturnFocus;
+  codeGuideReturnFocus = null;
+  queueMicrotask(() => returnTarget?.focus());
 }
 
 async function copyCodeText(value) {
@@ -468,7 +496,9 @@ codeGuideList.addEventListener("click", async (event) => {
   renderCodeGuide();
 });
 document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape" && !codeGuideBackdrop.hidden) closeCodeGuide();
+  if (codeGuideBackdrop.hidden) return;
+  if (event.key === "Escape") closeCodeGuide();
+  else keepFocusInDialog(event, codeGuideBackdrop.querySelector('[role="dialog"]'));
 });
 
 const seasonSelect = document.querySelector("#season-select");
@@ -589,18 +619,43 @@ function syncProgressFromStorage() {
   render();
 }
 
-window.addEventListener("focus", syncProgressFromStorage);
-window.addEventListener("pageshow", syncProgressFromStorage);
+const updateNotice = document.querySelector("#update-notice");
+async function checkForUpdate() {
+  try {
+    const versionUrl = new URL("./version.json", document.baseURI);
+    versionUrl.searchParams.set("check", String(Date.now()));
+    const response = await fetch(versionUrl, { cache: "no-store" });
+    if (!response.ok) return;
+    const latest = await response.json();
+    if (latest.assetVersion && latest.assetVersion !== RELEASE_VERSION) updateNotice.hidden = false;
+  } catch {}
+}
+
+document.querySelector("#reload-latest").addEventListener("click", () => window.location.reload());
+window.setInterval(checkForUpdate, 15 * 60 * 1000);
+
+window.addEventListener("focus", () => {
+  syncProgressFromStorage();
+  void checkForUpdate();
+});
+window.addEventListener("pageshow", () => {
+  syncProgressFromStorage();
+  void checkForUpdate();
+});
 window.addEventListener("storage", (event) => {
   if ([season.storageKey, ...(season.legacyStorageKeys || [])].includes(event.key)) syncProgressFromStorage();
 });
 document.addEventListener("visibilitychange", () => {
-  if (document.visibilityState === "visible") syncProgressFromStorage();
+  if (document.visibilityState === "visible") {
+    syncProgressFromStorage();
+    void checkForUpdate();
+  }
 });
 
 updateSeasonUi();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").catch(() => {});
 render();
+void checkForUpdate();
 try {
   if (localStorage.getItem(WHATS_NEW_STORAGE_KEY) !== RELEASE_VERSION) openWhatsNew();
 } catch {

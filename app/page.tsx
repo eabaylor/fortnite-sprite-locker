@@ -97,6 +97,23 @@ function loadProgress(season: SeasonCatalog): Progress {
   return {};
 }
 
+const FOCUSABLE_SELECTOR = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), summary, [tabindex]:not([tabindex="-1"])';
+
+function keepFocusInDialog(event: KeyboardEvent, dialog: HTMLElement | null) {
+  if (event.key !== "Tab" || !dialog) return;
+  const focusable = [...dialog.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)].filter((item) => !item.hidden && item.offsetParent !== null);
+  if (!focusable.length) return;
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
+}
+
 function ProgressRing({ value, total, label, tone }: { value: number; total: number; label: string; tone: "green" | "gold" }) {
   const percent = Math.round((value / total) * 100);
   return (
@@ -151,10 +168,15 @@ export default function Home() {
   const [focusedCode, setFocusedCode] = useState<string | null>(null);
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
   const [redeemedAdminCodes, setRedeemedAdminCodes] = useState<string[]>([]);
+  const [updateAvailable, setUpdateAvailable] = useState(false);
   const restoreInput = useRef<HTMLInputElement>(null);
   const dataMenu = useRef<HTMLDetailsElement>(null);
   const whatsNewClose = useRef<HTMLButtonElement>(null);
   const codeGuideClose = useRef<HTMLButtonElement>(null);
+  const whatsNewDialog = useRef<HTMLElement>(null);
+  const codeGuideDialog = useRef<HTMLElement>(null);
+  const whatsNewReturnFocus = useRef<HTMLElement | null>(null);
+  const codeGuideReturnFocus = useRef<HTMLElement | null>(null);
 
   const activeSeason = CATALOGS.find((season) => season.seasonId === selectedSeasonId) ?? CATALOGS[0];
   const sprites = activeSeason.families;
@@ -190,6 +212,7 @@ export default function Home() {
     if (!whatsNewOpen) return;
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") closeWhatsNew();
+      else keepFocusInDialog(event, whatsNewDialog.current);
     };
     document.body.classList.add("modal-open");
     document.addEventListener("keydown", onKeyDown);
@@ -203,7 +226,8 @@ export default function Home() {
   useEffect(() => {
     if (!codeGuideOpen) return;
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setCodeGuideOpen(false);
+      if (event.key === "Escape") closeCodeGuide();
+      else keepFocusInDialog(event, codeGuideDialog.current);
     };
     document.body.classList.add("modal-open");
     document.addEventListener("keydown", onKeyDown);
@@ -213,6 +237,32 @@ export default function Home() {
       document.removeEventListener("keydown", onKeyDown);
     };
   }, [codeGuideOpen]);
+
+  useEffect(() => {
+    let stopped = false;
+    const checkForUpdate = async () => {
+      try {
+        const versionUrl = new URL("./version.json", document.baseURI);
+        versionUrl.searchParams.set("check", String(Date.now()));
+        const response = await fetch(versionUrl, { cache: "no-store" });
+        if (!response.ok) return;
+        const latest = await response.json() as { assetVersion?: string };
+        if (!stopped && latest.assetVersion && latest.assetVersion !== RELEASE_VERSION) setUpdateAvailable(true);
+      } catch {}
+    };
+    const checkWhenVisible = () => {
+      if (document.visibilityState === "visible") void checkForUpdate();
+    };
+    const timer = window.setInterval(checkForUpdate, 15 * 60 * 1000);
+    window.addEventListener("focus", checkForUpdate);
+    document.addEventListener("visibilitychange", checkWhenVisible);
+    return () => {
+      stopped = true;
+      window.clearInterval(timer);
+      window.removeEventListener("focus", checkForUpdate);
+      document.removeEventListener("visibilitychange", checkWhenVisible);
+    };
+  }, []);
 
   useEffect(() => {
     if (ready) localStorage.setItem(activeSeason.storageKey, JSON.stringify(progress));
@@ -320,13 +370,30 @@ export default function Home() {
     try {
       localStorage.setItem(WHATS_NEW_STORAGE_KEY, RELEASE_VERSION);
     } catch {}
+    const returnTarget = whatsNewReturnFocus.current;
+    whatsNewReturnFocus.current = null;
+    queueMicrotask(() => returnTarget?.focus());
+  }
+
+  function openWhatsNew(opener?: HTMLElement) {
+    whatsNewReturnFocus.current = opener ?? (document.activeElement instanceof HTMLElement && document.activeElement !== document.body ? document.activeElement : null);
+    setWhatsNewOpen(true);
   }
 
   function openCodeGuide(code?: string, view: "sprites" | "other" = "sprites") {
+    codeGuideReturnFocus.current = document.activeElement instanceof HTMLElement && document.activeElement !== document.body ? document.activeElement : null;
     setFocusedCode(code ?? null);
     setCodeGuideView(view);
     setCopiedCode(null);
     setCodeGuideOpen(true);
+  }
+
+  function closeCodeGuide() {
+    setCodeGuideOpen(false);
+    setFocusedCode(null);
+    const returnTarget = codeGuideReturnFocus.current;
+    codeGuideReturnFocus.current = null;
+    queueMicrotask(() => returnTarget?.focus());
   }
 
   async function copyCode(code: string) {
@@ -396,10 +463,12 @@ export default function Home() {
 
   return (
     <main>
+      <a className="skip-link" href="#sprite-checklist">Skip to Sprite checklist</a>
       <header className="hero">
+        <h1 className="visually-hidden">Fortnite Sprite Locker checklist</h1>
         <nav>
           <div className="brand-lockup" data-season-id={activeSeason.seasonId}>
-            <button className="brand" type="button" onClick={() => setWhatsNewOpen(true)} aria-label="Open What’s New" title="Open What’s New">
+            <button className="brand" type="button" onClick={(event) => openWhatsNew(event.currentTarget)} aria-label="Open What’s New" title="Open What’s New">
               <Image src="/fortnite-sprite-locker-logo-transparent.png" alt="Fortnite Sprite Locker" width={1983} height={793} priority sizes="(max-width: 760px) 43vw, 330px" unoptimized />
             </button>
             <label className="season-badge" aria-label="Select Fortnite chapter and season">
@@ -440,7 +509,15 @@ export default function Home() {
         </nav>
       </header>
 
-      <section className="tracker" aria-label={`${activeSeason.chapter} ${activeSeason.season} Sprite checklist`}>
+      {updateAvailable && (
+        <aside className="update-notice" role="status" aria-live="polite">
+          <div><strong>A newer Sprite Locker is ready.</strong><span>Your saved checkmarks will stay in place.</span></div>
+          <button type="button" onClick={() => window.location.reload()}>Reload latest</button>
+        </aside>
+      )}
+
+      <section className="tracker" id="sprite-checklist" tabIndex={-1} aria-labelledby="checklist-heading">
+        <h2 className="visually-hidden" id="checklist-heading">{activeSeason.chapter} {activeSeason.season} Sprite checklist</h2>
         <div className="filters" role="group" aria-label="Filter checklist">
           <label className="select-filter status-filter">
             <span>Status</span>
@@ -515,7 +592,7 @@ export default function Home() {
 
       {whatsNewOpen && (
         <div className="whats-new-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) closeWhatsNew(); }}>
-          <section className="whats-new-card" role="dialog" aria-modal="true" aria-labelledby="whats-new-title">
+          <section ref={whatsNewDialog} className="whats-new-card" role="dialog" aria-modal="true" aria-labelledby="whats-new-title">
             <span className="whats-new-kicker">Tracker update · {currentCatalog.updatedDate}</span>
             <h2 id="whats-new-title">{WHATS_NEW.title}</h2>
             {WHATS_NEW.intro && <p>{WHATS_NEW.intro}</p>}
@@ -526,15 +603,15 @@ export default function Home() {
       )}
 
       {codeGuideOpen && !!(unlockCodes.length || otherAdminCodes.length) && (
-        <div className="code-guide-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setCodeGuideOpen(false); }}>
-          <section className="code-guide-card" role="dialog" aria-modal="true" aria-labelledby="code-guide-title">
+        <div className="code-guide-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) closeCodeGuide(); }}>
+          <section ref={codeGuideDialog} className="code-guide-card" role="dialog" aria-modal="true" aria-labelledby="code-guide-title">
             <header className="code-guide-header">
               <div>
                 <span>Chapter 7 · Season 4</span>
                 <h2 id="code-guide-title">Admin Panel Codes</h2>
                 <p>In the Battle Royale lobby, open <strong>…/Admin Panel</strong>, enter a code, and submit it. Reward codes work once per account; the two lobby transformations are reusable.</p>
               </div>
-              <button ref={codeGuideClose} className="code-guide-close" type="button" onClick={() => setCodeGuideOpen(false)} aria-label="Close Admin Panel codes">×</button>
+              <button ref={codeGuideClose} className="code-guide-close" type="button" onClick={closeCodeGuide} aria-label="Close Admin Panel codes">×</button>
             </header>
             <div className="code-guide-tabs" role="tablist" aria-label="Admin Panel code categories">
               <button type="button" role="tab" aria-selected={codeGuideView === "sprites"} className={codeGuideView === "sprites" ? "active" : ""} onClick={() => setCodeGuideView("sprites")}>Sprite unlocks <span>{unlockCodes.length}</span></button>

@@ -14,6 +14,17 @@ const total = current.families.reduce((sum, family) => sum + family.variants.len
 await mkdir(new URL("docs/", root), { recursive: true });
 await writeFile(new URL("docs/catalog.js", root), `window.SPRITE_CATALOGS = ${JSON.stringify(bundle, null, 2)};\n`);
 await writeFile(new URL("public/catalog.json", root), `${JSON.stringify(bundle, null, 2)}\n`);
+const version = `${JSON.stringify({ assetVersion: current.assetVersion, updatedDate: current.updatedDate }, null, 2)}\n`;
+await writeFile(new URL("docs/version.json", root), version);
+await writeFile(new URL("public/version.json", root), version);
+
+const appCss = await readFile(new URL("app/globals.css", root), "utf8");
+const staticCss = appCss
+  .replace(/^@import "tailwindcss";\r?\n\r?\n/, "")
+  .replaceAll("var(--font-body), sans-serif", '"Segoe UI", Arial, sans-serif')
+  .replaceAll("var(--font-display), Impact, sans-serif", 'Impact, "Arial Black", sans-serif')
+  .replaceAll("var(--font-display), sans-serif", 'Impact, "Arial Black", sans-serif');
+await writeFile(new URL("docs/styles.css", root), staticCss);
 
 const indexUrl = new URL("docs/index.html", root);
 let index = await readFile(indexUrl, "utf8");

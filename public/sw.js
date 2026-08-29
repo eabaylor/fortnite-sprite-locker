@@ -1,5 +1,5 @@
-const CACHE = "sprite-locker-20260829-1";
-const SHELL = ["./", "./manifest.webmanifest", "./favicon.svg", "./fortnite-sprite-locker-logo-transparent.png", "./catalog.json"];
+const CACHE = "sprite-locker-20260829-2";
+const SHELL = ["./", "./manifest.webmanifest", "./favicon.svg", "./fortnite-sprite-locker-logo-transparent.png", "./catalog.json", "./version.json"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => Promise.allSettled(SHELL.map((path) => cache.add(path)))).then(() => self.skipWaiting()));

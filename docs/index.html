@@ -11,13 +11,15 @@
     <title>Fortnite Sprite Locker — Sprite Checklist</title>
     <link rel="icon" href="favicon.svg" />
     <link rel="manifest" href="manifest.webmanifest" />
-    <link rel="stylesheet" href="styles.css?v=20260829-1" />
-    <script src="catalog.js?v=20260829-1" defer></script>
-    <script src="app.js?v=20260829-1" defer></script>
+    <link rel="stylesheet" href="styles.css?v=20260829-2" />
+    <script src="catalog.js?v=20260829-2" defer></script>
+    <script src="app.js?v=20260829-2" defer></script>
   </head>
   <body>
     <main>
+      <a class="skip-link" href="#sprite-checklist">Skip to Sprite checklist</a>
       <header class="hero">
+        <h1 class="visually-hidden">Fortnite Sprite Locker checklist</h1>
         <nav>
           <div class="brand-lockup" data-season-id="chapter-7-season-4">
             <button class="brand" id="brand-whats-new" type="button" aria-label="Open What’s New" title="Open What’s New">
@@ -65,7 +67,13 @@
         </nav>
       </header>
 
-      <section class="tracker" aria-label="Sprite checklist">
+      <aside class="update-notice" id="update-notice" role="status" aria-live="polite" hidden>
+        <div><strong>A newer Sprite Locker is ready.</strong><span>Your saved checkmarks will stay in place.</span></div>
+        <button type="button" id="reload-latest">Reload latest</button>
+      </aside>
+
+      <section class="tracker" id="sprite-checklist" tabindex="-1" aria-labelledby="checklist-heading">
+        <h2 class="visually-hidden" id="checklist-heading">Sprite checklist</h2>
         <div class="filters" role="group" aria-label="Filter checklist">
           <label class="select-filter status-filter">
             <span>Status</span>
