@@ -182,6 +182,9 @@ test("mobile layout keeps three variants inside the viewport", async () => {
   for (const css of [appCss, staticCss]) {
     assert.match(css, /grid-template-columns:\s*repeat\(3, minmax\(0, 1fr\)\)/);
     assert.match(css, /\.sprite-art img[^}]+object-fit:\s*contain/s);
+    assert.match(css, /\.hero\s*\{[^}]*overflow:\s*visible/s);
+    assert.match(css, /\.hero\s*\{[^}]*z-index:\s*10/s);
+    assert.match(css, /\.tracker\s*\{[^}]*z-index:\s*1/s);
     assert.match(css, /@media \(max-width: 760px\)/);
     assert.doesNotMatch(css, /\.variant-strip[^}]+overflow-x:\s*(auto|scroll)/s);
     assert.match(css, /\.whats-new-card/);

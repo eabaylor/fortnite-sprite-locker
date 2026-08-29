@@ -18,13 +18,15 @@ button, input, select { font: inherit; }
 a { color: inherit; }
 
 .hero {
+  position: relative;
+  z-index: 10;
   color: #f8f4e9;
   padding: 6px clamp(14px, 4vw, 56px);
   background:
     radial-gradient(circle at 78% 32%, rgba(40, 199, 152, .22), transparent 28%),
     linear-gradient(118deg, #0a3d30, #0d5944 70%, #0e7658);
   border-bottom: 4px solid var(--gold);
-  overflow: hidden;
+  overflow: visible;
 }
 
 nav { max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: minmax(220px, 330px) 1fr auto; align-items: center; gap: 16px; }
@@ -68,7 +70,7 @@ h1 em { color: var(--gold); font-style: normal; }
 .ring.green { --ring: #2ad49c; }
 .ring.gold { --ring: var(--gold); }
 
-.tracker { max-width: 1420px; margin: 0 auto; padding: 8px clamp(10px, 3vw, 42px) 18px; }
+.tracker { position: relative; z-index: 1; max-width: 1420px; margin: 0 auto; padding: 8px clamp(10px, 3vw, 42px) 18px; }
 .tracker .eyebrow { color: var(--green-dark); }
 h2 { margin-bottom: 0; font-family: var(--font-display), sans-serif; text-transform: uppercase; font-size: clamp(26px, 4vw, 46px); letter-spacing: -.045em; }
 .search { width: 100%; display: flex; gap: 7px; align-items: center; border-bottom: 2px solid rgba(220,247,236,.75); padding: 5px 2px; }

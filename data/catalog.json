@@ -7,16 +7,16 @@
   "imageBase": "sprites",
   "storageKey": "sprite-locker-progress-chapter-7-season-4",
   "legacyStorageKeys": [],
-  "updatedDate": "August 28, 2026",
+  "updatedDate": "August 29, 2026",
   "patch": "v42.00",
-  "assetVersion": "20260828-2",
+  "assetVersion": "20260829-1",
   "whatsNew": {
-    "title": "A cleaner tracker header",
-    "intro": "Frequently used tools are easier to reach without crowding the filters:",
+    "title": "Header menu visibility fixed",
+    "intro": "The checklist options now remain fully visible when opened:",
     "items": [
-      "Find a Sprite now sits directly below the live Sprite source link.",
-      "Backup, Restore, and Reset are tucked into the three-dot menu beside collection progress.",
-      "The daily Sprite and Admin Code refresh now runs at 6:30 AM Pacific."
+      "The three-dot menu can extend below the header without being cut off.",
+      "Backup, Restore, and Reset remain easy to reach on mobile.",
+      "The menu stays layered above the Sprite filters and checklist."
     ]
   },
   "unlockCodes": [
