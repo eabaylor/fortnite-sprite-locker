@@ -107,6 +107,7 @@ test("server renders the real tracker with current season and all cards", async 
   assert.match(html, /Clear filters/);
   assert.match(html, /Backup/);
   assert.match(html, /Restore/);
+  assert.match(html, /Open checklist options/);
   assert.match(html, /What’s New/);
   assert.match(html, /Admin Codes/);
   assert.doesNotMatch(html, /Sprite Codes/);
@@ -145,6 +146,9 @@ test("static build is generated from the shared catalog", async () => {
   assert.doesNotMatch(index, /id="whats-new-trigger"/);
   assert.match(index, /id="code-guide-backdrop"/);
   assert.match(index, /id="admin-codes-trigger"/);
+  assert.match(index, /id="data-menu"/);
+  assert.match(index, /class="source-tools"/);
+  assert.doesNotMatch(index, /class="data-actions"/);
   assert.doesNotMatch(index, /id="code-guide-trigger"/);
   assert.doesNotMatch(index, /id="other-codes-trigger"/);
   assert.match(app, /navigator\.clipboard/);
@@ -152,6 +156,7 @@ test("static build is generated from the shared catalog", async () => {
   assert.match(app, /data-mark-admin-code/);
   assert.match(app, /sprite-locker-redeemed-admin-codes-/);
   assert.match(app, /syncProgressFromStorage/);
+  assert.match(app, /menu\.open && !menu\.contains\(event\.target\)/);
   assert.match(app, /window\.addEventListener\("focus", syncProgressFromStorage\)/);
   assert.match(app, /progress = loadProgress\(\);\s*filter = event\.target\.value/s);
   assert.match(app, /Number\(leftUsed\) - Number\(rightUsed\)/);

@@ -152,6 +152,7 @@ export default function Home() {
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
   const [redeemedAdminCodes, setRedeemedAdminCodes] = useState<string[]>([]);
   const restoreInput = useRef<HTMLInputElement>(null);
+  const dataMenu = useRef<HTMLDetailsElement>(null);
   const whatsNewClose = useRef<HTMLButtonElement>(null);
   const codeGuideClose = useRef<HTMLButtonElement>(null);
 
@@ -241,6 +242,14 @@ export default function Home() {
       document.removeEventListener("visibilitychange", syncVisibleProgress);
     };
   }, [activeSeason, ready]);
+
+  useEffect(() => {
+    const closeDataMenu = (event: PointerEvent) => {
+      if (dataMenu.current?.open && !dataMenu.current.contains(event.target as Node)) dataMenu.current.open = false;
+    };
+    document.addEventListener("pointerdown", closeDataMenu);
+    return () => document.removeEventListener("pointerdown", closeDataMenu);
+  }, []);
 
   const counts = useMemo(() => {
     let acquired = 0;
@@ -403,11 +412,28 @@ export default function Home() {
               <span className="season-theme">{activeSeason.seasonTheme}</span>
             </label>
           </div>
-          <a className="source-link" href="https://fortnite.gg/sprites" target="_blank" rel="noreferrer">Live Sprite source ↗</a>
+          <div className="source-tools">
+            <a className="source-link" href="https://fortnite.gg/sprites" target="_blank" rel="noreferrer">Live Sprite source ↗</a>
+            <label className="search">
+              <span>⌕</span>
+              <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Find a Sprite…" aria-label="Find a Sprite" />
+            </label>
+          </div>
           <div className="header-status" id="top">
-            <div className="progress-panel" aria-label="Collection progress">
-              <ProgressRing value={counts.acquired} total={total} label="Acquired" tone="green" />
-              <ProgressRing value={counts.mastered} total={total} label="Mastered" tone="gold" />
+            <div className="header-status-row">
+              <div className="progress-panel" aria-label="Collection progress">
+                <ProgressRing value={counts.acquired} total={total} label="Acquired" tone="green" />
+                <ProgressRing value={counts.mastered} total={total} label="Mastered" tone="gold" />
+              </div>
+              <details className="data-menu" ref={dataMenu}>
+                <summary aria-label="Open checklist options" title="Checklist options"><span aria-hidden="true">⋮</span></summary>
+                <div className="data-menu-panel" aria-label="Checklist data">
+                  <button type="button" onClick={(event) => { backupProgress(); event.currentTarget.closest("details")?.removeAttribute("open"); }}>Backup</button>
+                  <button type="button" onClick={(event) => { restoreInput.current?.click(); event.currentTarget.closest("details")?.removeAttribute("open"); }}>Restore</button>
+                  <input ref={restoreInput} className="visually-hidden" type="file" accept="application/json,.json" onChange={(event) => restoreProgress(event.target.files?.[0])} aria-label="Restore checklist backup" />
+                  <button className="reset" onClick={(event) => { event.currentTarget.closest("details")?.removeAttribute("open"); if (confirm(`Clear every ${activeSeason.season} checkmark?`)) setProgress({}); }}>Reset</button>
+                </div>
+              </details>
             </div>
             <p className="update-stamp">UPDATED {activeSeason.updatedDate.toUpperCase()} · PATCH {activeSeason.patch.toUpperCase()}</p>
           </div>
@@ -433,16 +459,6 @@ export default function Home() {
               Admin Codes <span>{unlockCodes.length + otherAdminCodes.length}</span>
             </button>
           )}
-          <div className="data-actions" aria-label="Checklist data">
-            <button type="button" onClick={backupProgress}>Backup</button>
-            <button type="button" onClick={() => restoreInput.current?.click()}>Restore</button>
-            <input ref={restoreInput} className="visually-hidden" type="file" accept="application/json,.json" onChange={(event) => restoreProgress(event.target.files?.[0])} aria-label="Restore checklist backup" />
-            <button className="reset" onClick={() => { if (confirm(`Clear every ${activeSeason.season} checkmark?`)) setProgress({}); }}>Reset</button>
-          </div>
-          <label className="search">
-            <span>⌕</span>
-            <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Find a Sprite…" aria-label="Find a Sprite" />
-          </label>
         </div>
 
         <div className="sprite-list">

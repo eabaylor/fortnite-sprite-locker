@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-season-4",
-  "assetVersion": "20260828-1",
+  "assetVersion": "20260828-2",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -14,14 +14,14 @@
       "legacyStorageKeys": [],
       "updatedDate": "August 28, 2026",
       "patch": "v42.00",
-      "assetVersion": "20260828-1",
+      "assetVersion": "20260828-2",
       "whatsNew": {
-        "title": "One Admin Codes button",
-        "intro": "The tracker controls are simpler and status changes refresh immediately:",
+        "title": "A cleaner tracker header",
+        "intro": "Frequently used tools are easier to reach without crowding the filters:",
         "items": [
-          "Sprite and other reward codes now share one Admin Codes button while remaining separated into tabs inside the guide.",
-          "The button count shows all active Admin Panel codes together.",
-          "Not Mastered now re-syncs saved progress when the page regains focus or its status filter changes."
+          "Find a Sprite now sits directly below the live Sprite source link.",
+          "Backup, Restore, and Reset are tucked into the three-dot menu beside collection progress.",
+          "The daily Sprite and Admin Code refresh now runs at 6:30 AM Pacific."
         ]
       },
       "unlockCodes": [

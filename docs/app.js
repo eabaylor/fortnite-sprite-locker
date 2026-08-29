@@ -523,6 +523,7 @@ document.querySelector("#clear-filters").addEventListener("click", () => {
 });
 
 document.querySelector("#reset").addEventListener("click", () => {
+  document.querySelector("#data-menu").removeAttribute("open");
   if (!confirm(`Clear every ${season.season} checkmark?`)) return;
   progress = {};
   save();
@@ -537,10 +538,14 @@ document.querySelector("#backup").addEventListener("click", () => {
   link.download = `fortnite-sprite-locker-${season.seasonId}.json`;
   link.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
+  document.querySelector("#data-menu").removeAttribute("open");
 });
 
 const restoreInput = document.querySelector("#restore-input");
-document.querySelector("#restore").addEventListener("click", () => restoreInput.click());
+document.querySelector("#restore").addEventListener("click", () => {
+  restoreInput.click();
+  document.querySelector("#data-menu").removeAttribute("open");
+});
 restoreInput.addEventListener("change", async () => {
   const file = restoreInput.files?.[0];
   if (!file) return;
@@ -556,6 +561,11 @@ restoreInput.addEventListener("change", async () => {
   } finally {
     restoreInput.value = "";
   }
+});
+
+document.addEventListener("pointerdown", (event) => {
+  const menu = document.querySelector("#data-menu");
+  if (menu.open && !menu.contains(event.target)) menu.removeAttribute("open");
 });
 
 document.querySelector("#sprite-list").addEventListener("change", (event) => {
