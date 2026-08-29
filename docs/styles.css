@@ -92,12 +92,9 @@ h2 { margin-bottom: 0; font-family: Impact, "Arial Black", sans-serif; text-tran
 .filter-menu input { width: 16px; height: 16px; margin: 0; accent-color: var(--green-dark); }
 .filters .filter-menu-clear { width: 100%; margin-bottom: 4px; border-radius: 7px; padding: 6px; color: var(--green-dark); border-color: #b8d4c9; }
 .filters .clear-filters { color: var(--green-dark); border-color: #a9ccbf; }
-.filters .code-guide-trigger { display: inline-flex; align-items: center; gap: 6px; color: #3d2c00; border-color: #d39b0d; background: var(--gold); }
-.filters .code-guide-trigger:hover { background: #ffd05b; }
-.code-guide-trigger > span, .other-codes-trigger > span { min-width: 19px; height: 19px; display: inline-grid; place-items: center; border-radius: 999px; color: white; background: #725100; font-size: 9px; }
-.filters .other-codes-trigger { display: inline-flex; align-items: center; gap: 6px; color: white; border-color: var(--green-dark); background: var(--green-dark); }
-.filters .other-codes-trigger:hover { background: #07533f; }
-.other-codes-trigger > span { background: rgba(255,255,255,.2); }
+.filters .admin-codes-trigger { display: inline-flex; align-items: center; gap: 6px; color: #3d2c00; border-color: #d39b0d; background: var(--gold); }
+.filters .admin-codes-trigger:hover { background: #ffd05b; }
+.admin-codes-trigger > span { min-width: 19px; height: 19px; display: inline-grid; place-items: center; border-radius: 999px; color: white; background: #725100; font-size: 9px; }
 .data-actions { margin-left: auto; display: flex; align-items: center; gap: 4px; }
 .filters .data-actions button { padding-inline: 9px; }
 .filters .reset { color: #8c554d; border-color: #d7bbb5; }

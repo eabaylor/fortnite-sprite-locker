@@ -103,12 +103,9 @@ function updateSeasonUi() {
   document.querySelector("#season-theme").textContent = season.seasonTheme;
   document.querySelector(".update-stamp").textContent = `UPDATED ${season.updatedDate.toUpperCase()} · PATCH ${season.patch.toUpperCase()}`;
   document.querySelector(".tracker").setAttribute("aria-label", `${season.chapter} ${season.season} Sprite checklist`);
-  const codeTrigger = document.querySelector("#code-guide-trigger");
-  codeTrigger.hidden = unlockCodes().length === 0;
-  document.querySelector("#code-guide-count").textContent = unlockCodes().length;
-  const otherTrigger = document.querySelector("#other-codes-trigger");
-  otherTrigger.hidden = otherAdminCodes().length === 0;
-  document.querySelector("#other-codes-count").textContent = otherAdminCodes().length;
+  const adminCodeTrigger = document.querySelector("#admin-codes-trigger");
+  adminCodeTrigger.hidden = unlockCodes().length + otherAdminCodes().length === 0;
+  document.querySelector("#admin-codes-count").textContent = unlockCodes().length + otherAdminCodes().length;
   document.querySelector("#sprite-code-tab-count").textContent = unlockCodes().length;
   document.querySelector("#other-code-tab-count").textContent = otherAdminCodes().length;
 }
@@ -427,8 +424,7 @@ async function copyCodeText(value) {
   field.remove();
 }
 
-document.querySelector("#code-guide-trigger").addEventListener("click", () => openCodeGuide());
-document.querySelector("#other-codes-trigger").addEventListener("click", () => openCodeGuide(null, "other"));
+document.querySelector("#admin-codes-trigger").addEventListener("click", () => openCodeGuide());
 document.querySelector(".code-guide-tabs").addEventListener("click", (event) => {
   const tab = event.target.closest("[data-code-view]");
   if (!tab) return;
@@ -499,6 +495,7 @@ seasonSelect.addEventListener("change", () => {
 });
 
 document.querySelector("#status-filter").addEventListener("change", (event) => {
+  progress = loadProgress();
   filter = event.target.value;
   render();
 });
@@ -573,6 +570,22 @@ document.querySelector("#sprite-list").addEventListener("change", (event) => {
   else progress[key] = next;
   save();
   render();
+});
+
+function syncProgressFromStorage() {
+  const latest = loadProgress();
+  if (JSON.stringify(latest) === JSON.stringify(progress)) return;
+  progress = latest;
+  render();
+}
+
+window.addEventListener("focus", syncProgressFromStorage);
+window.addEventListener("pageshow", syncProgressFromStorage);
+window.addEventListener("storage", (event) => {
+  if ([season.storageKey, ...(season.legacyStorageKeys || [])].includes(event.key)) syncProgressFromStorage();
+});
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible") syncProgressFromStorage();
 });
 
 updateSeasonUi();

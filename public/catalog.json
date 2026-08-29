@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-season-4",
-  "assetVersion": "20260827-3",
+  "assetVersion": "20260828-1",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -12,16 +12,16 @@
       "imageBase": "sprites",
       "storageKey": "sprite-locker-progress-chapter-7-season-4",
       "legacyStorageKeys": [],
-      "updatedDate": "August 27, 2026",
+      "updatedDate": "August 28, 2026",
       "patch": "v42.00",
-      "assetVersion": "20260827-3",
+      "assetVersion": "20260828-1",
       "whatsNew": {
-        "title": "Used codes organize themselves",
-        "intro": "The Admin Panel guide is easier to scan after you start redeeming rewards:",
+        "title": "One Admin Codes button",
+        "intro": "The tracker controls are simpler and status changes refresh immediately:",
         "items": [
-          "Redeemed one-time codes are greyed out and automatically move below codes you can still use.",
-          "Reusable lobby-transformation codes remain active and easy to find.",
-          "The daily refresh now checks for new, changed, and expired Admin Panel codes as well as new Sprites."
+          "Sprite and other reward codes now share one Admin Codes button while remaining separated into tabs inside the guide.",
+          "The button count shows all active Admin Panel codes together.",
+          "Not Mastered now re-syncs saved progress when the page regains focus or its status filter changes."
         ]
       },
       "unlockCodes": [

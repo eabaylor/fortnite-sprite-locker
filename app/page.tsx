@@ -221,6 +221,27 @@ export default function Home() {
     if (ready) localStorage.setItem(adminCodeStorageKey, JSON.stringify(redeemedAdminCodes));
   }, [adminCodeStorageKey, ready, redeemedAdminCodes]);
 
+  useEffect(() => {
+    if (!ready) return;
+    const syncProgress = () => setProgress(loadProgress(activeSeason));
+    const syncVisibleProgress = () => {
+      if (document.visibilityState === "visible") syncProgress();
+    };
+    const syncStoredProgress = (event: StorageEvent) => {
+      if ([activeSeason.storageKey, ...(activeSeason.legacyStorageKeys ?? [])].includes(event.key ?? "")) syncProgress();
+    };
+    window.addEventListener("focus", syncProgress);
+    window.addEventListener("pageshow", syncProgress);
+    window.addEventListener("storage", syncStoredProgress);
+    document.addEventListener("visibilitychange", syncVisibleProgress);
+    return () => {
+      window.removeEventListener("focus", syncProgress);
+      window.removeEventListener("pageshow", syncProgress);
+      window.removeEventListener("storage", syncStoredProgress);
+      document.removeEventListener("visibilitychange", syncVisibleProgress);
+    };
+  }, [activeSeason, ready]);
+
   const counts = useMemo(() => {
     let acquired = 0;
     let mastered = 0;
@@ -397,21 +418,19 @@ export default function Home() {
         <div className="filters" role="group" aria-label="Filter checklist">
           <label className="select-filter status-filter">
             <span>Status</span>
-            <select value={filter} onChange={(event) => setFilter(event.target.value as Filter)} aria-label="Filter checklist by collection status">
+            <select value={filter} onChange={(event) => {
+              setProgress((current) => sanitizeProgress(current, activeSeason));
+              setFilter(event.target.value as Filter);
+            }} aria-label="Filter checklist by collection status">
               {FILTERS.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}
             </select>
           </label>
           <MultiSelectFilter label="Sprites" items={sprites.map((sprite) => sprite.name)} selected={selectedSprites} onToggle={toggleSpriteFilter} onClear={() => setSelectedSprites([])} className="sprite-filter" />
           <MultiSelectFilter label="Variants" items={variants} selected={selectedVariants} onToggle={toggleVariantFilter} onClear={() => setSelectedVariants([])} className="variant-filter" />
           <button className="clear-filters" onClick={clearFilters}>Clear filters</button>
-          {!!unlockCodes.length && (
-            <button className="code-guide-trigger" type="button" onClick={() => openCodeGuide()}>
-              Sprite Codes <span>{unlockCodes.length}</span>
-            </button>
-          )}
-          {!!otherAdminCodes.length && (
-            <button className="other-codes-trigger" type="button" onClick={() => openCodeGuide(undefined, "other")}>
-              Other Codes <span>{otherAdminCodes.length}</span>
+          {!!(unlockCodes.length || otherAdminCodes.length) && (
+            <button className="admin-codes-trigger" type="button" onClick={() => openCodeGuide()}>
+              Admin Codes <span>{unlockCodes.length + otherAdminCodes.length}</span>
             </button>
           )}
           <div className="data-actions" aria-label="Checklist data">
