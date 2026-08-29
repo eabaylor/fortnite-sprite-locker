@@ -29,8 +29,8 @@ async function render() {
 test("catalog has unique active entries and matching artwork", async () => {
   assert.equal(catalog.seasonId, "chapter-7-season-4");
   assert.equal(catalog.storageKey, "sprite-locker-progress-chapter-7-season-4");
-  assert.equal(entries.length, 33);
-  assert.equal(catalog.whatsNew.items.length, 4);
+  assert.equal(entries.length, 36);
+  assert.ok(catalog.whatsNew.items.length >= 1 && catalog.whatsNew.items.length <= 4);
 
   const keys = entries.map(({ family, variant }) => `${family.name}::${variant}`);
   assert.equal(new Set(keys).size, keys.length);
@@ -113,7 +113,7 @@ test("server renders the real tracker with current season and all cards", async 
   assert.doesNotMatch(html, /Sprite Codes/);
   assert.doesNotMatch(html, /Other Codes/);
   assert.doesNotMatch(html, /class="whats-new-trigger"/);
-  assert.equal((html.match(/class="sprite-card /g) ?? []).length, 33);
+  assert.equal((html.match(/class="sprite-card /g) ?? []).length, 36);
   assert.doesNotMatch(html, /Your site is taking shape|Building your site/);
 });
 

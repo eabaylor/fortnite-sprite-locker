@@ -9,15 +9,13 @@
   "legacyStorageKeys": [],
   "updatedDate": "August 29, 2026",
   "patch": "v42.00",
-  "assetVersion": "20260829-2",
+  "assetVersion": "20260829-3",
   "whatsNew": {
-    "title": "Mobile usability upgraded",
-    "intro": "The tracker is easier to use on small screens and stays current while it is open:",
+    "title": "Storm Scout has arrived",
+    "intro": "The full Storm Scout family is now live in the Override collection:",
     "items": [
-      "A new-release notice now appears when a newer tracker version is published.",
-      "Phone controls are larger and the 320px-wide header no longer overflows.",
-      "Keyboard navigation now includes a checklist shortcut and improved popup focus.",
-      "The static and hosted builds now share one generated stylesheet."
+      "Track the Base, Cheat Master, and Gold Storm Scout variants.",
+      "The current Season 4 checklist now contains 36 released Sprite cards across 12 families."
     ]
   },
   "unlockCodes": [
@@ -100,6 +98,7 @@
     { "name": "Jonesy", "rarity": "Rare", "variants": ["Base", "Cheat Master", "Gold"] },
     { "name": "Sonic", "rarity": "Epic", "variants": ["Base", "Cheat Master", "Gold"] },
     { "name": "Crown", "rarity": "Mythic", "variants": ["Base", "Cheat Master", "Gold"] },
-    { "name": "8-Bit", "rarity": "Rare", "variants": ["Base", "Cheat Master", "Gold"] }
+    { "name": "8-Bit", "rarity": "Rare", "variants": ["Base", "Cheat Master", "Gold"] },
+    { "name": "Storm Scout", "rarity": "Rare", "variants": ["Base", "Cheat Master", "Gold"] }
   ]
 }
