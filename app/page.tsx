@@ -20,6 +20,7 @@ type OtherAdminCode = {
   reward: string;
   category: string;
   useType: "one-time" | "reusable";
+  requirement?: string;
   verifiedDate: string;
   sourceUrl: string;
 };
@@ -666,6 +667,7 @@ export default function Home() {
                       <code>{item.code}</code>
                       <button type="button" disabled={used && item.useType === "one-time"} onClick={() => copyCode(item.code)}>{used && item.useType === "one-time" ? "Used" : copiedCode === item.code ? "Copied!" : "Copy"}</button>
                     </div>
+                    {item.requirement && <p className="code-requirement"><strong>Requirement:</strong> {item.requirement}</p>}
                     <div className="code-entry-footer">
                       <strong className={`code-use-type ${item.useType}`}>{item.useType === "reusable" ? "Reusable" : "One-time per account"}</strong>
                       <span>Verified {item.verifiedDate}</span>

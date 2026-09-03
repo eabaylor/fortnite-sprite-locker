@@ -29,7 +29,7 @@ async function render() {
 test("catalog has unique active entries and matching artwork", async () => {
   assert.equal(catalog.seasonId, "chapter-7-season-4");
   assert.equal(catalog.storageKey, "sprite-locker-progress-chapter-7-season-4");
-  assert.equal(entries.length, 36);
+  assert.equal(entries.length, 47);
   assert.ok(catalog.whatsNew.items.length >= 1 && catalog.whatsNew.items.length <= 4);
 
   const keys = entries.map(({ family, variant }) => `${family.name}::${variant}`);
@@ -43,9 +43,9 @@ test("catalog has unique active entries and matching artwork", async () => {
     assert.ok(unlock.rewards.length > 0);
     for (const reward of unlock.rewards) assert.ok(keys.includes(`${reward.name}::${reward.variant}`), `${unlock.code} has an unknown reward`);
   }
-  assert.equal(catalog.otherAdminCodes.length, 15);
+  assert.equal(catalog.otherAdminCodes.length, 18);
   const allAdminCodes = [...catalog.unlockCodes, ...catalog.otherAdminCodes];
-  assert.equal(allAdminCodes.length, 22);
+  assert.equal(allAdminCodes.length, 25);
   assert.equal(new Set(allAdminCodes.map(({ code }) => code.toLowerCase())).size, allAdminCodes.length);
   assert.equal(catalog.otherAdminCodes.filter(({ useType }) => useType === "reusable").length, 2);
   for (const item of catalog.otherAdminCodes) {
@@ -113,7 +113,7 @@ test("server renders the real tracker with current season and all cards", async 
   assert.doesNotMatch(html, /Sprite Codes/);
   assert.doesNotMatch(html, /Other Codes/);
   assert.doesNotMatch(html, /class="whats-new-trigger"/);
-  assert.equal((html.match(/class="sprite-card /g) ?? []).length, 36);
+  assert.equal((html.match(/class="sprite-card /g) ?? []).length, 47);
   assert.doesNotMatch(html, /Your site is taking shape|Building your site/);
 });
 
@@ -158,6 +158,7 @@ test("static build is generated from the shared catalog", async () => {
   assert.match(app, /navigator\.clipboard/);
   assert.match(app, /data-redeem-code/);
   assert.match(app, /data-mark-admin-code/);
+  assert.match(app, /item\.requirement/);
   assert.match(app, /sprite-locker-redeemed-admin-codes-/);
   assert.match(app, /syncProgressFromStorage/);
   assert.match(app, /menu\.open && !menu\.contains\(event\.target\)/);
@@ -167,6 +168,7 @@ test("static build is generated from the shared catalog", async () => {
   assert.match(app, /entry\.className = `code-entry \$\{used && item\.useType === "one-time" \? "is-used"/);
   assert.match(page, /Mark redeemed/);
   assert.match(page, /Mark used/);
+  assert.match(page, /item\.requirement/);
   assert.match(page, /window\.addEventListener\("focus", syncProgress\)/);
   assert.match(page, /setProgress\(\(current\) => sanitizeProgress\(current, activeSeason\)\)/);
   assert.match(page, /disabled=\{used && item\.useType === "one-time"\}/);

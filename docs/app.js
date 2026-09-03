@@ -393,6 +393,13 @@ function renderCodeGuide() {
     copy.textContent = copy.disabled ? "Used" : "Copy";
     codeRow.append(code, copy);
 
+    let requirement = null;
+    if (item.requirement) {
+      requirement = document.createElement("p");
+      requirement.className = "code-requirement";
+      requirement.innerHTML = `<strong>Requirement:</strong> ${item.requirement}`;
+    }
+
     const footer = document.createElement("div");
     footer.className = "code-entry-footer";
     const useType = document.createElement("strong");
@@ -415,7 +422,9 @@ function renderCodeGuide() {
       markUsed.textContent = used ? "✓ Used" : "Mark used";
       footer.append(markUsed);
     }
-    entry.append(rewards, codeRow, footer);
+    entry.append(rewards, codeRow);
+    if (requirement) entry.append(requirement);
+    entry.append(footer);
     codeGuideList.append(entry);
   }
 }

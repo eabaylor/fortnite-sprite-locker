@@ -1,7 +1,7 @@
 window.SPRITE_CATALOGS = {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-season-4",
-  "assetVersion": "20260829-3",
+  "assetVersion": "20260903-1",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -12,15 +12,17 @@ window.SPRITE_CATALOGS = {
       "imageBase": "sprites",
       "storageKey": "sprite-locker-progress-chapter-7-season-4",
       "legacyStorageKeys": [],
-      "updatedDate": "August 29, 2026",
-      "patch": "v42.00",
-      "assetVersion": "20260829-3",
+      "updatedDate": "September 3, 2026",
+      "patch": "v42.10",
+      "assetVersion": "20260903-1",
       "whatsNew": {
-        "title": "Storm Scout has arrived",
-        "intro": "The full Storm Scout family is now live in the Override collection:",
+        "title": "Four new Sprites have arrived",
+        "intro": "The v42.10 collection and Admin Code update is now live:",
         "items": [
-          "Track the Base, Cheat Master, and Gold Storm Scout variants.",
-          "The current Season 4 checklist now contains 36 released Sprite cards across 12 families."
+          "Added Overshield, Mega Man, X-Ray, and Onigiri Sprites.",
+          "Added the released Loot Hacker Crown variant.",
+          "The checklist now contains 47 released Sprite cards across 16 families.",
+          "Added three active Admin Codes from the v42.10 update."
         ]
       },
       "unlockCodes": [
@@ -111,6 +113,31 @@ window.SPRITE_CATALOGS = {
         }
       ],
       "otherAdminCodes": [
+        {
+          "code": "INVALIDCHEAT",
+          "reward": "2 Cheat Code Locators",
+          "category": "Gizmos",
+          "useType": "one-time",
+          "verifiedDate": "September 3, 2026",
+          "sourceUrl": "https://fortnite.gg/lobby-hacks"
+        },
+        {
+          "code": "ChatWhereDoYouFindTheKey",
+          "reward": "2 Extraction Accelerators",
+          "category": "Gizmos",
+          "useType": "one-time",
+          "verifiedDate": "September 3, 2026",
+          "sourceUrl": "https://fortnite.gg/lobby-hacks"
+        },
+        {
+          "code": "YourThoughtsAreMine",
+          "reward": "Void Master Geno style and 5,000 Sprite Dust",
+          "category": "Cosmetic + Sprite Dust",
+          "useType": "one-time",
+          "requirement": "Complete the hidden Geno quest before redeeming.",
+          "verifiedDate": "September 3, 2026",
+          "sourceUrl": "https://fortnite.gg/lobby-hacks"
+        },
         {
           "code": "H0p0nVC",
           "reward": "2,000 Sprite Dust",
@@ -234,6 +261,40 @@ window.SPRITE_CATALOGS = {
       ],
       "families": [
         {
+          "name": "Overshield",
+          "rarity": "Rare",
+          "variants": [
+            "Base",
+            "Cheat Master",
+            "Gold"
+          ]
+        },
+        {
+          "name": "Mega Man",
+          "rarity": "Rare",
+          "variants": [
+            "Base"
+          ]
+        },
+        {
+          "name": "X-Ray",
+          "rarity": "Legendary",
+          "variants": [
+            "Base",
+            "Cheat Master",
+            "Gold"
+          ]
+        },
+        {
+          "name": "Onigiri",
+          "rarity": "Rare",
+          "variants": [
+            "Base",
+            "Cheat Master",
+            "Gold"
+          ]
+        },
+        {
           "name": "Jackrabbit",
           "rarity": "Legendary",
           "variants": [
@@ -320,7 +381,8 @@ window.SPRITE_CATALOGS = {
           "variants": [
             "Base",
             "Cheat Master",
-            "Gold"
+            "Gold",
+            "Loot Hacker"
           ]
         },
         {
