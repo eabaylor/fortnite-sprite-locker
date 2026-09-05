@@ -610,7 +610,7 @@ export default function Home() {
               <div>
                 <span>Chapter 7 · Season 4</span>
                 <h2 id="code-guide-title">Admin Panel Codes</h2>
-                <p>In the Battle Royale lobby, open <strong>…/Admin Panel</strong>, enter a code, and submit it. Reward codes work once per account; the two lobby transformations are reusable.</p>
+                <p>In the Battle Royale lobby, open <strong>…/Admin Panel</strong>, enter a code, and submit it. Reward codes work once per account; temporary lobby transformations are reusable.</p>
               </div>
               <button ref={codeGuideClose} className="code-guide-close" type="button" onClick={closeCodeGuide} aria-label="Close Admin Panel codes">×</button>
             </header>

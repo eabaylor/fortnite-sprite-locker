@@ -1,7 +1,7 @@
 window.SPRITE_CATALOGS = {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-season-4",
-  "assetVersion": "20260903-1",
+  "assetVersion": "20260905-1",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -12,17 +12,17 @@ window.SPRITE_CATALOGS = {
       "imageBase": "sprites",
       "storageKey": "sprite-locker-progress-chapter-7-season-4",
       "legacyStorageKeys": [],
-      "updatedDate": "September 3, 2026",
+      "updatedDate": "September 5, 2026",
       "patch": "v42.10",
-      "assetVersion": "20260903-1",
+      "assetVersion": "20260905-1",
       "whatsNew": {
-        "title": "Four new Sprites have arrived",
-        "intro": "The v42.10 collection and Admin Code update is now live:",
+        "title": "Two new lobby transformations",
+        "intro": "The Admin Codes guide has two newly verified reusable effects:",
         "items": [
-          "Added Overshield, Mega Man, X-Ray, and Onigiri Sprites.",
-          "Added the released Loot Hacker Crown variant.",
-          "The checklist now contains 47 released Sprite cards across 16 families.",
-          "Added three active Admin Codes from the v42.10 update."
+          "Use BRB to briefly transform into a toilet in the lobby.",
+          "Use InsertCoinToContinue to briefly transform the party into arcade-machine props.",
+          "Both effects can be used more than once.",
+          "The Admin Codes guide now contains 27 verified active codes."
         ]
       },
       "unlockCodes": [
@@ -113,6 +113,22 @@ window.SPRITE_CATALOGS = {
         }
       ],
       "otherAdminCodes": [
+        {
+          "code": "BRB",
+          "reward": "Briefly transform into a toilet in the lobby",
+          "category": "Lobby Effect",
+          "useType": "reusable",
+          "verifiedDate": "September 5, 2026",
+          "sourceUrl": "https://www.gamesradar.com/games/fortnite/fortnite-lobby-hack-codes/"
+        },
+        {
+          "code": "InsertCoinToContinue",
+          "reward": "Briefly transform all party members into arcade-machine props in the lobby",
+          "category": "Lobby Effect",
+          "useType": "reusable",
+          "verifiedDate": "September 5, 2026",
+          "sourceUrl": "https://www.gamesradar.com/games/fortnite/fortnite-lobby-hack-codes/"
+        },
         {
           "code": "INVALIDCHEAT",
           "reward": "2 Cheat Code Locators",
