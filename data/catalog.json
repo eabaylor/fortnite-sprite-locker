@@ -9,15 +9,14 @@
   "legacyStorageKeys": [],
   "updatedDate": "September 5, 2026",
   "patch": "v42.10",
-  "assetVersion": "20260905-1",
+  "assetVersion": "20260905-2",
   "whatsNew": {
-    "title": "Two new lobby transformations",
-    "intro": "The Admin Codes guide has two newly verified reusable effects:",
+    "title": "5,000 more Sprite Dust",
+    "intro": "A newly verified Admin Panel code is ready to redeem:",
     "items": [
-      "Use BRB to briefly transform into a toilet in the lobby.",
-      "Use InsertCoinToContinue to briefly transform the party into arcade-machine props.",
-      "Both effects can be used more than once.",
-      "The Admin Codes guide now contains 27 verified active codes."
+      "Use WhereIsTheDustyTree to claim 5,000 Sprite Dust.",
+      "The reward is a one-time redemption per account.",
+      "The Admin Codes guide now contains 28 verified active codes."
     ]
   },
   "unlockCodes": [
@@ -73,6 +72,7 @@
     }
   ],
   "otherAdminCodes": [
+    { "code": "WhereIsTheDustyTree", "reward": "5,000 Sprite Dust", "category": "Sprite Dust", "useType": "one-time", "verifiedDate": "September 5, 2026", "sourceUrl": "https://www.vice.com/en/article/fortnite-cheat-codes-lobby-hacks/" },
     { "code": "BRB", "reward": "Briefly transform into a toilet in the lobby", "category": "Lobby Effect", "useType": "reusable", "verifiedDate": "September 5, 2026", "sourceUrl": "https://www.gamesradar.com/games/fortnite/fortnite-lobby-hack-codes/" },
     { "code": "InsertCoinToContinue", "reward": "Briefly transform all party members into arcade-machine props in the lobby", "category": "Lobby Effect", "useType": "reusable", "verifiedDate": "September 5, 2026", "sourceUrl": "https://www.gamesradar.com/games/fortnite/fortnite-lobby-hack-codes/" },
     { "code": "INVALIDCHEAT", "reward": "2 Cheat Code Locators", "category": "Gizmos", "useType": "one-time", "verifiedDate": "September 3, 2026", "sourceUrl": "https://fortnite.gg/lobby-hacks" },
