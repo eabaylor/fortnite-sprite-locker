@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-season-4",
-  "assetVersion": "20260905-2",
+  "assetVersion": "20260907-1",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -12,16 +12,16 @@
       "imageBase": "sprites",
       "storageKey": "sprite-locker-progress-chapter-7-season-4",
       "legacyStorageKeys": [],
-      "updatedDate": "September 5, 2026",
+      "updatedDate": "September 7, 2026",
       "patch": "v42.10",
-      "assetVersion": "20260905-2",
+      "assetVersion": "20260907-1",
       "whatsNew": {
-        "title": "5,000 more Sprite Dust",
-        "intro": "A newly verified Admin Panel code is ready to redeem:",
+        "title": "Mastery Monday code",
+        "intro": "A new limited-time Admin Panel reward is ready to claim:",
         "items": [
-          "Use WhereIsTheDustyTree to claim 5,000 Sprite Dust.",
-          "The reward is a one-time redemption per account.",
-          "The Admin Codes guide now contains 28 verified active codes."
+          "Use NOPROLLAMA to claim 1 Llama Supply Drop Gizmo.",
+          "Redeem it once per account before it expires on September 14.",
+          "The Admin Codes guide now contains 29 verified active codes."
         ]
       },
       "unlockCodes": [
@@ -112,6 +112,15 @@
         }
       ],
       "otherAdminCodes": [
+        {
+          "code": "NOPROLLAMA",
+          "reward": "1 Llama Supply Drop Gizmo",
+          "category": "Gizmos",
+          "useType": "one-time",
+          "requirement": "Limited-time code: redeem by September 14, 2026.",
+          "verifiedDate": "September 7, 2026",
+          "sourceUrl": "https://www.vice.com/en/article/fortnite-mastery-monday-september-7-start-times-new-cheat-code/"
+        },
         {
           "code": "WhereIsTheDustyTree",
           "reward": "5,000 Sprite Dust",
