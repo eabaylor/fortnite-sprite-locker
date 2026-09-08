@@ -1,7 +1,7 @@
 window.SPRITE_CATALOGS = {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-season-4",
-  "assetVersion": "20260907-1",
+  "assetVersion": "20260908-1",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -12,16 +12,16 @@ window.SPRITE_CATALOGS = {
       "imageBase": "sprites",
       "storageKey": "sprite-locker-progress-chapter-7-season-4",
       "legacyStorageKeys": [],
-      "updatedDate": "September 7, 2026",
+      "updatedDate": "September 8, 2026",
       "patch": "v42.10",
-      "assetVersion": "20260907-1",
+      "assetVersion": "20260908-1",
       "whatsNew": {
-        "title": "Mastery Monday code",
-        "intro": "A new limited-time Admin Panel reward is ready to claim:",
+        "title": "More free Sprite Dust",
+        "intro": "A newly verified Admin Panel code is ready to redeem:",
         "items": [
-          "Use NOPROLLAMA to claim 1 Llama Supply Drop Gizmo.",
-          "Redeem it once per account before it expires on September 14.",
-          "The Admin Codes guide now contains 29 verified active codes."
+          "Use DustInTheWind to claim 5,000 Sprite Dust.",
+          "The reward is a one-time redemption per account.",
+          "The Admin Codes guide now contains 30 verified active codes."
         ]
       },
       "unlockCodes": [
@@ -112,6 +112,14 @@ window.SPRITE_CATALOGS = {
         }
       ],
       "otherAdminCodes": [
+        {
+          "code": "DustInTheWind",
+          "reward": "5,000 Sprite Dust",
+          "category": "Sprite Dust",
+          "useType": "one-time",
+          "verifiedDate": "September 7, 2026",
+          "sourceUrl": "https://www.theclick.gg/dustinthewind-fortnite-code/"
+        },
         {
           "code": "NOPROLLAMA",
           "reward": "1 Llama Supply Drop Gizmo",
