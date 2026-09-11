@@ -7,16 +7,16 @@
   "imageBase": "sprites",
   "storageKey": "sprite-locker-progress-chapter-7-season-4",
   "legacyStorageKeys": [],
-  "updatedDate": "September 8, 2026",
+  "updatedDate": "September 11, 2026",
   "patch": "v42.10",
-  "assetVersion": "20260908-1",
+  "assetVersion": "20260911-1",
   "whatsNew": {
-    "title": "More free Sprite Dust",
-    "intro": "A newly verified Admin Panel code is ready to redeem:",
+    "title": "Loot Hacker Sprites are live",
+    "intro": "New Sprite Day has expanded the current-season collection:",
     "items": [
-      "Use DustInTheWind to claim 5,000 Sprite Dust.",
-      "The reward is a one-time redemption per account.",
-      "The Admin Codes guide now contains 30 verified active codes."
+      "14 Loot Hacker variants are now available to collect.",
+      "The Chapter 7 Season 4 checklist now contains 61 released Sprites.",
+      "Your existing Season 4 checkmarks and Admin Code history are preserved."
     ]
   },
   "unlockCodes": [
@@ -97,21 +97,21 @@
     { "code": "DontBlockMe", "reward": "Temporarily change the Tetris block lobby transformation", "category": "Lobby Effect", "useType": "reusable", "verifiedDate": "August 27, 2026", "sourceUrl": "https://allthings.how/fortnite-admin-panel-codes/" }
   ],
   "families": [
-    { "name": "Overshield", "rarity": "Rare", "variants": ["Base", "Cheat Master", "Gold"] },
+    { "name": "Overshield", "rarity": "Rare", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
     { "name": "Mega Man", "rarity": "Rare", "variants": ["Base"] },
-    { "name": "X-Ray", "rarity": "Legendary", "variants": ["Base", "Cheat Master", "Gold"] },
-    { "name": "Onigiri", "rarity": "Rare", "variants": ["Base", "Cheat Master", "Gold"] },
-    { "name": "Jackrabbit", "rarity": "Legendary", "variants": ["Base", "Cheat Master", "Gold"] },
-    { "name": "Shadow", "rarity": "Epic", "variants": ["Base", "Cheat Master", "Gold"] },
-    { "name": "Bush", "rarity": "Rare", "variants": ["Base", "Cheat Master", "Gold"] },
-    { "name": "Tails", "rarity": "Epic", "variants": ["Base", "Cheat Master", "Gold"] },
-    { "name": "Killswitch", "rarity": "Epic", "variants": ["Base", "Cheat Master", "Gold"] },
-    { "name": "Adventure", "rarity": "Rare", "variants": ["Base", "Cheat Master", "Gold"] },
-    { "name": "Klombo", "rarity": "Mythic", "variants": ["Base", "Cheat Master", "Gold"] },
-    { "name": "Jonesy", "rarity": "Rare", "variants": ["Base", "Cheat Master", "Gold"] },
-    { "name": "Sonic", "rarity": "Epic", "variants": ["Base", "Cheat Master", "Gold"] },
+    { "name": "X-Ray", "rarity": "Legendary", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
+    { "name": "Onigiri", "rarity": "Rare", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
+    { "name": "Jackrabbit", "rarity": "Legendary", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
+    { "name": "Shadow", "rarity": "Epic", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
+    { "name": "Bush", "rarity": "Rare", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
+    { "name": "Tails", "rarity": "Epic", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
+    { "name": "Killswitch", "rarity": "Epic", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
+    { "name": "Adventure", "rarity": "Rare", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
+    { "name": "Klombo", "rarity": "Mythic", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
+    { "name": "Jonesy", "rarity": "Rare", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
+    { "name": "Sonic", "rarity": "Epic", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
     { "name": "Crown", "rarity": "Mythic", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
-    { "name": "8-Bit", "rarity": "Rare", "variants": ["Base", "Cheat Master", "Gold"] },
-    { "name": "Storm Scout", "rarity": "Rare", "variants": ["Base", "Cheat Master", "Gold"] }
+    { "name": "8-Bit", "rarity": "Rare", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
+    { "name": "Storm Scout", "rarity": "Rare", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] }
   ]
 }

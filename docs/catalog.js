@@ -1,7 +1,7 @@
 window.SPRITE_CATALOGS = {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-season-4",
-  "assetVersion": "20260908-1",
+  "assetVersion": "20260911-1",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -12,16 +12,16 @@ window.SPRITE_CATALOGS = {
       "imageBase": "sprites",
       "storageKey": "sprite-locker-progress-chapter-7-season-4",
       "legacyStorageKeys": [],
-      "updatedDate": "September 8, 2026",
+      "updatedDate": "September 11, 2026",
       "patch": "v42.10",
-      "assetVersion": "20260908-1",
+      "assetVersion": "20260911-1",
       "whatsNew": {
-        "title": "More free Sprite Dust",
-        "intro": "A newly verified Admin Panel code is ready to redeem:",
+        "title": "Loot Hacker Sprites are live",
+        "intro": "New Sprite Day has expanded the current-season collection:",
         "items": [
-          "Use DustInTheWind to claim 5,000 Sprite Dust.",
-          "The reward is a one-time redemption per account.",
-          "The Admin Codes guide now contains 30 verified active codes."
+          "14 Loot Hacker variants are now available to collect.",
+          "The Chapter 7 Season 4 checklist now contains 61 released Sprites.",
+          "Your existing Season 4 checkmarks and Admin Code history are preserved."
         ]
       },
       "unlockCodes": [
@@ -306,7 +306,8 @@ window.SPRITE_CATALOGS = {
           "variants": [
             "Base",
             "Cheat Master",
-            "Gold"
+            "Gold",
+            "Loot Hacker"
           ]
         },
         {
@@ -322,7 +323,8 @@ window.SPRITE_CATALOGS = {
           "variants": [
             "Base",
             "Cheat Master",
-            "Gold"
+            "Gold",
+            "Loot Hacker"
           ]
         },
         {
@@ -331,7 +333,8 @@ window.SPRITE_CATALOGS = {
           "variants": [
             "Base",
             "Cheat Master",
-            "Gold"
+            "Gold",
+            "Loot Hacker"
           ]
         },
         {
@@ -340,7 +343,8 @@ window.SPRITE_CATALOGS = {
           "variants": [
             "Base",
             "Cheat Master",
-            "Gold"
+            "Gold",
+            "Loot Hacker"
           ]
         },
         {
@@ -349,7 +353,8 @@ window.SPRITE_CATALOGS = {
           "variants": [
             "Base",
             "Cheat Master",
-            "Gold"
+            "Gold",
+            "Loot Hacker"
           ]
         },
         {
@@ -358,7 +363,8 @@ window.SPRITE_CATALOGS = {
           "variants": [
             "Base",
             "Cheat Master",
-            "Gold"
+            "Gold",
+            "Loot Hacker"
           ]
         },
         {
@@ -367,7 +373,8 @@ window.SPRITE_CATALOGS = {
           "variants": [
             "Base",
             "Cheat Master",
-            "Gold"
+            "Gold",
+            "Loot Hacker"
           ]
         },
         {
@@ -376,7 +383,8 @@ window.SPRITE_CATALOGS = {
           "variants": [
             "Base",
             "Cheat Master",
-            "Gold"
+            "Gold",
+            "Loot Hacker"
           ]
         },
         {
@@ -385,7 +393,8 @@ window.SPRITE_CATALOGS = {
           "variants": [
             "Base",
             "Cheat Master",
-            "Gold"
+            "Gold",
+            "Loot Hacker"
           ]
         },
         {
@@ -394,7 +403,8 @@ window.SPRITE_CATALOGS = {
           "variants": [
             "Base",
             "Cheat Master",
-            "Gold"
+            "Gold",
+            "Loot Hacker"
           ]
         },
         {
@@ -403,7 +413,8 @@ window.SPRITE_CATALOGS = {
           "variants": [
             "Base",
             "Cheat Master",
-            "Gold"
+            "Gold",
+            "Loot Hacker"
           ]
         },
         {
@@ -412,7 +423,8 @@ window.SPRITE_CATALOGS = {
           "variants": [
             "Base",
             "Cheat Master",
-            "Gold"
+            "Gold",
+            "Loot Hacker"
           ]
         },
         {
@@ -431,7 +443,8 @@ window.SPRITE_CATALOGS = {
           "variants": [
             "Base",
             "Cheat Master",
-            "Gold"
+            "Gold",
+            "Loot Hacker"
           ]
         },
         {
@@ -440,7 +453,8 @@ window.SPRITE_CATALOGS = {
           "variants": [
             "Base",
             "Cheat Master",
-            "Gold"
+            "Gold",
+            "Loot Hacker"
           ]
         }
       ]
