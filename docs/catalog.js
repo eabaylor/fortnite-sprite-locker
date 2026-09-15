@@ -1,7 +1,7 @@
 window.SPRITE_CATALOGS = {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-season-4",
-  "assetVersion": "20260911-1",
+  "assetVersion": "20260915-1",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -12,16 +12,16 @@ window.SPRITE_CATALOGS = {
       "imageBase": "sprites",
       "storageKey": "sprite-locker-progress-chapter-7-season-4",
       "legacyStorageKeys": [],
-      "updatedDate": "September 11, 2026",
+      "updatedDate": "September 15, 2026",
       "patch": "v42.10",
-      "assetVersion": "20260911-1",
+      "assetVersion": "20260915-1",
       "whatsNew": {
-        "title": "Loot Hacker Sprites are live",
-        "intro": "New Sprite Day has expanded the current-season collection:",
+        "title": "A new Admin Code is live",
+        "intro": "The verified Lobby Hack list has a new reward:",
         "items": [
-          "14 Loot Hacker variants are now available to collect.",
-          "The Chapter 7 Season 4 checklist now contains 61 released Sprites.",
-          "Your existing Season 4 checkmarks and Admin Code history are preserved."
+          "BEAMMEUP grants 2 Extraction Accelerators.",
+          "The Admin Codes guide now contains 31 active codes.",
+          "Your Sprite checkmarks and redeemed-code history are preserved."
         ]
       },
       "unlockCodes": [
@@ -112,6 +112,14 @@ window.SPRITE_CATALOGS = {
         }
       ],
       "otherAdminCodes": [
+        {
+          "code": "BeamMeUp",
+          "reward": "2 Extraction Accelerators",
+          "category": "Gizmos",
+          "useType": "one-time",
+          "verifiedDate": "September 14, 2026",
+          "sourceUrl": "https://beebom.com/fortnite-lobby-hack-codes/"
+        },
         {
           "code": "DustInTheWind",
           "reward": "5,000 Sprite Dust",
