@@ -1,7 +1,7 @@
 window.SPRITE_CATALOGS = {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-season-4",
-  "assetVersion": "20260917-1",
+  "assetVersion": "20260917-2",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -14,14 +14,13 @@ window.SPRITE_CATALOGS = {
       "legacyStorageKeys": [],
       "updatedDate": "September 17, 2026",
       "patch": "v42.20",
-      "assetVersion": "20260917-1",
+      "assetVersion": "20260917-2",
       "whatsNew": {
-        "title": "Three new Sprites have arrived",
-        "intro": "Fortnite's v42.20 update brings 12 new Sprite cards and a new Admin Code:",
+        "title": "Sprites are now sorted A–Z",
+        "intro": "It is easier to find a Sprite family and scan its variants:",
         "items": [
-          "Blinky, Crash Bandicoot, and Pond each have Base, Gold, Cheat Master, and Loot Hacker variants.",
-          "SAYH12WR1X3L unlocks Wrixel's Hero Portrait Spray; the guide now has 32 codes.",
-          "Your Sprite checkmarks and redeemed-code history are preserved."
+          "Sprite families and the variants within each family now appear alphabetically.",
+          "This order applies to both seasons without changing your saved checkmarks."
         ]
       },
       "unlockCodes": [

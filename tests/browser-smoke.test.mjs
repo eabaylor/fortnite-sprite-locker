@@ -43,6 +43,8 @@ window.addEventListener("load", () => {
   const status = document.querySelector("#status-filter");
   status.value = "all";
   status.dispatchEvent(new Event("change", { bubbles: true }));
+  const familyNames = [...document.querySelectorAll(".sprite-row .row-label h3")].map((heading) => heading.textContent);
+  const firstVariants = [...document.querySelectorAll(".sprite-row:first-child .sprite-card h4")].map((heading) => heading.textContent);
   const mastered = document.querySelector('[data-field="mastered"]');
   const name = mastered.dataset.name;
   const variant = mastered.dataset.variant;
@@ -62,6 +64,8 @@ window.addEventListener("load", () => {
     statusHeight: Math.round(document.querySelector(".select-filter").getBoundingClientRect().height),
     searchFontSize: parseFloat(getComputedStyle(document.querySelector("#search")).fontSize),
     menuInsideViewport: menuRect.left >= 0 && menuRect.right <= document.documentElement.clientWidth,
+    familyNames,
+    firstVariants,
   };
   const output = document.createElement("pre");
   output.id = "browser-audit";
@@ -148,6 +152,9 @@ test("live static tracker works at 320px in a real browser", async (context) => 
     assert.ok(audit.statusHeight >= 40, `Status filter is only ${audit.statusHeight}px tall.`);
     assert.ok(audit.searchFontSize >= 16, `Search text is only ${audit.searchFontSize}px.`);
     assert.equal(audit.menuInsideViewport, true);
+    assert.deepEqual(audit.familyNames.slice(0, 4), ["Adventure", "Blinky", "Bush", "Crash Bandicoot"]);
+    assert.equal(audit.familyNames.at(-1), "8-Bit");
+    assert.deepEqual(audit.firstVariants, ["Base", "Cheat Master", "Gold", "Loot Hacker"]);
   } finally {
     await new Promise((resolve) => server.close(resolve));
     await rm(profile, { recursive: true, force: true });

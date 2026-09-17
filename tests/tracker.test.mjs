@@ -114,6 +114,9 @@ test("server renders the real tracker with current season and all cards", async 
   assert.doesNotMatch(html, /Other Codes/);
   assert.doesNotMatch(html, /class="whats-new-trigger"/);
   assert.equal((html.match(/class="sprite-card /g) ?? []).length, 73);
+  const familyNames = [...html.matchAll(/<h3>([^<]+)<\/h3>/g)].map((match) => match[1]);
+  assert.deepEqual(familyNames.slice(0, 4), ["Adventure", "Blinky", "Bush", "Crash Bandicoot"]);
+  assert.equal(familyNames.at(-1), "8-Bit");
   assert.doesNotMatch(html, /Your site is taking shape|Building your site/);
 });
 

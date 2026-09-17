@@ -32,10 +32,21 @@ function keepFocusInDialog(event, dialog) {
 }
 
 const keyFor = (name, variant) => `${name}::${variant}`;
+const compareSpriteNames = (left, right) => {
+  const leftIsNumeric = /^\d/.test(left);
+  const rightIsNumeric = /^\d/.test(right);
+  if (leftIsNumeric !== rightIsNumeric) return leftIsNumeric ? 1 : -1;
+  return left.localeCompare(right, "en", { sensitivity: "base", numeric: true });
+};
+const orderedFamilies = (families) => families.map((family) => ({
+  ...family,
+  variants: [...family.variants].sort(compareSpriteNames),
+})).sort((left, right) => compareSpriteNames(left.name, right.name));
+const familiesBySeason = new Map(CATALOGS.map((catalog) => [catalog.seasonId, orderedFamilies(catalog.families)]));
 const slugFor = (name) => name.toLowerCase().replace(/\./g, "").replace(/\s+/g, "-");
 const variantSlugFor = (variant) => variant.toLowerCase().replace(/\s+/g, "-");
 const stateFor = (name, variant) => progress[keyFor(name, variant)] || { acquired: false, mastered: false };
-const sprites = () => season.families;
+const sprites = () => familiesBySeason.get(season.seasonId) || [];
 const unlockCodes = () => season.unlockCodes || [];
 const otherAdminCodes = () => season.otherAdminCodes || [];
 const unlockFor = (name, variant) => unlockCodes().find((item) => item.rewards.some((reward) => reward.name === name && reward.variant === variant));

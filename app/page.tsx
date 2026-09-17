@@ -60,6 +60,16 @@ const FILTERS: { value: Filter; label: string }[] = [
 ];
 
 const keyFor = (name: string, variant: string) => `${name}::${variant}`;
+const compareSpriteNames = (left: string, right: string) => {
+  const leftIsNumeric = /^\d/.test(left);
+  const rightIsNumeric = /^\d/.test(right);
+  if (leftIsNumeric !== rightIsNumeric) return leftIsNumeric ? 1 : -1;
+  return left.localeCompare(right, "en", { sensitivity: "base", numeric: true });
+};
+const orderedFamilies = (families: SpriteFamily[]) => families.map((family) => ({
+  ...family,
+  variants: [...family.variants].sort(compareSpriteNames),
+})).sort((left, right) => compareSpriteNames(left.name, right.name));
 const activeKeysFor = (season: SeasonCatalog) => new Set(
   season.families.flatMap((sprite) => sprite.variants.map((variant) => keyFor(sprite.name, variant))),
 );
@@ -180,7 +190,7 @@ export default function Home() {
   const codeGuideReturnFocus = useRef<HTMLElement | null>(null);
 
   const activeSeason = CATALOGS.find((season) => season.seasonId === selectedSeasonId) ?? CATALOGS[0];
-  const sprites = activeSeason.families;
+  const sprites = useMemo(() => orderedFamilies(activeSeason.families), [activeSeason]);
   const total = sprites.reduce((sum, sprite) => sum + sprite.variants.length, 0);
   const variants = [...new Set(sprites.flatMap((sprite) => sprite.variants))];
   const unlockCodes = activeSeason.unlockCodes ?? [];
