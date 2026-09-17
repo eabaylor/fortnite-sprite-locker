@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-season-4",
-  "assetVersion": "20260915-1",
+  "assetVersion": "20260917-1",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -12,15 +12,15 @@
       "imageBase": "sprites",
       "storageKey": "sprite-locker-progress-chapter-7-season-4",
       "legacyStorageKeys": [],
-      "updatedDate": "September 15, 2026",
-      "patch": "v42.10",
-      "assetVersion": "20260915-1",
+      "updatedDate": "September 17, 2026",
+      "patch": "v42.20",
+      "assetVersion": "20260917-1",
       "whatsNew": {
-        "title": "A new Admin Code is live",
-        "intro": "The verified Lobby Hack list has a new reward:",
+        "title": "Three new Sprites have arrived",
+        "intro": "Fortnite's v42.20 update brings 12 new Sprite cards and a new Admin Code:",
         "items": [
-          "BEAMMEUP grants 2 Extraction Accelerators.",
-          "The Admin Codes guide now contains 31 active codes.",
+          "Blinky, Crash Bandicoot, and Pond each have Base, Gold, Cheat Master, and Loot Hacker variants.",
+          "SAYH12WR1X3L unlocks Wrixel's Hero Portrait Spray; the guide now has 32 codes.",
           "Your Sprite checkmarks and redeemed-code history are preserved."
         ]
       },
@@ -112,6 +112,14 @@
         }
       ],
       "otherAdminCodes": [
+        {
+          "code": "SAYH12WR1X3L",
+          "reward": "Wrixel's Hero Portrait Spray",
+          "category": "Spray",
+          "useType": "one-time",
+          "verifiedDate": "September 17, 2026",
+          "sourceUrl": "https://fortnite.gg/lobby-hacks"
+        },
         {
           "code": "BeamMeUp",
           "reward": "2 Extraction Accelerators",
@@ -458,6 +466,36 @@
         {
           "name": "Storm Scout",
           "rarity": "Rare",
+          "variants": [
+            "Base",
+            "Cheat Master",
+            "Gold",
+            "Loot Hacker"
+          ]
+        },
+        {
+          "name": "Blinky",
+          "rarity": "Legendary",
+          "variants": [
+            "Base",
+            "Cheat Master",
+            "Gold",
+            "Loot Hacker"
+          ]
+        },
+        {
+          "name": "Crash Bandicoot",
+          "rarity": "Legendary",
+          "variants": [
+            "Base",
+            "Cheat Master",
+            "Gold",
+            "Loot Hacker"
+          ]
+        },
+        {
+          "name": "Pond",
+          "rarity": "Epic",
           "variants": [
             "Base",
             "Cheat Master",
