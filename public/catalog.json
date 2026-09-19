@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-season-4",
-  "assetVersion": "20260917-2",
+  "assetVersion": "20260919-1",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -12,15 +12,17 @@
       "imageBase": "sprites",
       "storageKey": "sprite-locker-progress-chapter-7-season-4",
       "legacyStorageKeys": [],
-      "updatedDate": "September 17, 2026",
+      "updatedDate": "September 19, 2026",
       "patch": "v42.20",
-      "assetVersion": "20260917-2",
+      "assetVersion": "20260919-1",
       "whatsNew": {
-        "title": "Sprites are now sorted A–Z",
-        "intro": "It is easier to find a Sprite family and scan its variants:",
+        "title": "Five new Admin Codes",
+        "intro": "The active Admin Panel guide now includes the latest verified rewards:",
         "items": [
-          "Sprite families and the variants within each family now appear alphabetically.",
-          "This order applies to both seasons without changing your saved checkmarks."
+          "BlinkyInkyPinkyClyde and PlayToLevelUp add 7,000 Sprite Dust combined.",
+          "ChatFindMeAnotherCode and NOCTURNEOP55N1 add two Cheat Code Locators and two Extraction Accelerators.",
+          "DestinyAwaits adds two Llama Supply Drops.",
+          "NoProLlama was removed after its September 14 expiration was confirmed."
         ]
       },
       "unlockCodes": [
@@ -112,6 +114,46 @@
       ],
       "otherAdminCodes": [
         {
+          "code": "BlinkyInkyPinkyClyde",
+          "reward": "5,000 Sprite Dust",
+          "category": "Sprite Dust",
+          "useType": "one-time",
+          "verifiedDate": "September 19, 2026",
+          "sourceUrl": "https://www.nintendolife.com/guides/fortnite-lobby-hack-codes-admin-panel"
+        },
+        {
+          "code": "PlayToLevelUp",
+          "reward": "2,000 Sprite Dust",
+          "category": "Sprite Dust",
+          "useType": "one-time",
+          "verifiedDate": "September 19, 2026",
+          "sourceUrl": "https://www.nintendolife.com/guides/fortnite-lobby-hack-codes-admin-panel"
+        },
+        {
+          "code": "ChatFindMeAnotherCode",
+          "reward": "2 Cheat Code Locators",
+          "category": "Gizmos",
+          "useType": "one-time",
+          "verifiedDate": "September 19, 2026",
+          "sourceUrl": "https://www.nintendolife.com/guides/fortnite-lobby-hack-codes-admin-panel"
+        },
+        {
+          "code": "NOCTURNEOP55N1",
+          "reward": "2 Extraction Accelerators",
+          "category": "Gizmos",
+          "useType": "one-time",
+          "verifiedDate": "September 19, 2026",
+          "sourceUrl": "https://www.nintendolife.com/guides/fortnite-lobby-hack-codes-admin-panel"
+        },
+        {
+          "code": "DestinyAwaits",
+          "reward": "2 Llama Supply Drops",
+          "category": "Gizmos",
+          "useType": "one-time",
+          "verifiedDate": "September 19, 2026",
+          "sourceUrl": "https://www.nintendolife.com/guides/fortnite-lobby-hack-codes-admin-panel"
+        },
+        {
           "code": "SAYH12WR1X3L",
           "reward": "Wrixel's Hero Portrait Spray",
           "category": "Spray",
@@ -134,15 +176,6 @@
           "useType": "one-time",
           "verifiedDate": "September 7, 2026",
           "sourceUrl": "https://www.theclick.gg/dustinthewind-fortnite-code/"
-        },
-        {
-          "code": "NOPROLLAMA",
-          "reward": "1 Llama Supply Drop Gizmo",
-          "category": "Gizmos",
-          "useType": "one-time",
-          "requirement": "Limited-time code: redeem by September 14, 2026.",
-          "verifiedDate": "September 7, 2026",
-          "sourceUrl": "https://www.vice.com/en/article/fortnite-mastery-monday-september-7-start-times-new-cheat-code/"
         },
         {
           "code": "WhereIsTheDustyTree",
