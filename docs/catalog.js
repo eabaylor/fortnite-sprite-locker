@@ -1,7 +1,7 @@
 window.SPRITE_CATALOGS = {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-season-4",
-  "assetVersion": "20260919-1",
+  "assetVersion": "20260922-1",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -12,17 +12,16 @@ window.SPRITE_CATALOGS = {
       "imageBase": "sprites",
       "storageKey": "sprite-locker-progress-chapter-7-season-4",
       "legacyStorageKeys": [],
-      "updatedDate": "September 19, 2026",
+      "updatedDate": "September 22, 2026",
       "patch": "v42.20",
-      "assetVersion": "20260919-1",
+      "assetVersion": "20260922-1",
       "whatsNew": {
-        "title": "Five new Admin Codes",
-        "intro": "The active Admin Panel guide now includes the latest verified rewards:",
+        "title": "Two new Admin Codes",
+        "intro": "The latest verified Lobby Hacks are ready to redeem:",
         "items": [
-          "BlinkyInkyPinkyClyde and PlayToLevelUp add 7,000 Sprite Dust combined.",
-          "ChatFindMeAnotherCode and NOCTURNEOP55N1 add two Cheat Code Locators and two Extraction Accelerators.",
-          "DestinyAwaits adds two Llama Supply Drops.",
-          "NoProLlama was removed after its September 14 expiration was confirmed."
+          "9YEARS unlocks the 9th Birthday Sprite Spray.",
+          "AlmostScaringSeason grants two Cheat Code Locators.",
+          "MagicIsReal remains hidden until its current availability issue is resolved."
         ]
       },
       "unlockCodes": [
@@ -113,6 +112,22 @@ window.SPRITE_CATALOGS = {
         }
       ],
       "otherAdminCodes": [
+        {
+          "code": "9YEARS",
+          "reward": "9th Birthday Sprite Spray",
+          "category": "Spray",
+          "useType": "one-time",
+          "verifiedDate": "September 22, 2026",
+          "sourceUrl": "https://www.vice.com/en/article/fortnite-cheat-codes-lobby-hacks/"
+        },
+        {
+          "code": "AlmostScaringSeason",
+          "reward": "2 Cheat Code Locators",
+          "category": "Gizmos",
+          "useType": "one-time",
+          "verifiedDate": "September 22, 2026",
+          "sourceUrl": "https://www.vice.com/en/article/fortnite-cheat-codes-lobby-hacks/"
+        },
         {
           "code": "BlinkyInkyPinkyClyde",
           "reward": "5,000 Sprite Dust",
