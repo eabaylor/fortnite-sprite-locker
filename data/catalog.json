@@ -7,16 +7,16 @@
   "imageBase": "sprites",
   "storageKey": "sprite-locker-progress-chapter-7-season-4",
   "legacyStorageKeys": [],
-  "updatedDate": "September 22, 2026",
+  "updatedDate": "September 23, 2026",
   "patch": "v42.20",
-  "assetVersion": "20260922-1",
+  "assetVersion": "20260923-1",
   "whatsNew": {
-    "title": "Two new Admin Codes",
-    "intro": "The latest verified Lobby Hacks are ready to redeem:",
+    "title": "Sprites are easier to browse",
+    "intro": "The checklist now follows one consistent alphabetical order:",
     "items": [
-      "9YEARS unlocks the 9th Birthday Sprite Spray.",
-      "AlmostScaringSeason grants two Cheat Code Locators.",
-      "MagicIsReal remains hidden until its current availability issue is resolved."
+      "Sprite families are sorted A–Z, with number-led names placed after the lettered names.",
+      "Every family keeps all of its variants together in alphabetical order.",
+      "The same ordering is used when switching to an earlier season."
     ]
   },
   "unlockCodes": [
@@ -105,24 +105,24 @@
     { "code": "DontBlockMe", "reward": "Temporarily change the Tetris block lobby transformation", "category": "Lobby Effect", "useType": "reusable", "verifiedDate": "August 27, 2026", "sourceUrl": "https://allthings.how/fortnite-admin-panel-codes/" }
   ],
   "families": [
-    { "name": "Overshield", "rarity": "Rare", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
-    { "name": "Mega Man", "rarity": "Rare", "variants": ["Base"] },
-    { "name": "X-Ray", "rarity": "Legendary", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
-    { "name": "Onigiri", "rarity": "Rare", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
-    { "name": "Jackrabbit", "rarity": "Legendary", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
-    { "name": "Shadow", "rarity": "Epic", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
-    { "name": "Bush", "rarity": "Rare", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
-    { "name": "Tails", "rarity": "Epic", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
-    { "name": "Killswitch", "rarity": "Epic", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
     { "name": "Adventure", "rarity": "Rare", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
-    { "name": "Klombo", "rarity": "Mythic", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
-    { "name": "Jonesy", "rarity": "Rare", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
-    { "name": "Sonic", "rarity": "Epic", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
-    { "name": "Crown", "rarity": "Mythic", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
-    { "name": "8-Bit", "rarity": "Rare", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
-    { "name": "Storm Scout", "rarity": "Rare", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
     { "name": "Blinky", "rarity": "Legendary", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
+    { "name": "Bush", "rarity": "Rare", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
     { "name": "Crash Bandicoot", "rarity": "Legendary", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
-    { "name": "Pond", "rarity": "Epic", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] }
+    { "name": "Crown", "rarity": "Mythic", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
+    { "name": "Jackrabbit", "rarity": "Legendary", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
+    { "name": "Jonesy", "rarity": "Rare", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
+    { "name": "Killswitch", "rarity": "Epic", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
+    { "name": "Klombo", "rarity": "Mythic", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
+    { "name": "Mega Man", "rarity": "Rare", "variants": ["Base"] },
+    { "name": "Onigiri", "rarity": "Rare", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
+    { "name": "Overshield", "rarity": "Rare", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
+    { "name": "Pond", "rarity": "Epic", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
+    { "name": "Shadow", "rarity": "Epic", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
+    { "name": "Sonic", "rarity": "Epic", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
+    { "name": "Storm Scout", "rarity": "Rare", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
+    { "name": "Tails", "rarity": "Epic", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
+    { "name": "X-Ray", "rarity": "Legendary", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
+    { "name": "8-Bit", "rarity": "Rare", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] }
   ]
 }
