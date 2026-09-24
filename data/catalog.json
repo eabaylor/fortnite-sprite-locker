@@ -7,16 +7,16 @@
   "imageBase": "sprites",
   "storageKey": "sprite-locker-progress-chapter-7-season-4",
   "legacyStorageKeys": [],
-  "updatedDate": "September 23, 2026",
+  "updatedDate": "September 24, 2026",
   "patch": "v42.20",
-  "assetVersion": "20260923-1",
+  "assetVersion": "20260924-1",
   "whatsNew": {
-    "title": "Sprites are easier to browse",
-    "intro": "The checklist now follows one consistent alphabetical order:",
+    "title": "Bounty Hunter Crown is live",
+    "intro": "The first released Bounty Hunter variant is now in the tracker:",
     "items": [
-      "Sprite families are sorted A–Z, with number-led names placed after the lettered names.",
-      "Every family keeps all of its variants together in alphabetical order.",
-      "The same ordering is used when switching to an earlier season."
+      "Bounty Hunter Crown has been added with its current artwork.",
+      "The wider Bounty Hunter set is still marked unreleased and has not been added early.",
+      "Your existing Chapter 7 Season 4 checkmarks remain unchanged."
     ]
   },
   "unlockCodes": [
@@ -109,7 +109,7 @@
     { "name": "Blinky", "rarity": "Legendary", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
     { "name": "Bush", "rarity": "Rare", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
     { "name": "Crash Bandicoot", "rarity": "Legendary", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
-    { "name": "Crown", "rarity": "Mythic", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
+    { "name": "Crown", "rarity": "Mythic", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker"] },
     { "name": "Jackrabbit", "rarity": "Legendary", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
     { "name": "Jonesy", "rarity": "Rare", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
     { "name": "Killswitch", "rarity": "Epic", "variants": ["Base", "Cheat Master", "Gold", "Loot Hacker"] },
