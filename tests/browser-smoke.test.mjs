@@ -154,7 +154,7 @@ test("live static tracker works at 320px in a real browser", async (context) => 
     assert.equal(audit.menuInsideViewport, true);
     assert.deepEqual(audit.familyNames.slice(0, 4), ["Adventure", "Blinky", "Bush", "Crash Bandicoot"]);
     assert.equal(audit.familyNames.at(-1), "8-Bit");
-    assert.deepEqual(audit.firstVariants, ["Base", "Cheat Master", "Gold", "Loot Hacker"]);
+    assert.deepEqual(audit.firstVariants, ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker"]);
   } finally {
     await new Promise((resolve) => server.close(resolve));
     await rm(profile, { recursive: true, force: true });
