@@ -29,7 +29,7 @@ async function render() {
 test("catalog has unique active entries and matching artwork", async () => {
   assert.equal(catalog.seasonId, "chapter-7-season-4");
   assert.equal(catalog.storageKey, "sprite-locker-progress-chapter-7-season-4");
-  assert.equal(entries.length, 96);
+  assert.equal(entries.length, 101);
   assert.ok(catalog.whatsNew.items.length >= 1 && catalog.whatsNew.items.length <= 4);
 
   const keys = entries.map(({ family, variant }) => `${family.name}::${variant}`);
@@ -43,9 +43,9 @@ test("catalog has unique active entries and matching artwork", async () => {
     assert.ok(unlock.rewards.length > 0);
     for (const reward of unlock.rewards) assert.ok(keys.includes(`${reward.name}::${reward.variant}`), `${unlock.code} has an unknown reward`);
   }
-  assert.equal(catalog.otherAdminCodes.length, 31);
+  assert.equal(catalog.otherAdminCodes.length, 34);
   const allAdminCodes = [...catalog.unlockCodes, ...catalog.otherAdminCodes];
-  assert.equal(allAdminCodes.length, 38);
+  assert.equal(allAdminCodes.length, 41);
   assert.equal(new Set(allAdminCodes.map(({ code }) => code.toLowerCase())).size, allAdminCodes.length);
   assert.equal(catalog.otherAdminCodes.filter(({ useType }) => useType === "reusable").length, 4);
   for (const item of catalog.otherAdminCodes) {
@@ -113,9 +113,9 @@ test("server renders the real tracker with current season and all cards", async 
   assert.doesNotMatch(html, /Sprite Codes/);
   assert.doesNotMatch(html, /Other Codes/);
   assert.doesNotMatch(html, /class="whats-new-trigger"/);
-  assert.equal((html.match(/class="sprite-card /g) ?? []).length, 96);
+  assert.equal((html.match(/class="sprite-card /g) ?? []).length, 101);
   const familyNames = [...html.matchAll(/<h3>([^<]+)<\/h3>/g)].map((match) => match[1]);
-  assert.deepEqual(familyNames.slice(0, 4), ["Adventure", "Blinky", "Bush", "Crash Bandicoot"]);
+  assert.deepEqual(familyNames.slice(0, 4), ["Adventure", "Birthday", "Blinky", "Bush"]);
   assert.equal(familyNames.at(-1), "8-Bit");
   assert.doesNotMatch(html, /Your site is taking shape|Building your site/);
 });

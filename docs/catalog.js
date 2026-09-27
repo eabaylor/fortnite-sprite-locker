@@ -1,7 +1,7 @@
 window.SPRITE_CATALOGS = {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-season-4",
-  "assetVersion": "20260925-1",
+  "assetVersion": "20260927-1",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -12,17 +12,17 @@ window.SPRITE_CATALOGS = {
       "imageBase": "sprites",
       "storageKey": "sprite-locker-progress-chapter-7-season-4",
       "legacyStorageKeys": [],
-      "updatedDate": "September 25, 2026",
+      "updatedDate": "September 27, 2026",
       "patch": "v42.20",
-      "assetVersion": "20260925-1",
+      "assetVersion": "20260927-1",
       "whatsNew": {
-        "title": "Bounty Hunters and Morgana are live",
-        "intro": "The September 24 Sprite drop is now fully reflected in the tracker:",
+        "title": "Birthday Sprite and three new codes",
+        "intro": "The ninth-birthday and FNCS weekend releases are now in the tracker:",
         "items": [
-          "17 newly released Bounty Hunter variants have been added with their current artwork.",
-          "Morgana joins the roster with Base, Gold, Cheat Master, Loot Hacker, and Bounty Hunter forms.",
-          "The current-season checklist now contains 96 released Sprite variants; Birthday remains excluded until its official release.",
-          "Your existing Chapter 7 Season 4 checkmarks remain unchanged."
+          "Birthday Sprite has arrived with Base, Gold, Cheat Master, Loot Hacker, and Bounty Hunter forms.",
+          "DustySprites grants 5,000 Sprite Dust and WhoCrackedTheCode grants 40,000 XP.",
+          "WeAreTheWorldChampionsToday unlocks the FNCS Sentry Back Bling.",
+          "The checklist now contains 101 released Sprite variants and 41 verified Admin Codes."
         ]
       },
       "unlockCodes": [
@@ -113,6 +113,30 @@ window.SPRITE_CATALOGS = {
         }
       ],
       "otherAdminCodes": [
+        {
+          "code": "WeAreTheWorldChampionsToday",
+          "reward": "FNCS Sentry Back Bling",
+          "category": "Back Bling",
+          "useType": "one-time",
+          "verifiedDate": "September 27, 2026",
+          "sourceUrl": "https://www.vice.com/en/article/fortnite-admin-panel-codes-september-26/"
+        },
+        {
+          "code": "DustySprites",
+          "reward": "5,000 Sprite Dust",
+          "category": "Sprite Dust",
+          "useType": "one-time",
+          "verifiedDate": "September 27, 2026",
+          "sourceUrl": "https://www.vice.com/en/article/fortnite-admin-panel-codes-september-26/"
+        },
+        {
+          "code": "WhoCrackedTheCode",
+          "reward": "40,000 XP",
+          "category": "XP",
+          "useType": "one-time",
+          "verifiedDate": "September 27, 2026",
+          "sourceUrl": "https://www.vice.com/en/article/fortnite-admin-panel-codes-september-26/"
+        },
         {
           "code": "9YEARS",
           "reward": "9th Birthday Sprite Spray",
@@ -366,6 +390,17 @@ window.SPRITE_CATALOGS = {
       "families": [
         {
           "name": "Adventure",
+          "rarity": "Rare",
+          "variants": [
+            "Base",
+            "Bounty Hunter",
+            "Cheat Master",
+            "Gold",
+            "Loot Hacker"
+          ]
+        },
+        {
+          "name": "Birthday",
           "rarity": "Rare",
           "variants": [
             "Base",
