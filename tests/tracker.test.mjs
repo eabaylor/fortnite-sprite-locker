@@ -43,11 +43,11 @@ test("catalog has unique active entries and matching artwork", async () => {
     assert.ok(unlock.rewards.length > 0);
     for (const reward of unlock.rewards) assert.ok(keys.includes(`${reward.name}::${reward.variant}`), `${unlock.code} has an unknown reward`);
   }
-  assert.equal(catalog.otherAdminCodes.length, 34);
+  assert.equal(catalog.otherAdminCodes.length, 36);
   const allAdminCodes = [...catalog.unlockCodes, ...catalog.otherAdminCodes];
-  assert.equal(allAdminCodes.length, 41);
+  assert.equal(allAdminCodes.length, 43);
   assert.equal(new Set(allAdminCodes.map(({ code }) => code.toLowerCase())).size, allAdminCodes.length);
-  assert.equal(catalog.otherAdminCodes.filter(({ useType }) => useType === "reusable").length, 4);
+  assert.equal(catalog.otherAdminCodes.filter(({ useType }) => useType === "reusable").length, 5);
   for (const item of catalog.otherAdminCodes) {
     assert.ok(item.reward);
     assert.ok(item.category);

@@ -7,17 +7,16 @@
   "imageBase": "sprites",
   "storageKey": "sprite-locker-progress-chapter-7-season-4",
   "legacyStorageKeys": [],
-  "updatedDate": "September 27, 2026",
+  "updatedDate": "September 30, 2026",
   "patch": "v42.20",
-  "assetVersion": "20260927-1",
+  "assetVersion": "20260930-1",
   "whatsNew": {
-    "title": "Birthday Sprite and three new codes",
-    "intro": "The ninth-birthday and FNCS weekend releases are now in the tracker:",
+    "title": "Two new Admin Codes",
+    "intro": "The latest verified Lobby Hacks are now in the tracker:",
     "items": [
-      "Birthday Sprite has arrived with Base, Gold, Cheat Master, Loot Hacker, and Bounty Hunter forms.",
-      "DustySprites grants 5,000 Sprite Dust and WhoCrackedTheCode grants 40,000 XP.",
-      "WeAreTheWorldChampionsToday unlocks the FNCS Sentry Back Bling.",
-      "The checklist now contains 101 released Sprite variants and 41 verified Admin Codes."
+      "BoneRattler grants four Spicy Taco Gizmos once per account.",
+      "PowerOut triggers a reusable Five Nights at Freddy's lobby jumpscare.",
+      "The checklist still contains 101 released Sprite variants and now includes 43 verified Admin Codes."
     ]
   },
   "unlockCodes": [
@@ -73,6 +72,8 @@
     }
   ],
   "otherAdminCodes": [
+    { "code": "PowerOut", "reward": "Five Nights at Freddy's lobby jumpscare", "category": "Lobby Effect", "useType": "reusable", "verifiedDate": "September 30, 2026", "sourceUrl": "https://fortnite.gg/lobby-hacks" },
+    { "code": "BoneRattler", "reward": "4 Spicy Tacos", "category": "Gizmos", "useType": "one-time", "verifiedDate": "September 30, 2026", "sourceUrl": "https://www.nintendolife.com/guides/fortnite-lobby-hack-codes-admin-panel" },
     { "code": "WeAreTheWorldChampionsToday", "reward": "FNCS Sentry Back Bling", "category": "Back Bling", "useType": "one-time", "verifiedDate": "September 27, 2026", "sourceUrl": "https://www.vice.com/en/article/fortnite-admin-panel-codes-september-26/" },
     { "code": "DustySprites", "reward": "5,000 Sprite Dust", "category": "Sprite Dust", "useType": "one-time", "verifiedDate": "September 27, 2026", "sourceUrl": "https://www.vice.com/en/article/fortnite-admin-panel-codes-september-26/" },
     { "code": "WhoCrackedTheCode", "reward": "40,000 XP", "category": "XP", "useType": "one-time", "verifiedDate": "September 27, 2026", "sourceUrl": "https://www.vice.com/en/article/fortnite-admin-panel-codes-september-26/" },
