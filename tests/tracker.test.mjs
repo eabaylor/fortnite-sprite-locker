@@ -14,6 +14,12 @@ const bundle = {
 };
 
 const slug = (value) => value.toLowerCase().replaceAll(".", "").replaceAll(" ", "-");
+const compareSpriteNames = (left, right) => {
+  const leftIsNumeric = /^\d/.test(left);
+  const rightIsNumeric = /^\d/.test(right);
+  if (leftIsNumeric !== rightIsNumeric) return leftIsNumeric ? 1 : -1;
+  return left.localeCompare(right, "en", { sensitivity: "base", numeric: true });
+};
 
 async function render() {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
@@ -29,8 +35,12 @@ async function render() {
 test("catalog has unique active entries and matching artwork", async () => {
   assert.equal(catalog.seasonId, "chapter-7-season-4");
   assert.equal(catalog.storageKey, "sprite-locker-progress-chapter-7-season-4");
-  assert.equal(entries.length, 101);
+  assert.equal(entries.length, 122);
   assert.ok(catalog.whatsNew.items.length >= 1 && catalog.whatsNew.items.length <= 4);
+  assert.deepEqual(catalog.families.map(({ name }) => name), [...catalog.families.map(({ name }) => name)].sort(compareSpriteNames));
+  for (const family of catalog.families) {
+    assert.deepEqual(family.variants, [...family.variants].sort(compareSpriteNames), `${family.name} variants are not alphabetical`);
+  }
 
   const keys = entries.map(({ family, variant }) => `${family.name}::${variant}`);
   assert.equal(new Set(keys).size, keys.length);
@@ -113,7 +123,7 @@ test("server renders the real tracker with current season and all cards", async 
   assert.doesNotMatch(html, /Sprite Codes/);
   assert.doesNotMatch(html, /Other Codes/);
   assert.doesNotMatch(html, /class="whats-new-trigger"/);
-  assert.equal((html.match(/class="sprite-card /g) ?? []).length, 101);
+  assert.equal((html.match(/class="sprite-card /g) ?? []).length, 122);
   const familyNames = [...html.matchAll(/<h3>([^<]+)<\/h3>/g)].map((match) => match[1]);
   assert.deepEqual(familyNames.slice(0, 4), ["Adventure", "Birthday", "Blinky", "Bush"]);
   assert.equal(familyNames.at(-1), "8-Bit");

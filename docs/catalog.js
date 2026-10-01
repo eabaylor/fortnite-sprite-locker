@@ -1,7 +1,7 @@
 window.SPRITE_CATALOGS = {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-season-4",
-  "assetVersion": "20260930-1",
+  "assetVersion": "20261001-1",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -12,16 +12,17 @@ window.SPRITE_CATALOGS = {
       "imageBase": "sprites",
       "storageKey": "sprite-locker-progress-chapter-7-season-4",
       "legacyStorageKeys": [],
-      "updatedDate": "September 30, 2026",
-      "patch": "v42.20",
-      "assetVersion": "20260930-1",
+      "updatedDate": "October 1, 2026",
+      "patch": "v42.30",
+      "assetVersion": "20261001-1",
       "whatsNew": {
-        "title": "Two new Admin Codes",
-        "intro": "The latest verified Lobby Hacks are now in the tracker:",
+        "title": "Fortnitemares Sprites have arrived",
+        "intro": "The first released Fortnitemares Sprites are now ready to track:",
         "items": [
-          "BoneRattler grants four Spicy Taco Gizmos once per account.",
-          "PowerOut triggers a reusable Five Nights at Freddy's lobby jumpscare.",
-          "The checklist still contains 101 released Sprite variants and now includes 43 verified Admin Codes."
+          "Spooky Dash, Vampire, The Deer, and Dumpster Dive are available in five released forms each.",
+          "Crown has gained the released Trick or Treat variant.",
+          "Sprite families and their variants are now shown alphabetically.",
+          "The checklist now contains 122 released Sprite variants and 43 verified Admin Codes."
         ]
       },
       "unlockCodes": [
@@ -466,6 +467,18 @@ window.SPRITE_CATALOGS = {
             "Bounty Hunter",
             "Cheat Master",
             "Gold",
+            "Loot Hacker",
+            "Trick or Treat"
+          ]
+        },
+        {
+          "name": "Dumpster Dive",
+          "rarity": "Epic",
+          "variants": [
+            "Base",
+            "Bounty Hunter",
+            "Cheat Master",
+            "Gold",
             "Loot Hacker"
           ]
         },
@@ -587,6 +600,17 @@ window.SPRITE_CATALOGS = {
           ]
         },
         {
+          "name": "Spooky Dash",
+          "rarity": "Mythic",
+          "variants": [
+            "Base",
+            "Bounty Hunter",
+            "Cheat Master",
+            "Gold",
+            "Loot Hacker"
+          ]
+        },
+        {
           "name": "Storm Scout",
           "rarity": "Rare",
           "variants": [
@@ -600,6 +624,28 @@ window.SPRITE_CATALOGS = {
         {
           "name": "Tails",
           "rarity": "Epic",
+          "variants": [
+            "Base",
+            "Bounty Hunter",
+            "Cheat Master",
+            "Gold",
+            "Loot Hacker"
+          ]
+        },
+        {
+          "name": "The Deer",
+          "rarity": "Legendary",
+          "variants": [
+            "Base",
+            "Bounty Hunter",
+            "Cheat Master",
+            "Gold",
+            "Loot Hacker"
+          ]
+        },
+        {
+          "name": "Vampire",
+          "rarity": "Legendary",
           "variants": [
             "Base",
             "Bounty Hunter",
