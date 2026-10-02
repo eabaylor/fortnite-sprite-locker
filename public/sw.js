@@ -1,4 +1,4 @@
-const CACHE = "sprite-locker-20261001-1";
+const CACHE = "sprite-locker-20261002-1";
 const SHELL = ["./", "./manifest.webmanifest", "./favicon.svg", "./fortnite-sprite-locker-logo-transparent.png", "./catalog.json", "./version.json"];
 
 self.addEventListener("install", (event) => {

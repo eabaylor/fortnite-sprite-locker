@@ -1,7 +1,7 @@
 window.SPRITE_CATALOGS = {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-season-4",
-  "assetVersion": "20261001-1",
+  "assetVersion": "20261002-1",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -12,17 +12,17 @@ window.SPRITE_CATALOGS = {
       "imageBase": "sprites",
       "storageKey": "sprite-locker-progress-chapter-7-season-4",
       "legacyStorageKeys": [],
-      "updatedDate": "October 1, 2026",
+      "updatedDate": "October 2, 2026",
       "patch": "v42.30",
-      "assetVersion": "20261001-1",
+      "assetVersion": "20261002-1",
       "whatsNew": {
-        "title": "Fortnitemares Sprites have arrived",
-        "intro": "The first released Fortnitemares Sprites are now ready to track:",
+        "title": "Three new Fortnitemares Admin Codes",
+        "intro": "The latest verified Lobby Hacks are now in the code guide:",
         "items": [
-          "Spooky Dash, Vampire, The Deer, and Dumpster Dive are available in five released forms each.",
-          "Crown has gained the released Trick or Treat variant.",
-          "Sprite families and their variants are now shown alphabetically.",
-          "The checklist now contains 122 released Sprite variants and 43 verified Admin Codes."
+          "CrowsAreAfraid triggers a reusable scarecrow lobby transformation.",
+          "PumpkinSpiceLife triggers a reusable pumpkin lobby transformation.",
+          "IThinkTheKeyFoundMeChat grants one Extraction Accelerator once per account.",
+          "The tracker now includes 122 released Sprite variants and 46 verified Admin Codes."
         ]
       },
       "unlockCodes": [
@@ -113,6 +113,30 @@ window.SPRITE_CATALOGS = {
         }
       ],
       "otherAdminCodes": [
+        {
+          "code": "CrowsAreAfraid",
+          "reward": "Temporarily transform into a scarecrow in the lobby",
+          "category": "Lobby Effect",
+          "useType": "reusable",
+          "verifiedDate": "October 2, 2026",
+          "sourceUrl": "https://www.nintendolife.com/guides/fortnite-lobby-hack-codes-admin-panel"
+        },
+        {
+          "code": "PumpkinSpiceLife",
+          "reward": "Temporarily transform into a pumpkin in the lobby",
+          "category": "Lobby Effect",
+          "useType": "reusable",
+          "verifiedDate": "October 2, 2026",
+          "sourceUrl": "https://www.nintendolife.com/guides/fortnite-lobby-hack-codes-admin-panel"
+        },
+        {
+          "code": "IThinkTheKeyFoundMeChat",
+          "reward": "1 Extraction Accelerator",
+          "category": "Gizmos",
+          "useType": "one-time",
+          "verifiedDate": "October 2, 2026",
+          "sourceUrl": "https://www.nintendolife.com/guides/fortnite-lobby-hack-codes-admin-panel"
+        },
         {
           "code": "PowerOut",
           "reward": "Five Nights at Freddy's lobby jumpscare",
