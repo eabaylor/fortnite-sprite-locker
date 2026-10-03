@@ -1,7 +1,7 @@
 window.SPRITE_CATALOGS = {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-season-4",
-  "assetVersion": "20261002-1",
+  "assetVersion": "20261003-1",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -12,17 +12,17 @@ window.SPRITE_CATALOGS = {
       "imageBase": "sprites",
       "storageKey": "sprite-locker-progress-chapter-7-season-4",
       "legacyStorageKeys": [],
-      "updatedDate": "October 2, 2026",
+      "updatedDate": "October 3, 2026",
       "patch": "v42.30",
-      "assetVersion": "20261002-1",
+      "assetVersion": "20261003-1",
       "whatsNew": {
-        "title": "Three new Fortnitemares Admin Codes",
-        "intro": "The latest verified Lobby Hacks are now in the code guide:",
+        "title": "Four quest-gated Admin Codes added",
+        "intro": "These verified Lobby Hacks unlock after their related Story Quests:",
         "items": [
-          "CrowsAreAfraid triggers a reusable scarecrow lobby transformation.",
-          "PumpkinSpiceLife triggers a reusable pumpkin lobby transformation.",
-          "IThinkTheKeyFoundMeChat grants one Extraction Accelerator once per account.",
-          "The tracker now includes 122 released Sprite variants and 46 verified Admin Codes."
+          "S7H-50P-R03 triggers Hope's Geno story lobby effect after recording all three Lobby Hack pieces.",
+          "runSystemOverride and ImTheRealEdgelord each grant 5,000 Sprite Dust after their required Story Quests.",
+          "MagicIsReal grants 5,000 Sprite Dust after completing Bastian's Story Quest.",
+          "The tracker now includes 122 released Sprite variants and 50 verified Admin Codes."
         ]
       },
       "unlockCodes": [
@@ -113,6 +113,42 @@ window.SPRITE_CATALOGS = {
         }
       ],
       "otherAdminCodes": [
+        {
+          "code": "S7H-50P-R03",
+          "reward": "Geno story voice line and lobby glitch effect",
+          "category": "Story Event",
+          "useType": "one-time",
+          "requirement": "Record all three of Hope's Lobby Hack pieces during the Geno Part 2 Story Quests before redeeming.",
+          "verifiedDate": "October 3, 2026",
+          "sourceUrl": "https://www.vice.com/en/article/fortnite-cheat-codes-lobby-hacks/"
+        },
+        {
+          "code": "runSystemOverride",
+          "reward": "5,000 Sprite Dust",
+          "category": "Sprite Dust",
+          "useType": "one-time",
+          "requirement": "Complete the Geno Part 2 Story Quests and talk to The Order about the next step before redeeming.",
+          "verifiedDate": "October 3, 2026",
+          "sourceUrl": "https://www.vice.com/en/article/fortnite-cheat-codes-lobby-hacks/"
+        },
+        {
+          "code": "ImTheRealEdgelord",
+          "reward": "5,000 Sprite Dust",
+          "category": "Sprite Dust",
+          "useType": "one-time",
+          "requirement": "Complete all Wrixel (Ziggy) Story Quests before redeeming.",
+          "verifiedDate": "October 3, 2026",
+          "sourceUrl": "https://www.vice.com/en/article/fortnite-cheat-codes-lobby-hacks/"
+        },
+        {
+          "code": "MagicIsReal",
+          "reward": "5,000 Sprite Dust",
+          "category": "Sprite Dust",
+          "useType": "one-time",
+          "requirement": "Complete Bastian's Story Quest before redeeming.",
+          "verifiedDate": "October 3, 2026",
+          "sourceUrl": "https://www.vice.com/en/article/fortnite-cheat-codes-lobby-hacks/"
+        },
         {
           "code": "CrowsAreAfraid",
           "reward": "Temporarily transform into a scarecrow in the lobby",
