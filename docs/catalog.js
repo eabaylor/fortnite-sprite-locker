@@ -1,7 +1,7 @@
 window.SPRITE_CATALOGS = {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-season-4",
-  "assetVersion": "20261003-1",
+  "assetVersion": "20261006-1",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -12,17 +12,16 @@ window.SPRITE_CATALOGS = {
       "imageBase": "sprites",
       "storageKey": "sprite-locker-progress-chapter-7-season-4",
       "legacyStorageKeys": [],
-      "updatedDate": "October 3, 2026",
+      "updatedDate": "October 6, 2026",
       "patch": "v42.30",
-      "assetVersion": "20261003-1",
+      "assetVersion": "20261006-1",
       "whatsNew": {
-        "title": "Four quest-gated Admin Codes added",
-        "intro": "These verified Lobby Hacks unlock after their related Story Quests:",
+        "title": "A new Fortnitemares Admin Code",
+        "intro": "A fresh Lobby Hack reward is ready to redeem:",
         "items": [
-          "S7H-50P-R03 triggers Hope's Geno story lobby effect after recording all three Lobby Hack pieces.",
-          "runSystemOverride and ImTheRealEdgelord each grant 5,000 Sprite Dust after their required Story Quests.",
-          "MagicIsReal grants 5,000 Sprite Dust after completing Bastian's Story Quest.",
-          "The tracker now includes 122 released Sprite variants and 50 verified Admin Codes."
+          "VeryScaryPumpkin grants 3 Snack-O'-Lantern Gizmos.",
+          "This is a one-time code, so mark it used after you redeem it.",
+          "The tracker now includes 122 released Sprite variants and 51 verified Admin Codes."
         ]
       },
       "unlockCodes": [
@@ -113,6 +112,14 @@ window.SPRITE_CATALOGS = {
         }
       ],
       "otherAdminCodes": [
+        {
+          "code": "VeryScaryPumpkin",
+          "reward": "3 Snack-O'-Lanterns",
+          "category": "Gizmos",
+          "useType": "one-time",
+          "verifiedDate": "October 6, 2026",
+          "sourceUrl": "https://beebom.com/fortnite-lobby-hack-codes/"
+        },
         {
           "code": "S7H-50P-R03",
           "reward": "Geno story voice line and lobby glitch effect",
