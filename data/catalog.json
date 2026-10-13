@@ -7,16 +7,15 @@
   "imageBase": "sprites",
   "storageKey": "sprite-locker-progress-chapter-7-season-4",
   "legacyStorageKeys": [],
-  "updatedDate": "October 8, 2026",
+  "updatedDate": "October 13, 2026",
   "patch": "v42.30",
-  "assetVersion": "20261008-1",
+  "assetVersion": "20261013-1",
   "whatsNew": {
-    "title": "Trick-or-Treat Sprites are live",
-    "intro": "The Fortnitemares collection just grew:",
+    "title": "New Admin Code is live",
+    "intro": "A new one-time Lobby Hack reward is ready:",
     "items": [
-      "23 newly released Trick-or-Treat variants are now in the checklist.",
-      "Every current family except Mega Man now has a Trick-or-Treat variant.",
-      "The tracker now includes 145 released Sprite variants and 51 verified Admin Codes."
+      "DOOR2DOOR4CANDY awards 2 Extraction Accelerators.",
+      "The tracker now includes 145 released Sprite variants and 52 verified Admin Codes."
     ]
   },
   "unlockCodes": [
@@ -72,6 +71,7 @@
     }
   ],
   "otherAdminCodes": [
+    { "code": "DOOR2DOOR4CANDY", "reward": "2 Extraction Accelerators", "category": "Gizmos", "useType": "one-time", "verifiedDate": "October 13, 2026", "sourceUrl": "https://allthings.how/fortnite-codes/" },
     { "code": "VeryScaryPumpkin", "reward": "3 Snack-O'-Lanterns", "category": "Gizmos", "useType": "one-time", "verifiedDate": "October 6, 2026", "sourceUrl": "https://beebom.com/fortnite-lobby-hack-codes/" },
     { "code": "S7H-50P-R03", "reward": "Geno story voice line and lobby glitch effect", "category": "Story Event", "useType": "one-time", "requirement": "Record all three of Hope's Lobby Hack pieces during the Geno Part 2 Story Quests before redeeming.", "verifiedDate": "October 3, 2026", "sourceUrl": "https://www.vice.com/en/article/fortnite-cheat-codes-lobby-hacks/" },
     { "code": "runSystemOverride", "reward": "5,000 Sprite Dust", "category": "Sprite Dust", "useType": "one-time", "requirement": "Complete the Geno Part 2 Story Quests and talk to The Order about the next step before redeeming.", "verifiedDate": "October 3, 2026", "sourceUrl": "https://www.vice.com/en/article/fortnite-cheat-codes-lobby-hacks/" },

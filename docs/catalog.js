@@ -1,7 +1,7 @@
 window.SPRITE_CATALOGS = {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-season-4",
-  "assetVersion": "20261008-1",
+  "assetVersion": "20261013-1",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -12,16 +12,15 @@ window.SPRITE_CATALOGS = {
       "imageBase": "sprites",
       "storageKey": "sprite-locker-progress-chapter-7-season-4",
       "legacyStorageKeys": [],
-      "updatedDate": "October 8, 2026",
+      "updatedDate": "October 13, 2026",
       "patch": "v42.30",
-      "assetVersion": "20261008-1",
+      "assetVersion": "20261013-1",
       "whatsNew": {
-        "title": "Trick-or-Treat Sprites are live",
-        "intro": "The Fortnitemares collection just grew:",
+        "title": "New Admin Code is live",
+        "intro": "A new one-time Lobby Hack reward is ready:",
         "items": [
-          "23 newly released Trick-or-Treat variants are now in the checklist.",
-          "Every current family except Mega Man now has a Trick-or-Treat variant.",
-          "The tracker now includes 145 released Sprite variants and 51 verified Admin Codes."
+          "DOOR2DOOR4CANDY awards 2 Extraction Accelerators.",
+          "The tracker now includes 145 released Sprite variants and 52 verified Admin Codes."
         ]
       },
       "unlockCodes": [
@@ -112,6 +111,14 @@ window.SPRITE_CATALOGS = {
         }
       ],
       "otherAdminCodes": [
+        {
+          "code": "DOOR2DOOR4CANDY",
+          "reward": "2 Extraction Accelerators",
+          "category": "Gizmos",
+          "useType": "one-time",
+          "verifiedDate": "October 13, 2026",
+          "sourceUrl": "https://allthings.how/fortnite-codes/"
+        },
         {
           "code": "VeryScaryPumpkin",
           "reward": "3 Snack-O'-Lanterns",
