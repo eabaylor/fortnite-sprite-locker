@@ -210,14 +210,18 @@ test("static build is generated from the shared catalog", async () => {
   assert.match(page, /updateAvailable/);
 });
 
-test("mobile layout keeps three variants inside the viewport", async () => {
+test("mobile layout supports compact and classic views without horizontal scrolling", async () => {
   const [appCss, staticCss] = await Promise.all([
     readFile(new URL("app/globals.css", root), "utf8"),
     readFile(new URL("docs/styles.css", root), "utf8"),
   ]);
   for (const css of [appCss, staticCss]) {
     assert.match(css, /grid-template-columns:\s*repeat\(3, minmax\(0, 1fr\)\)/);
+    assert.match(css, /\.compact-variant-strip[^}]+grid-template-columns:\s*repeat\(var\(--variant-count\), minmax\(0, 1fr\)\)/s);
     assert.match(css, /\.sprite-art img[^}]+object-fit:\s*contain/s);
+    assert.match(css, /\.compact-sprite-art img[^}]+object-fit:\s*contain/s);
+    assert.match(css, /\.sticky-controls\s*\{[^}]*position:\s*sticky/s);
+    assert.match(css, /\.view-switch/);
     assert.match(css, /\.hero\s*\{[^}]*overflow:\s*visible/s);
     assert.match(css, /\.hero\s*\{[^}]*z-index:\s*10/s);
     assert.match(css, /\.tracker\s*\{[^}]*z-index:\s*1/s);

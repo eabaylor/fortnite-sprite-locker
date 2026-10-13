@@ -1,7 +1,7 @@
 window.SPRITE_CATALOGS = {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-season-4",
-  "assetVersion": "20261013-2",
+  "assetVersion": "20261013-3",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -14,7 +14,7 @@ window.SPRITE_CATALOGS = {
       "legacyStorageKeys": [],
       "updatedDate": "October 13, 2026",
       "patch": "v42.30",
-      "assetVersion": "20261013-2",
+      "assetVersion": "20261013-3",
       "familyOrder": [
         "Jonesy",
         "Adventure",
@@ -51,12 +51,13 @@ window.SPRITE_CATALOGS = {
         "Trick or Treat"
       ],
       "whatsNew": {
-        "title": "Sprites now match the game",
-        "intro": "The checklist is easier to compare with Fortnite:",
+        "title": "Compact view is here",
+        "intro": "The tracker is faster to use while you play:",
         "items": [
-          "Sprite families now follow their in-game collection order.",
-          "Each family’s variants now follow the same order shown in Fortnite.",
-          "Your acquired, mastered, and redeemed-code progress is unchanged."
+          "Compact view now opens by default with the real Sprite artwork.",
+          "Tap a Sprite to move it from Missing to Acquired to Mastered.",
+          "Switch back to Classic view from the new View control at any time.",
+          "The header, progress, search, and filters now stay visible while you scroll."
         ]
       },
       "unlockCodes": [

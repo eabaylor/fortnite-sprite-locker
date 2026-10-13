@@ -45,6 +45,7 @@ type SeasonCatalog = {
 type SpriteState = { acquired: boolean; mastered: boolean };
 type Progress = Record<string, SpriteState>;
 type Filter = "all" | "missing" | "not-mastered" | "acquired" | "acquired-unmastered" | "mastered";
+type ViewMode = "compact" | "classic";
 
 const CATALOGS = [currentCatalog, previousCatalog] as SeasonCatalog[];
 const DEFAULT_SEASON_ID = currentCatalog.seasonId;
@@ -184,6 +185,7 @@ export default function Home() {
   const [selectedSprites, setSelectedSprites] = useState<string[]>([]);
   const [selectedVariants, setSelectedVariants] = useState<string[]>([]);
   const [query, setQuery] = useState("");
+  const [viewMode, setViewMode] = useState<ViewMode>("compact");
   const [ready, setReady] = useState(false);
   const [whatsNewOpen, setWhatsNewOpen] = useState(false);
   const [codeGuideOpen, setCodeGuideOpen] = useState(false);
@@ -459,6 +461,18 @@ export default function Home() {
     });
   }
 
+  function cycleStatus(name: string, variant: string) {
+    const key = keyFor(name, variant);
+    setProgress((current) => {
+      const old = current[key] ?? { acquired: false, mastered: false };
+      const updated = { ...current };
+      if (!old.acquired) updated[key] = { acquired: true, mastered: false };
+      else if (!old.mastered) updated[key] = { acquired: true, mastered: true };
+      else delete updated[key];
+      return updated;
+    });
+  }
+
   function backupProgress() {
     const backup = { schemaVersion: 1, seasonId: activeSeason.seasonId, exportedAt: new Date().toISOString(), progress: sanitizeProgress(progress, activeSeason) };
     const url = URL.createObjectURL(new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" }));
@@ -487,7 +501,8 @@ export default function Home() {
   return (
     <main>
       <a className="skip-link" href="#sprite-checklist">Skip to Sprite checklist</a>
-      <header className="hero">
+      <div className="sticky-controls">
+        <header className="hero">
         <h1 className="visually-hidden">Fortnite Sprite Locker checklist</h1>
         <nav>
           <div className="brand-lockup" data-season-id={activeSeason.seasonId}>
@@ -530,7 +545,35 @@ export default function Home() {
             <p className="update-stamp">UPDATED {activeSeason.updatedDate.toUpperCase()} · PATCH {activeSeason.patch.toUpperCase()}</p>
           </div>
         </nav>
-      </header>
+        </header>
+
+        <div className="tracker-toolbar">
+          <div className="filters" role="group" aria-label="Filter checklist">
+            <div className="view-switch" role="group" aria-label="Checklist view">
+              <span>View</span>
+              <button type="button" className={viewMode === "compact" ? "active" : ""} aria-pressed={viewMode === "compact"} onClick={() => setViewMode("compact")}>Compact</button>
+              <button type="button" className={viewMode === "classic" ? "active" : ""} aria-pressed={viewMode === "classic"} onClick={() => setViewMode("classic")}>Classic</button>
+            </div>
+            <label className="select-filter status-filter">
+              <span>Status</span>
+              <select value={filter} onChange={(event) => {
+                setProgress((current) => sanitizeProgress(current, activeSeason));
+                setFilter(event.target.value as Filter);
+              }} aria-label="Filter checklist by collection status">
+                {FILTERS.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}
+              </select>
+            </label>
+            <MultiSelectFilter label="Sprites" items={sprites.map((sprite) => sprite.name)} selected={selectedSprites} onToggle={toggleSpriteFilter} onClear={() => setSelectedSprites([])} className="sprite-filter" />
+            <MultiSelectFilter label="Variants" items={variants} selected={selectedVariants} onToggle={toggleVariantFilter} onClear={() => setSelectedVariants([])} className="variant-filter" />
+            <button className="clear-filters" onClick={clearFilters}>Clear filters</button>
+            {!!(unlockCodes.length || otherAdminCodes.length) && (
+              <button className="admin-codes-trigger" type="button" onClick={() => openCodeGuide()}>
+                Admin Codes <span>{unlockCodes.length + otherAdminCodes.length}</span>
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
 
       {updateAvailable && (
         <aside className="update-notice" role="status" aria-live="polite">
@@ -541,63 +584,63 @@ export default function Home() {
 
       <section className="tracker" id="sprite-checklist" tabIndex={-1} aria-labelledby="checklist-heading">
         <h2 className="visually-hidden" id="checklist-heading">{activeSeason.chapter} {activeSeason.season} Sprite checklist</h2>
-        <div className="filters" role="group" aria-label="Filter checklist">
-          <label className="select-filter status-filter">
-            <span>Status</span>
-            <select value={filter} onChange={(event) => {
-              setProgress((current) => sanitizeProgress(current, activeSeason));
-              setFilter(event.target.value as Filter);
-            }} aria-label="Filter checklist by collection status">
-              {FILTERS.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}
-            </select>
-          </label>
-          <MultiSelectFilter label="Sprites" items={sprites.map((sprite) => sprite.name)} selected={selectedSprites} onToggle={toggleSpriteFilter} onClear={() => setSelectedSprites([])} className="sprite-filter" />
-          <MultiSelectFilter label="Variants" items={variants} selected={selectedVariants} onToggle={toggleVariantFilter} onClear={() => setSelectedVariants([])} className="variant-filter" />
-          <button className="clear-filters" onClick={clearFilters}>Clear filters</button>
-          {!!(unlockCodes.length || otherAdminCodes.length) && (
-            <button className="admin-codes-trigger" type="button" onClick={() => openCodeGuide()}>
-              Admin Codes <span>{unlockCodes.length + otherAdminCodes.length}</span>
-            </button>
-          )}
-        </div>
-
-        <div className="sprite-list">
+        <div className={`sprite-list ${viewMode === "compact" ? "compact-view" : "classic-view"}`}>
           {visible.map((sprite) => (
-            <section className="sprite-row" key={sprite.name}>
-              <div className="row-label">
-                <span className={`rarity ${sprite.rarity.toLowerCase()}`}>{sprite.rarity}</span>
-                <h3>{sprite.name}</h3>
-                <a href={`https://fortnite.gg/sprites?search=${encodeURIComponent(sprite.name)}`} target="_blank" rel="noreferrer">details ↗</a>
-              </div>
-              <div className="variant-strip">
-                {sprite.variants.map((variant) => {
-                  const key = keyFor(sprite.name, variant);
-                  const state = progress[key] ?? { acquired: false, mastered: false };
-                  const unlock = unlockCodes.find((item) => item.rewards.some((reward) => reward.name === sprite.name && reward.variant === variant));
-                  return (
-                    <article className={`sprite-card ${state.mastered ? "is-mastered" : state.acquired ? "is-acquired" : ""}`} key={variant}>
-                      <div className={`sprite-art ${variant.toLowerCase().replace(/\s+/g, "-")}`}>
-                        <Image src={imageFor(activeSeason, sprite.name, variant)} alt={`${variant === "Base" ? "" : `${variant} `}${sprite.name} Sprite`} width={256} height={256} loading="lazy" sizes="(max-width: 760px) calc((100vw - 82px) / 3), 30vw" unoptimized />
-                        {unlock && (
-                          <button className="code-unlock-badge" type="button" onClick={() => openCodeGuide(unlock.code)} aria-label={`View unlock code for ${sprite.name} ${variant}`}>
-                            Code unlock
-                          </button>
-                        )}
-                      </div>
-                      <h4>{variant}</h4>
-                      <label className="check acquired-check">
-                        <input type="checkbox" checked={state.acquired} onChange={() => toggle(sprite.name, variant, "acquired")} aria-label={`${sprite.name} ${variant} acquired`} />
-                        <span><span className="long-label">Acquired</span><span className="short-label">A</span></span>
-                      </label>
-                      <label className="check mastered-check">
-                        <input type="checkbox" checked={state.mastered} onChange={() => toggle(sprite.name, variant, "mastered")} aria-label={`${sprite.name} ${variant} mastered`} />
-                        <span><span className="long-label">Mastered</span><span className="short-label">M</span></span>
-                      </label>
-                    </article>
-                  );
-                })}
-              </div>
-            </section>
+            viewMode === "compact" ? (
+              <section className="sprite-row compact-row" key={sprite.name}>
+                <div className="compact-family-head">
+                  <div><span className={`rarity ${sprite.rarity.toLowerCase()}`}>{sprite.rarity}</span><h3>{sprite.name}</h3></div>
+                  <a href={`https://fortnite.gg/sprites?search=${encodeURIComponent(sprite.name)}`} target="_blank" rel="noreferrer">details ↗</a>
+                </div>
+                <div className="compact-variant-strip" style={{ "--variant-count": sprite.variants.length } as React.CSSProperties}>
+                  {sprite.variants.map((variant) => {
+                    const key = keyFor(sprite.name, variant);
+                    const state = progress[key] ?? { acquired: false, mastered: false };
+                    const status = state.mastered ? "Mastered" : state.acquired ? "Acquired" : "Missing";
+                    const nextStatus = !state.acquired ? "Acquired" : !state.mastered ? "Mastered" : "Missing";
+                    const unlock = unlockCodes.find((item) => item.rewards.some((reward) => reward.name === sprite.name && reward.variant === variant));
+                    return (
+                      <article className={`sprite-card compact-sprite-card ${state.mastered ? "is-mastered" : state.acquired ? "is-acquired" : ""}`} key={variant}>
+                        <button className="compact-sprite-toggle" type="button" onClick={() => cycleStatus(sprite.name, variant)} aria-label={`${sprite.name} ${variant}: ${status}. Mark ${nextStatus}.`}>
+                          <span className={`compact-sprite-art ${variant.toLowerCase().replace(/\s+/g, "-")}`}>
+                            <Image src={imageFor(activeSeason, sprite.name, variant)} alt="" width={256} height={256} loading="lazy" sizes="(max-width: 760px) calc((100vw - 36px) / 6), 12vw" unoptimized />
+                          </span>
+                          <h4>{variant}</h4>
+                          <span className="compact-status" aria-hidden="true">{state.mastered ? "★" : state.acquired ? "✓" : ""}</span>
+                        </button>
+                        {unlock && <button className="compact-code-badge" type="button" onClick={() => openCodeGuide(unlock.code)} aria-label={`View unlock code for ${sprite.name} ${variant}`}>⌨</button>}
+                      </article>
+                    );
+                  })}
+                </div>
+              </section>
+            ) : (
+              <section className="sprite-row classic-row" key={sprite.name}>
+                <div className="row-label">
+                  <span className={`rarity ${sprite.rarity.toLowerCase()}`}>{sprite.rarity}</span>
+                  <h3>{sprite.name}</h3>
+                  <a href={`https://fortnite.gg/sprites?search=${encodeURIComponent(sprite.name)}`} target="_blank" rel="noreferrer">details ↗</a>
+                </div>
+                <div className="variant-strip">
+                  {sprite.variants.map((variant) => {
+                    const key = keyFor(sprite.name, variant);
+                    const state = progress[key] ?? { acquired: false, mastered: false };
+                    const unlock = unlockCodes.find((item) => item.rewards.some((reward) => reward.name === sprite.name && reward.variant === variant));
+                    return (
+                      <article className={`sprite-card classic-sprite-card ${state.mastered ? "is-mastered" : state.acquired ? "is-acquired" : ""}`} key={variant}>
+                        <div className={`sprite-art ${variant.toLowerCase().replace(/\s+/g, "-")}`}>
+                          <Image src={imageFor(activeSeason, sprite.name, variant)} alt={`${variant === "Base" ? "" : `${variant} `}${sprite.name} Sprite`} width={256} height={256} loading="lazy" sizes="(max-width: 760px) calc((100vw - 82px) / 3), 30vw" unoptimized />
+                          {unlock && <button className="code-unlock-badge" type="button" onClick={() => openCodeGuide(unlock.code)} aria-label={`View unlock code for ${sprite.name} ${variant}`}>Code unlock</button>}
+                        </div>
+                        <h4>{variant}</h4>
+                        <label className="check acquired-check"><input type="checkbox" checked={state.acquired} onChange={() => toggle(sprite.name, variant, "acquired")} aria-label={`${sprite.name} ${variant} acquired`} /><span><span className="long-label">Acquired</span><span className="short-label">A</span></span></label>
+                        <label className="check mastered-check"><input type="checkbox" checked={state.mastered} onChange={() => toggle(sprite.name, variant, "mastered")} aria-label={`${sprite.name} ${variant} mastered`} /><span><span className="long-label">Mastered</span><span className="short-label">M</span></span></label>
+                      </article>
+                    );
+                  })}
+                </div>
+              </section>
+            )
           ))}
           {!visible.length && <div className="empty"><strong>No Sprites here.</strong><span>Try another name or filter.</span></div>}
         </div>

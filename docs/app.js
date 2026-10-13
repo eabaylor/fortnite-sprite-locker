@@ -6,6 +6,7 @@ const FOCUSABLE_SELECTOR = 'a[href], button:not([disabled]), input:not([disabled
 let season = CATALOGS.find((item) => item.seasonId === BUNDLE.defaultSeasonId)
   || CATALOGS[0];
 let filter = "missing";
+let viewMode = "compact";
 const selectedSprites = new Set();
 const selectedVariants = new Set();
 let query = "";
@@ -152,6 +153,7 @@ function updateSeasonUi() {
 function render() {
   const list = document.querySelector("#sprite-list");
   list.replaceChildren();
+  list.className = `sprite-list ${viewMode === "compact" ? "compact-view" : "classic-view"}`;
   let shown = 0;
 
   for (const { name, rarity, variants } of sprites()) {
@@ -171,42 +173,67 @@ function render() {
     shown += visibleVariants.length;
 
     const row = document.createElement("section");
-    row.className = "sprite-row";
-    row.innerHTML = `
+    row.className = `sprite-row ${viewMode === "compact" ? "compact-row" : "classic-row"}`;
+    row.innerHTML = viewMode === "compact" ? `
+      <div class="compact-family-head">
+        <div><span class="rarity ${rarity.toLowerCase()}">${rarity}</span><h3>${name}</h3></div>
+        <a href="https://fortnite.gg/sprites?search=${encodeURIComponent(name)}" target="_blank" rel="noreferrer">details ↗</a>
+      </div>
+      <div class="compact-variant-strip" style="--variant-count:${visibleVariants.length}"></div>` : `
       <div class="row-label">
         <span class="rarity ${rarity.toLowerCase()}">${rarity}</span>
         <h3>${name}</h3>
         <a href="https://fortnite.gg/sprites?search=${encodeURIComponent(name)}" target="_blank" rel="noreferrer">details ↗</a>
       </div>
       <div class="variant-strip"></div>`;
-    const strip = row.querySelector(".variant-strip");
+    const strip = row.querySelector(viewMode === "compact" ? ".compact-variant-strip" : ".variant-strip");
 
     for (const variant of visibleVariants) {
       const state = stateFor(name, variant);
       const unlock = unlockFor(name, variant);
       const card = document.createElement("article");
-      card.className = `sprite-card ${state.mastered ? "is-mastered" : state.acquired ? "is-acquired" : ""}`;
-      card.innerHTML = `
-        <div class="sprite-art ${variantSlugFor(variant)}">
-          <img src="${season.imageBase}/${slugFor(name)}-${variantSlugFor(variant)}-256.webp" alt="${variant === "Base" ? "" : `${variant} `}${name} Sprite" width="256" height="256" loading="lazy" decoding="async" />
-        </div>
-        <h4>${variant}</h4>
-        <label class="check acquired-check">
-          <input type="checkbox" data-name="${name}" data-variant="${variant}" data-field="acquired" aria-label="${name} ${variant} acquired" ${state.acquired ? "checked" : ""} />
-          <span><span class="long-label">Acquired</span><span class="short-label">A</span></span>
-        </label>
-        <label class="check mastered-check">
-          <input type="checkbox" data-name="${name}" data-variant="${variant}" data-field="mastered" aria-label="${name} ${variant} mastered" ${state.mastered ? "checked" : ""} />
-          <span><span class="long-label">Mastered</span><span class="short-label">M</span></span>
-        </label>`;
-      if (unlock) {
-        const badge = document.createElement("button");
-        badge.className = "code-unlock-badge";
-        badge.type = "button";
-        badge.textContent = "Code unlock";
-        badge.setAttribute("aria-label", `View unlock code for ${name} ${variant}`);
-        badge.addEventListener("click", () => openCodeGuide(unlock.code));
-        card.querySelector(".sprite-art").append(badge);
+      card.className = `sprite-card ${viewMode === "compact" ? "compact-sprite-card" : "classic-sprite-card"} ${state.mastered ? "is-mastered" : state.acquired ? "is-acquired" : ""}`;
+      if (viewMode === "compact") {
+        const status = state.mastered ? "Mastered" : state.acquired ? "Acquired" : "Missing";
+        const nextStatus = !state.acquired ? "Acquired" : !state.mastered ? "Mastered" : "Missing";
+        card.innerHTML = `
+          <button class="compact-sprite-toggle" type="button" data-name="${name}" data-variant="${variant}" aria-label="${name} ${variant}: ${status}. Mark ${nextStatus}.">
+            <span class="compact-sprite-art ${variantSlugFor(variant)}"><img src="${season.imageBase}/${slugFor(name)}-${variantSlugFor(variant)}-256.webp" alt="" width="256" height="256" loading="lazy" decoding="async" /></span>
+            <h4>${variant}</h4>
+            <span class="compact-status" aria-hidden="true">${state.mastered ? "★" : state.acquired ? "✓" : ""}</span>
+          </button>`;
+        if (unlock) {
+          const badge = document.createElement("button");
+          badge.className = "compact-code-badge";
+          badge.type = "button";
+          badge.textContent = "⌨";
+          badge.setAttribute("aria-label", `View unlock code for ${name} ${variant}`);
+          badge.addEventListener("click", () => openCodeGuide(unlock.code));
+          card.append(badge);
+        }
+      } else {
+        card.innerHTML = `
+          <div class="sprite-art ${variantSlugFor(variant)}">
+            <img src="${season.imageBase}/${slugFor(name)}-${variantSlugFor(variant)}-256.webp" alt="${variant === "Base" ? "" : `${variant} `}${name} Sprite" width="256" height="256" loading="lazy" decoding="async" />
+          </div>
+          <h4>${variant}</h4>
+          <label class="check acquired-check">
+            <input type="checkbox" data-name="${name}" data-variant="${variant}" data-field="acquired" aria-label="${name} ${variant} acquired" ${state.acquired ? "checked" : ""} />
+            <span><span class="long-label">Acquired</span><span class="short-label">A</span></span>
+          </label>
+          <label class="check mastered-check">
+            <input type="checkbox" data-name="${name}" data-variant="${variant}" data-field="mastered" aria-label="${name} ${variant} mastered" ${state.mastered ? "checked" : ""} />
+            <span><span class="long-label">Mastered</span><span class="short-label">M</span></span>
+          </label>`;
+        if (unlock) {
+          const badge = document.createElement("button");
+          badge.className = "code-unlock-badge";
+          badge.type = "button";
+          badge.textContent = "Code unlock";
+          badge.setAttribute("aria-label", `View unlock code for ${name} ${variant}`);
+          badge.addEventListener("click", () => openCodeGuide(unlock.code));
+          card.querySelector(".sprite-art").append(badge);
+        }
       }
       strip.append(card);
     }
@@ -641,6 +668,30 @@ document.querySelector("#sprite-list").addEventListener("change", (event) => {
   save();
   render();
 });
+
+document.querySelector("#sprite-list").addEventListener("click", (event) => {
+  const button = event.target.closest(".compact-sprite-toggle");
+  if (!button) return;
+  const { name, variant } = button.dataset;
+  const key = keyFor(name, variant);
+  const old = stateFor(name, variant);
+  if (!old.acquired) progress[key] = { acquired: true, mastered: false };
+  else if (!old.mastered) progress[key] = { acquired: true, mastered: true };
+  else delete progress[key];
+  save();
+  render();
+});
+
+for (const [id, mode] of [["#compact-view", "compact"], ["#classic-view", "classic"]]) {
+  document.querySelector(id).addEventListener("click", () => {
+    viewMode = mode;
+    document.querySelector("#compact-view").classList.toggle("active", viewMode === "compact");
+    document.querySelector("#classic-view").classList.toggle("active", viewMode === "classic");
+    document.querySelector("#compact-view").setAttribute("aria-pressed", String(viewMode === "compact"));
+    document.querySelector("#classic-view").setAttribute("aria-pressed", String(viewMode === "classic"));
+    render();
+  });
+}
 
 function syncProgressFromStorage() {
   const latest = loadProgress();

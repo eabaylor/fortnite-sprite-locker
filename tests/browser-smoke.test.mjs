@@ -43,22 +43,38 @@ window.addEventListener("load", () => {
   const status = document.querySelector("#status-filter");
   status.value = "all";
   status.dispatchEvent(new Event("change", { bubbles: true }));
-  const familyNames = [...document.querySelectorAll(".sprite-row .row-label h3")].map((heading) => heading.textContent);
+  const defaultCompact = document.querySelector("#sprite-list").classList.contains("compact-view") && document.querySelector("#compact-view").getAttribute("aria-pressed") === "true";
+  const familyNames = [...document.querySelectorAll(".sprite-row h3")].map((heading) => heading.textContent);
   const firstVariants = [...document.querySelectorAll(".sprite-row:first-child .sprite-card h4")].map((heading) => heading.textContent);
-  const mastered = document.querySelector('[data-field="mastered"]');
-  const name = mastered.dataset.name;
-  const variant = mastered.dataset.variant;
-  mastered.click();
+  const compactCards = [...document.querySelectorAll(".sprite-row:first-child .compact-sprite-card")];
+  const compactRowInsideViewport = compactCards.length === 6 && compactCards.every((card) => {
+    const rect = card.getBoundingClientRect();
+    return rect.left >= 0 && rect.right <= document.documentElement.clientWidth;
+  });
+  let compactToggle = document.querySelector(".compact-sprite-toggle");
+  const name = compactToggle.dataset.name;
+  const variant = compactToggle.dataset.variant;
+  compactToggle.click();
+  compactToggle = document.querySelector('.compact-sprite-toggle[data-name="' + CSS.escape(name) + '"][data-variant="' + CSS.escape(variant) + '"]');
+  compactToggle.click();
+  document.querySelector("#classic-view").click();
   const selector = (field) => '[data-name="' + CSS.escape(name) + '"][data-variant="' + CSS.escape(variant) + '"][data-field="' + field + '"]';
   const menu = document.querySelector("#data-menu");
   menu.open = true;
   const menuRect = menu.querySelector(".data-menu-panel").getBoundingClientRect();
+  window.scrollTo(0, 600);
+  const stickyTopAfterScroll = Math.round(document.querySelector(".sticky-controls").getBoundingClientRect().top);
   const result = {
     viewportWidth: document.documentElement.clientWidth,
     scrollWidth: document.documentElement.scrollWidth,
     h1Count: document.querySelectorAll("h1").length,
     hasSkipLink: !!document.querySelector('.skip-link[href="#sprite-checklist"]'),
     updateNoticeHidden: document.querySelector("#update-notice").hidden,
+    defaultCompact,
+    compactRowInsideViewport,
+    classicSelectable: document.querySelector("#sprite-list").classList.contains("classic-view") && document.querySelector("#classic-view").getAttribute("aria-pressed") === "true",
+    stickyControls: getComputedStyle(document.querySelector(".sticky-controls")).position === "sticky",
+    stickyTopAfterScroll,
     masteredImpliesAcquired: document.querySelector(selector("mastered")).checked && document.querySelector(selector("acquired")).checked,
     checkHeight: Math.round(document.querySelector(".check").getBoundingClientRect().height),
     statusHeight: Math.round(document.querySelector(".select-filter").getBoundingClientRect().height),
@@ -147,6 +163,11 @@ test("live static tracker works at 320px in a real browser", async (context) => 
     assert.equal(audit.h1Count, 1);
     assert.equal(audit.hasSkipLink, true);
     assert.equal(audit.updateNoticeHidden, true);
+    assert.equal(audit.defaultCompact, true);
+    assert.equal(audit.compactRowInsideViewport, true);
+    assert.equal(audit.classicSelectable, true);
+    assert.equal(audit.stickyControls, true);
+    assert.equal(audit.stickyTopAfterScroll, 0);
     assert.equal(audit.masteredImpliesAcquired, true);
     assert.ok(audit.checkHeight >= 40, `Checklist tap target is only ${audit.checkHeight}px tall.`);
     assert.ok(audit.statusHeight >= 40, `Status filter is only ${audit.statusHeight}px tall.`);

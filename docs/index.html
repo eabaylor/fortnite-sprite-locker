@@ -11,13 +11,14 @@
     <title>Fortnite Sprite Locker — Sprite Checklist</title>
     <link rel="icon" href="favicon.svg" />
     <link rel="manifest" href="manifest.webmanifest" />
-    <link rel="stylesheet" href="styles.css?v=20261013-2" />
-    <script src="catalog.js?v=20261013-2" defer></script>
-    <script src="app.js?v=20261013-2" defer></script>
+    <link rel="stylesheet" href="styles.css?v=20261013-3" />
+    <script src="catalog.js?v=20261013-3" defer></script>
+    <script src="app.js?v=20261013-3" defer></script>
   </head>
   <body>
     <main>
       <a class="skip-link" href="#sprite-checklist">Skip to Sprite checklist</a>
+      <div class="sticky-controls">
       <header class="hero">
         <h1 class="visually-hidden">Fortnite Sprite Locker checklist</h1>
         <nav>
@@ -67,14 +68,13 @@
         </nav>
       </header>
 
-      <aside class="update-notice" id="update-notice" role="status" aria-live="polite" hidden>
-        <div><strong>A newer Sprite Locker is ready.</strong><span>Your saved checkmarks will stay in place.</span></div>
-        <button type="button" id="reload-latest">Reload latest</button>
-      </aside>
-
-      <section class="tracker" id="sprite-checklist" tabindex="-1" aria-labelledby="checklist-heading">
-        <h2 class="visually-hidden" id="checklist-heading">Sprite checklist</h2>
+      <div class="tracker-toolbar">
         <div class="filters" role="group" aria-label="Filter checklist">
+          <div class="view-switch" role="group" aria-label="Checklist view">
+            <span>View</span>
+            <button type="button" class="active" id="compact-view" aria-pressed="true">Compact</button>
+            <button type="button" id="classic-view" aria-pressed="false">Classic</button>
+          </div>
           <label class="select-filter status-filter">
             <span>Status</span>
             <select id="status-filter" aria-label="Filter checklist by collection status">
@@ -101,8 +101,17 @@
           <button class="clear-filters" id="clear-filters">Clear filters</button>
           <button class="admin-codes-trigger" id="admin-codes-trigger" type="button">Admin Codes <span id="admin-codes-count">0</span></button>
         </div>
+      </div>
+      </div>
 
-        <div class="sprite-list" id="sprite-list"></div>
+      <aside class="update-notice" id="update-notice" role="status" aria-live="polite" hidden>
+        <div><strong>A newer Sprite Locker is ready.</strong><span>Your saved checkmarks will stay in place.</span></div>
+        <button type="button" id="reload-latest">Reload latest</button>
+      </aside>
+
+      <section class="tracker" id="sprite-checklist" tabindex="-1" aria-labelledby="checklist-heading">
+        <h2 class="visually-hidden" id="checklist-heading">Sprite checklist</h2>
+        <div class="sprite-list compact-view" id="sprite-list"></div>
       </section>
 
       <aside class="sync-note">
