@@ -217,7 +217,7 @@ test("mobile layout supports compact and classic views without horizontal scroll
   ]);
   for (const css of [appCss, staticCss]) {
     assert.match(css, /grid-template-columns:\s*repeat\(3, minmax\(0, 1fr\)\)/);
-    assert.match(css, /\.compact-variant-strip[^}]+grid-template-columns:\s*repeat\(var\(--variant-count\), minmax\(0, 1fr\)\)/s);
+    assert.match(css, /\.compact-variant-strip[^}]+grid-template-columns:\s*repeat\(6, minmax\(0, 1fr\)\)/s);
     assert.match(css, /\.sprite-art img[^}]+object-fit:\s*contain/s);
     assert.match(css, /\.compact-sprite-art img[^}]+object-fit:\s*contain/s);
     assert.match(css, /\.sticky-controls\s*\{[^}]*position:\s*sticky/s);

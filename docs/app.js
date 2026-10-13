@@ -5,7 +5,7 @@ const WHATS_NEW_STORAGE_KEY = "sprite-locker-last-seen-release";
 const FOCUSABLE_SELECTOR = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), summary, [tabindex]:not([tabindex="-1"])';
 let season = CATALOGS.find((item) => item.seasonId === BUNDLE.defaultSeasonId)
   || CATALOGS[0];
-let filter = "missing";
+let filter = "all";
 let viewMode = "compact";
 const selectedSprites = new Set();
 const selectedVariants = new Set();
@@ -179,7 +179,7 @@ function render() {
         <div><span class="rarity ${rarity.toLowerCase()}">${rarity}</span><h3>${name}</h3></div>
         <a href="https://fortnite.gg/sprites?search=${encodeURIComponent(name)}" target="_blank" rel="noreferrer">details ↗</a>
       </div>
-      <div class="compact-variant-strip" style="--variant-count:${visibleVariants.length}"></div>` : `
+      <div class="compact-variant-strip"></div>` : `
       <div class="row-label">
         <span class="rarity ${rarity.toLowerCase()}">${rarity}</span>
         <h3>${name}</h3>
@@ -571,7 +571,7 @@ seasonSelect.addEventListener("change", () => {
   season = nextSeason;
   progress = loadProgress();
   redeemedAdminCodes = loadRedeemedAdminCodes();
-  filter = "missing";
+  filter = "all";
   query = "";
   closeCodeGuide();
   document.querySelector("#status-filter").value = filter;
@@ -597,7 +597,7 @@ setupMultiFilter("variant-filter-menu", "variant-filter-label", selectedVariants
 populateSeasonFilters();
 
 document.querySelector("#clear-filters").addEventListener("click", () => {
-  filter = "missing";
+  filter = "all";
   query = "";
   selectedSprites.clear();
   selectedVariants.clear();

@@ -181,7 +181,7 @@ function MultiSelectFilter({ label, items, selected, onToggle, onClear, classNam
 export default function Home() {
   const [selectedSeasonId, setSelectedSeasonId] = useState(DEFAULT_SEASON_ID);
   const [progress, setProgress] = useState<Progress>({});
-  const [filter, setFilter] = useState<Filter>("missing");
+  const [filter, setFilter] = useState<Filter>("all");
   const [selectedSprites, setSelectedSprites] = useState<string[]>([]);
   const [selectedVariants, setSelectedVariants] = useState<string[]>([]);
   const [query, setQuery] = useState("");
@@ -368,7 +368,7 @@ export default function Home() {
     } catch {
       setRedeemedAdminCodes([]);
     }
-    setFilter("missing");
+    setFilter("all");
     setSelectedSprites([]);
     setSelectedVariants([]);
     setQuery("");
@@ -384,7 +384,7 @@ export default function Home() {
   }
 
   function clearFilters() {
-    setFilter("missing");
+    setFilter("all");
     setSelectedSprites([]);
     setSelectedVariants([]);
     setQuery("");
@@ -592,7 +592,7 @@ export default function Home() {
                   <div><span className={`rarity ${sprite.rarity.toLowerCase()}`}>{sprite.rarity}</span><h3>{sprite.name}</h3></div>
                   <a href={`https://fortnite.gg/sprites?search=${encodeURIComponent(sprite.name)}`} target="_blank" rel="noreferrer">details ↗</a>
                 </div>
-                <div className="compact-variant-strip" style={{ "--variant-count": sprite.variants.length } as React.CSSProperties}>
+                <div className="compact-variant-strip">
                   {sprite.variants.map((variant) => {
                     const key = keyFor(sprite.name, variant);
                     const state = progress[key] ?? { acquired: false, mastered: false };

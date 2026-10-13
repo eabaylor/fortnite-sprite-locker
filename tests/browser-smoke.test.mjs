@@ -41,20 +41,29 @@ function browserHarness() {
   return `<script>
 window.addEventListener("load", () => {
   const status = document.querySelector("#status-filter");
-  status.value = "all";
-  status.dispatchEvent(new Event("change", { bubbles: true }));
+  const defaultStatusAll = status.value === "all";
   const defaultCompact = document.querySelector("#sprite-list").classList.contains("compact-view") && document.querySelector("#compact-view").getAttribute("aria-pressed") === "true";
   const familyNames = [...document.querySelectorAll(".sprite-row h3")].map((heading) => heading.textContent);
-  const firstVariants = [...document.querySelectorAll(".sprite-row:first-child .sprite-card h4")].map((heading) => heading.textContent);
-  const compactCards = [...document.querySelectorAll(".sprite-row:first-child .compact-sprite-card")];
+  const sixVariantRow = [...document.querySelectorAll(".sprite-row")].find((row) => row.querySelectorAll(".compact-sprite-card").length === 6);
+  const firstVariants = [...sixVariantRow.querySelectorAll(".sprite-card h4")].map((heading) => heading.textContent);
+  const compactCards = [...sixVariantRow.querySelectorAll(".compact-sprite-card")];
   const compactRowInsideViewport = compactCards.length === 6 && compactCards.every((card) => {
     const rect = card.getBoundingClientRect();
     return rect.left >= 0 && rect.right <= document.documentElement.clientWidth;
   });
-  let compactToggle = document.querySelector(".compact-sprite-toggle");
+  const compactCardWidth = compactCards[0].getBoundingClientRect().width;
+  let compactToggle = compactCards[0].querySelector(".compact-sprite-toggle");
   const name = compactToggle.dataset.name;
   const variant = compactToggle.dataset.variant;
+  status.value = "missing";
+  status.dispatchEvent(new Event("change", { bubbles: true }));
+  compactToggle = document.querySelector('.compact-sprite-toggle[data-name="' + CSS.escape(name) + '"][data-variant="' + CSS.escape(variant) + '"]');
   compactToggle.click();
+  const filteredRow = [...document.querySelectorAll(".sprite-row")].find((row) => row.querySelector("h3")?.textContent === name);
+  const remainingCompactCard = filteredRow.querySelector(".compact-sprite-card");
+  const fixedSixColumnWidth = Math.abs(remainingCompactCard.getBoundingClientRect().width - compactCardWidth) < 1;
+  status.value = "all";
+  status.dispatchEvent(new Event("change", { bubbles: true }));
   compactToggle = document.querySelector('.compact-sprite-toggle[data-name="' + CSS.escape(name) + '"][data-variant="' + CSS.escape(variant) + '"]');
   compactToggle.click();
   document.querySelector("#classic-view").click();
@@ -70,8 +79,10 @@ window.addEventListener("load", () => {
     h1Count: document.querySelectorAll("h1").length,
     hasSkipLink: !!document.querySelector('.skip-link[href="#sprite-checklist"]'),
     updateNoticeHidden: document.querySelector("#update-notice").hidden,
+    defaultStatusAll,
     defaultCompact,
     compactRowInsideViewport,
+    fixedSixColumnWidth,
     classicSelectable: document.querySelector("#sprite-list").classList.contains("classic-view") && document.querySelector("#classic-view").getAttribute("aria-pressed") === "true",
     stickyControls: getComputedStyle(document.querySelector(".sticky-controls")).position === "sticky",
     stickyTopAfterScroll,
@@ -163,8 +174,10 @@ test("live static tracker works at 320px in a real browser", async (context) => 
     assert.equal(audit.h1Count, 1);
     assert.equal(audit.hasSkipLink, true);
     assert.equal(audit.updateNoticeHidden, true);
+    assert.equal(audit.defaultStatusAll, true);
     assert.equal(audit.defaultCompact, true);
     assert.equal(audit.compactRowInsideViewport, true);
+    assert.equal(audit.fixedSixColumnWidth, true);
     assert.equal(audit.classicSelectable, true);
     assert.equal(audit.stickyControls, true);
     assert.equal(audit.stickyTopAfterScroll, 0);

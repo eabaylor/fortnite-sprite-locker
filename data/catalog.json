@@ -9,7 +9,7 @@
   "legacyStorageKeys": [],
   "updatedDate": "October 13, 2026",
   "patch": "v42.30",
-  "assetVersion": "20261013-3",
+  "assetVersion": "20261013-4",
   "familyOrder": [
     "Jonesy",
     "Adventure",
@@ -46,13 +46,13 @@
     "Trick or Treat"
   ],
   "whatsNew": {
-    "title": "Compact view is here",
-    "intro": "The tracker is faster to use while you play:",
+    "title": "Compact view stays steady",
+    "intro": "The compact checklist is now easier to scan and update:",
     "items": [
-      "Compact view now opens by default with the real Sprite artwork.",
-      "Tap a Sprite to move it from Missing to Acquired to Mastered.",
-      "Switch back to Classic view from the new View control at any time.",
-      "The header, progress, search, and filters now stay visible while you scroll."
+      "All Sprites now show by default when compact view opens.",
+      "Every compact family keeps a fixed six-slot grid while status filters change.",
+      "Marking a Sprite no longer enlarges the remaining images in its row.",
+      "Classic view remains available from the View control."
     ]
   },
   "unlockCodes": [

@@ -165,7 +165,7 @@ h2 { margin-bottom: 0; font-family: var(--font-display), sans-serif; text-transf
 .compact-family-head .rarity { flex: none; margin: 0; }
 .compact-family-head h3 { min-width: 0; margin: 0; font-family: var(--font-display), sans-serif; font-size: 18px; letter-spacing: -.025em; overflow-wrap: anywhere; }
 .compact-family-head a { flex: none; color: var(--muted); font-size: 10px; font-weight: 800; text-decoration: none; }
-.compact-variant-strip { min-width: 0; display: grid; grid-template-columns: repeat(var(--variant-count), minmax(0, 1fr)); gap: 6px; }
+.compact-variant-strip { min-width: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; }
 .compact-sprite-card { position: relative; overflow: hidden; border-radius: 10px; padding: 0; }
 .compact-sprite-toggle { width: 100%; min-width: 0; min-height: 88px; display: block; cursor: pointer; border: 0; padding: 5px 3px 6px; color: var(--ink); background: transparent; }
 .compact-sprite-toggle:focus-visible { outline: 3px solid var(--ink); outline-offset: -3px; }
