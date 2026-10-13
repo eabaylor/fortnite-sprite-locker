@@ -1,7 +1,7 @@
 window.SPRITE_CATALOGS = {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-season-4",
-  "assetVersion": "20261013-5",
+  "assetVersion": "20261013-6",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -14,8 +14,9 @@ window.SPRITE_CATALOGS = {
       "legacyStorageKeys": [],
       "updatedDate": "October 13, 2026",
       "patch": "v42.30",
-      "assetVersion": "20261013-5",
+      "assetVersion": "20261013-6",
       "familyOrder": [
+        "Dumpster Dive",
         "Jonesy",
         "Adventure",
         "Bush",
@@ -29,18 +30,17 @@ window.SPRITE_CATALOGS = {
         "Klombo",
         "Mega Man",
         "Overshield",
+        "Pond",
         "X-Ray",
         "Onigiri",
         "Storm Scout",
         "Blinky",
         "Birthday",
         "Crash Bandicoot",
-        "Pond",
         "Morgana",
         "Spooky Dash",
-        "Vampire",
         "The Deer",
-        "Dumpster Dive"
+        "Vampire"
       ],
       "variantOrder": [
         "Base",
@@ -51,12 +51,12 @@ window.SPRITE_CATALOGS = {
         "Trick or Treat"
       ],
       "whatsNew": {
-        "title": "Code unlocks are easier to spot",
-        "intro": "A matching blue style now identifies Admin Codes:",
+        "title": "Sprite order matches PlayStation",
+        "intro": "Find each family in the order shown in your game:",
         "items": [
-          "Sprites with an unlock code have a blue ticket icon at the bottom-left.",
-          "Tap the ticket to open that Sprite’s unlock code.",
-          "The Admin Codes button uses the same blue, distinct from gold Mastered markers."
+          "Dumpster Dive is first, followed by Jonesy, Adventure, and Bush.",
+          "Pond follows Overshield; The Deer appears before Vampire.",
+          "All 25 current-season families and 145 variants remain available with your saved progress."
         ]
       },
       "unlockCodes": [

@@ -38,7 +38,7 @@ test("catalog has unique active entries and matching artwork", async () => {
   assert.equal(entries.length, 145);
   assert.ok(catalog.whatsNew.items.length >= 1 && catalog.whatsNew.items.length <= 4);
   assert.deepEqual(catalog.familyOrder, [
-    "Jonesy", "Adventure", "Bush", "Sonic", "Tails", "Shadow", "8-Bit", "Jackrabbit", "Crown", "Killswitch", "Klombo", "Mega Man", "Overshield", "X-Ray", "Onigiri", "Storm Scout", "Blinky", "Birthday", "Crash Bandicoot", "Pond", "Morgana", "Spooky Dash", "Vampire", "The Deer", "Dumpster Dive",
+    "Dumpster Dive", "Jonesy", "Adventure", "Bush", "Sonic", "Tails", "Shadow", "8-Bit", "Jackrabbit", "Crown", "Killswitch", "Klombo", "Mega Man", "Overshield", "Pond", "X-Ray", "Onigiri", "Storm Scout", "Blinky", "Birthday", "Crash Bandicoot", "Morgana", "Spooky Dash", "The Deer", "Vampire",
   ]);
   assert.deepEqual(catalog.variantOrder, ["Base", "Gold", "Cheat Master", "Loot Hacker", "Bounty Hunter", "Trick or Treat"]);
   assert.deepEqual(new Set(catalog.familyOrder), new Set(catalog.families.map(({ name }) => name)));
@@ -127,8 +127,7 @@ test("server renders the real tracker with current season and all cards", async 
   assert.doesNotMatch(html, /class="whats-new-trigger"/);
   assert.equal((html.match(/class="sprite-card /g) ?? []).length, 145);
   const familyNames = [...html.matchAll(/<h3>([^<]+)<\/h3>/g)].map((match) => match[1]);
-  assert.deepEqual(familyNames.slice(0, 4), ["Jonesy", "Adventure", "Bush", "Sonic"]);
-  assert.equal(familyNames.at(-1), "Dumpster Dive");
+  assert.deepEqual(familyNames, catalog.familyOrder);
   assert.doesNotMatch(html, /Your site is taking shape|Building your site/);
 });
 

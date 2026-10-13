@@ -186,8 +186,7 @@ test("live static tracker works at 320px in a real browser", async (context) => 
     assert.ok(audit.statusHeight >= 40, `Status filter is only ${audit.statusHeight}px tall.`);
     assert.ok(audit.searchFontSize >= 16, `Search text is only ${audit.searchFontSize}px.`);
     assert.equal(audit.menuInsideViewport, true);
-    assert.deepEqual(audit.familyNames.slice(0, 4), ["Jonesy", "Adventure", "Bush", "Sonic"]);
-    assert.equal(audit.familyNames.at(-1), "Dumpster Dive");
+    assert.deepEqual(audit.familyNames, catalog.familyOrder);
     assert.deepEqual(audit.firstVariants, ["Base", "Gold", "Cheat Master", "Loot Hacker", "Bounty Hunter", "Trick or Treat"]);
   } finally {
     await new Promise((resolve) => server.close(resolve));
