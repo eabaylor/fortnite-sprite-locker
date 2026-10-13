@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-season-4",
-  "assetVersion": "20261013-4",
+  "assetVersion": "20261013-5",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -14,7 +14,7 @@
       "legacyStorageKeys": [],
       "updatedDate": "October 13, 2026",
       "patch": "v42.30",
-      "assetVersion": "20261013-4",
+      "assetVersion": "20261013-5",
       "familyOrder": [
         "Jonesy",
         "Adventure",
@@ -51,13 +51,12 @@
         "Trick or Treat"
       ],
       "whatsNew": {
-        "title": "Compact view stays steady",
-        "intro": "The compact checklist is now easier to scan and update:",
+        "title": "Code unlocks are easier to spot",
+        "intro": "A matching blue style now identifies Admin Codes:",
         "items": [
-          "All Sprites now show by default when compact view opens.",
-          "Every compact family keeps a fixed six-slot grid while status filters change.",
-          "Marking a Sprite no longer enlarges the remaining images in its row.",
-          "Classic view remains available from the View control."
+          "Sprites with an unlock code have a blue ticket icon at the bottom-left.",
+          "Tap the ticket to open that Sprite’s unlock code.",
+          "The Admin Codes button uses the same blue, distinct from gold Mastered markers."
         ]
       },
       "unlockCodes": [

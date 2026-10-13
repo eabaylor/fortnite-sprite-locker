@@ -608,7 +608,7 @@ export default function Home() {
                           <h4>{variant}</h4>
                           <span className="compact-status" aria-hidden="true">{state.mastered ? "★" : state.acquired ? "✓" : ""}</span>
                         </button>
-                        {unlock && <button className="compact-code-badge" type="button" onClick={() => openCodeGuide(unlock.code)} aria-label={`View unlock code for ${sprite.name} ${variant}`}>⌨</button>}
+                        {unlock && <button className="compact-code-badge" type="button" onClick={() => openCodeGuide(unlock.code)} aria-label={`View unlock code for ${sprite.name} ${variant}`} title="Unlock with an Admin Code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 6h18v4a2 2 0 0 0 0 4v4H3v-4a2 2 0 0 0 0-4V6Z" /><path d="m10 9-3 3 3 3m4-6 3 3-3 3" /></svg></button>}
                       </article>
                     );
                   })}

@@ -206,7 +206,8 @@ function render() {
           const badge = document.createElement("button");
           badge.className = "compact-code-badge";
           badge.type = "button";
-          badge.textContent = "⌨";
+          badge.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18v4a2 2 0 0 0 0 4v4H3v-4a2 2 0 0 0 0-4V6Z"/><path d="m10 9-3 3 3 3m4-6 3 3-3 3"/></svg>';
+          badge.title = "Unlock with an Admin Code";
           badge.setAttribute("aria-label", `View unlock code for ${name} ${variant}`);
           badge.addEventListener("click", () => openCodeGuide(unlock.code));
           card.append(badge);
