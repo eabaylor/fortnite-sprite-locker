@@ -38,11 +38,21 @@ const compareSpriteNames = (left, right) => {
   if (leftIsNumeric !== rightIsNumeric) return leftIsNumeric ? 1 : -1;
   return left.localeCompare(right, "en", { sensitivity: "base", numeric: true });
 };
-const orderedFamilies = (families) => families.map((family) => ({
+const compareByOrder = (order, left, right) => {
+  const leftIndex = order?.indexOf(left) ?? -1;
+  const rightIndex = order?.indexOf(right) ?? -1;
+  if (leftIndex !== rightIndex) {
+    if (leftIndex === -1) return 1;
+    if (rightIndex === -1) return -1;
+    return leftIndex - rightIndex;
+  }
+  return compareSpriteNames(left, right);
+};
+const orderedFamilies = (catalog) => catalog.families.map((family) => ({
   ...family,
-  variants: [...family.variants].sort(compareSpriteNames),
-})).sort((left, right) => compareSpriteNames(left.name, right.name));
-const familiesBySeason = new Map(CATALOGS.map((catalog) => [catalog.seasonId, orderedFamilies(catalog.families)]));
+  variants: [...family.variants].sort((left, right) => compareByOrder(catalog.variantOrder, left, right)),
+})).sort((left, right) => compareByOrder(catalog.familyOrder, left.name, right.name));
+const familiesBySeason = new Map(CATALOGS.map((catalog) => [catalog.seasonId, orderedFamilies(catalog)]));
 const slugFor = (name) => name.toLowerCase().replace(/\./g, "").replace(/\s+/g, "-");
 const variantSlugFor = (variant) => variant.toLowerCase().replace(/\s+/g, "-");
 const stateFor = (name, variant) => progress[keyFor(name, variant)] || { acquired: false, mastered: false };

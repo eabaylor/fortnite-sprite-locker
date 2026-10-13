@@ -35,6 +35,8 @@ type SeasonCatalog = {
   updatedDate: string;
   patch: string;
   assetVersion?: string;
+  familyOrder?: string[];
+  variantOrder?: string[];
   whatsNew?: { title: string; intro?: string; items: string[] };
   unlockCodes?: UnlockCode[];
   otherAdminCodes?: OtherAdminCode[];
@@ -66,10 +68,20 @@ const compareSpriteNames = (left: string, right: string) => {
   if (leftIsNumeric !== rightIsNumeric) return leftIsNumeric ? 1 : -1;
   return left.localeCompare(right, "en", { sensitivity: "base", numeric: true });
 };
-const orderedFamilies = (families: SpriteFamily[]) => families.map((family) => ({
+const compareByOrder = (order: string[] | undefined, left: string, right: string) => {
+  const leftIndex = order?.indexOf(left) ?? -1;
+  const rightIndex = order?.indexOf(right) ?? -1;
+  if (leftIndex !== rightIndex) {
+    if (leftIndex === -1) return 1;
+    if (rightIndex === -1) return -1;
+    return leftIndex - rightIndex;
+  }
+  return compareSpriteNames(left, right);
+};
+const orderedFamilies = (season: SeasonCatalog) => season.families.map((family) => ({
   ...family,
-  variants: [...family.variants].sort(compareSpriteNames),
-})).sort((left, right) => compareSpriteNames(left.name, right.name));
+  variants: [...family.variants].sort((left, right) => compareByOrder(season.variantOrder, left, right)),
+})).sort((left, right) => compareByOrder(season.familyOrder, left.name, right.name));
 const activeKeysFor = (season: SeasonCatalog) => new Set(
   season.families.flatMap((sprite) => sprite.variants.map((variant) => keyFor(sprite.name, variant))),
 );
@@ -190,7 +202,7 @@ export default function Home() {
   const codeGuideReturnFocus = useRef<HTMLElement | null>(null);
 
   const activeSeason = CATALOGS.find((season) => season.seasonId === selectedSeasonId) ?? CATALOGS[0];
-  const sprites = useMemo(() => orderedFamilies(activeSeason.families), [activeSeason]);
+  const sprites = useMemo(() => orderedFamilies(activeSeason), [activeSeason]);
   const total = sprites.reduce((sum, sprite) => sum + sprite.variants.length, 0);
   const variants = [...new Set(sprites.flatMap((sprite) => sprite.variants))];
   const unlockCodes = activeSeason.unlockCodes ?? [];

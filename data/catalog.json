@@ -9,13 +9,49 @@
   "legacyStorageKeys": [],
   "updatedDate": "October 13, 2026",
   "patch": "v42.30",
-  "assetVersion": "20261013-1",
+  "assetVersion": "20261013-2",
+  "familyOrder": [
+    "Jonesy",
+    "Adventure",
+    "Bush",
+    "Sonic",
+    "Tails",
+    "Shadow",
+    "8-Bit",
+    "Jackrabbit",
+    "Crown",
+    "Killswitch",
+    "Klombo",
+    "Mega Man",
+    "Overshield",
+    "X-Ray",
+    "Onigiri",
+    "Storm Scout",
+    "Blinky",
+    "Birthday",
+    "Crash Bandicoot",
+    "Pond",
+    "Morgana",
+    "Spooky Dash",
+    "Vampire",
+    "The Deer",
+    "Dumpster Dive"
+  ],
+  "variantOrder": [
+    "Base",
+    "Gold",
+    "Cheat Master",
+    "Loot Hacker",
+    "Bounty Hunter",
+    "Trick or Treat"
+  ],
   "whatsNew": {
-    "title": "New Admin Code is live",
-    "intro": "A new one-time Lobby Hack reward is ready:",
+    "title": "Sprites now match the game",
+    "intro": "The checklist is easier to compare with Fortnite:",
     "items": [
-      "DOOR2DOOR4CANDY awards 2 Extraction Accelerators.",
-      "The tracker now includes 145 released Sprite variants and 52 verified Admin Codes."
+      "Sprite families now follow their in-game collection order.",
+      "Each family’s variants now follow the same order shown in Fortnite.",
+      "Your acquired, mastered, and redeemed-code progress is unchanged."
     ]
   },
   "unlockCodes": [
