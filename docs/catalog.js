@@ -1,7 +1,7 @@
 window.SPRITE_CATALOGS = {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-season-4",
-  "assetVersion": "20261015-1",
+  "assetVersion": "20261015-2",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -14,7 +14,7 @@ window.SPRITE_CATALOGS = {
       "legacyStorageKeys": [],
       "updatedDate": "October 15, 2026",
       "patch": "v42.40",
-      "assetVersion": "20261015-1",
+      "assetVersion": "20261015-2",
       "familyOrder": [
         "Dumpster Dive",
         "Jonesy",
@@ -54,12 +54,13 @@ window.SPRITE_CATALOGS = {
         "Quack"
       ],
       "whatsNew": {
-        "title": "Honey, Willow, and Quack Sprites",
-        "intro": "17 released Sprite variants join the v42.40 checklist:",
+        "title": "Share and compare your locker",
+        "intro": "Find the Sprites you and a friend still need:",
         "items": [
-          "Honey and One Wish Willow each have six variants to track.",
-          "Quack variants are now available for Jonesy, Adventure, Bush, Klombo, and Spooky Dash.",
-          "The current season now includes 27 Sprite families and 162 variants. Your saved checkmarks stay in place."
+          "List view adds readable Acquired and Mastered controls for every variant.",
+          "Create a share link or paste a friend’s link to compare the same season side by side.",
+          "Filter by I need / they have, They need / I have, Both missing, or Not mastered.",
+          "Shared lockers are dated snapshots. Create a new link after updating your progress."
         ]
       },
       "unlockCodes": [

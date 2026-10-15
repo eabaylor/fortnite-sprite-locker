@@ -39,7 +39,7 @@ const mime = {
 
 function browserHarness() {
   return `<script>
-window.addEventListener("load", () => {
+window.addEventListener("load", async () => {
   const status = document.querySelector("#status-filter");
   const defaultStatusAll = status.value === "all";
   const defaultCompact = document.querySelector("#sprite-list").classList.contains("compact-view") && document.querySelector("#compact-view").getAttribute("aria-pressed") === "true";
@@ -94,6 +94,31 @@ window.addEventListener("load", () => {
     familyNames,
     firstVariants,
   };
+  menu.open = false;
+  try {
+    const tools = await import('./locker-tools.js');
+    document.querySelector('#list-view').click();
+    for (let i = 0; i < 100 && !document.querySelector('.locker-share'); i++) await new Promise(resolve => setTimeout(resolve, 20));
+    document.querySelector('.locker-share').click();
+    const shared = tools.decodeSnapshot(document.querySelector('.locker-share-url').value);
+    result.sharedMastered = shared.entries.get(name + '::' + variant) === 2;
+    const season = window.SPRITE_CATALOGS.seasons[0];
+    const friendProgress = {};
+    const target = season.families.find(f => f.name !== name);
+    friendProgress[target.name + '::' + target.variants[0]] = { acquired: true, mastered: false };
+    const before = localStorage.getItem(season.storageKey);
+    document.querySelector('.locker-import-url').value = tools.encodeSnapshot(tools.makeSnapshot(season, friendProgress, 'Test friend'));
+    document.querySelector('.locker-import').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+    result.comparisonDoesNotOverwrite = before === localStorage.getItem(season.storageKey);
+    result.listCount = document.querySelectorAll('.locker-list-row').length;
+    const comparisonFilter = document.querySelector('.locker-compare-filter');
+    comparisonFilter.value = 'i-need';
+    comparisonFilter.dispatchEvent(new Event('change'));
+    result.iNeedCount = document.querySelectorAll('.locker-list-row').length;
+    document.querySelector('.locker-list-row button[data-field="acquired"]').click();
+    result.comparisonReactsImmediately = document.querySelectorAll('.locker-list-row').length === 0;
+    result.listNoOverflow = document.documentElement.scrollWidth === document.documentElement.clientWidth;
+  } catch (error) { result.comparisonError = error.message; }
   const output = document.createElement("pre");
   output.id = "browser-audit";
   output.textContent = JSON.stringify(result);
@@ -138,6 +163,7 @@ function dumpDom(chrome, url, profile) {
       `--user-data-dir=${profile}`,
       "--window-size=320,568",
       "--dump-dom",
+      "--virtual-time-budget=8000",
       url,
     ], { stdio: ["ignore", "pipe", "pipe"] });
     let stdout = "";
@@ -186,6 +212,13 @@ test("live static tracker works at 320px in a real browser", async (context) => 
     assert.ok(audit.statusHeight >= 40, `Status filter is only ${audit.statusHeight}px tall.`);
     assert.ok(audit.searchFontSize >= 16, `Search text is only ${audit.searchFontSize}px.`);
     assert.equal(audit.menuInsideViewport, true);
+    assert.equal(audit.comparisonError, undefined);
+    assert.equal(audit.sharedMastered, true);
+    assert.equal(audit.comparisonDoesNotOverwrite, true);
+    assert.equal(audit.listCount, catalog.families.reduce((n, f) => n + f.variants.length, 0));
+    assert.equal(audit.iNeedCount, 1);
+    assert.equal(audit.comparisonReactsImmediately, true);
+    assert.equal(audit.listNoOverflow, true);
     assert.deepEqual(audit.familyNames, catalog.familyOrder);
     assert.deepEqual(audit.firstVariants, ["Base", "Gold", "Cheat Master", "Loot Hacker", "Bounty Hunter", "Trick or Treat"]);
   } finally {

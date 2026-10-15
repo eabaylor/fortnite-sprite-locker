@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 import currentCatalog from "@/data/catalog.json";
 import previousCatalog from "@/archive/chapter-7-season-3.json";
+import LockerTools from "./LockerTools";
 
 type SpriteFamily = { name: string; rarity: string; variants: string[] };
 type UnlockReward = { name: string; variant: string };
@@ -45,7 +46,7 @@ type SeasonCatalog = {
 type SpriteState = { acquired: boolean; mastered: boolean };
 type Progress = Record<string, SpriteState>;
 type Filter = "all" | "missing" | "not-mastered" | "acquired" | "acquired-unmastered" | "mastered";
-type ViewMode = "compact" | "classic";
+type ViewMode = "compact" | "classic" | "list";
 
 const CATALOGS = [currentCatalog, previousCatalog] as SeasonCatalog[];
 const DEFAULT_SEASON_ID = currentCatalog.seasonId;
@@ -216,6 +217,7 @@ export default function Home() {
     const savedProgress = loadProgress(initialSeason);
     queueMicrotask(() => {
       setSelectedSeasonId(initialSeason.seasonId);
+      if (window.location.hash.startsWith("#locker=")) setViewMode("list");
       setProgress(savedProgress);
       try {
         const savedCodes = JSON.parse(localStorage.getItem(`sprite-locker-redeemed-admin-codes-${initialSeason.seasonId}`) ?? "[]");
@@ -553,6 +555,7 @@ export default function Home() {
               <span>View</span>
               <button type="button" className={viewMode === "compact" ? "active" : ""} aria-pressed={viewMode === "compact"} onClick={() => setViewMode("compact")}>Compact</button>
               <button type="button" className={viewMode === "classic" ? "active" : ""} aria-pressed={viewMode === "classic"} onClick={() => setViewMode("classic")}>Classic</button>
+              <button type="button" className={viewMode === "list" ? "active" : ""} aria-pressed={viewMode === "list"} onClick={() => setViewMode("list")}>List</button>
             </div>
             <label className="select-filter status-filter">
               <span>Status</span>
@@ -566,6 +569,7 @@ export default function Home() {
             <MultiSelectFilter label="Sprites" items={sprites.map((sprite) => sprite.name)} selected={selectedSprites} onToggle={toggleSpriteFilter} onClear={() => setSelectedSprites([])} className="sprite-filter" />
             <MultiSelectFilter label="Variants" items={variants} selected={selectedVariants} onToggle={toggleVariantFilter} onClear={() => setSelectedVariants([])} className="variant-filter" />
             <button className="clear-filters" onClick={clearFilters}>Clear filters</button>
+            <button className="compare-lockers-trigger" type="button" onClick={() => { clearFilters(); setViewMode("list"); }}>Compare Lockers</button>
             {!!(unlockCodes.length || otherAdminCodes.length) && (
               <button className="admin-codes-trigger" type="button" onClick={() => openCodeGuide()}>
                 Admin Codes <span>{unlockCodes.length + otherAdminCodes.length}</span>
@@ -584,7 +588,8 @@ export default function Home() {
 
       <section className="tracker" id="sprite-checklist" tabIndex={-1} aria-labelledby="checklist-heading">
         <h2 className="visually-hidden" id="checklist-heading">{activeSeason.chapter} {activeSeason.season} Sprite checklist</h2>
-        <div className={`sprite-list ${viewMode === "compact" ? "compact-view" : "classic-view"}`}>
+        <div hidden={viewMode !== "list"}>{ready && <LockerTools season={activeSeason} catalogs={CATALOGS} families={visible} progress={progress} imageFor={(name, variant) => imageFor(activeSeason, name, variant)} onToggle={toggle} onSeason={changeSeason} />}</div>
+        <div hidden={viewMode === "list"} className={`sprite-list ${viewMode === "compact" ? "compact-view" : "classic-view"}`}>
           {visible.map((sprite) => (
             viewMode === "compact" ? (
               <section className="sprite-row compact-row" key={sprite.name}>

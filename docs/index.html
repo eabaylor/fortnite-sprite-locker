@@ -11,9 +11,9 @@
     <title>Fortnite Sprite Locker — Sprite Checklist</title>
     <link rel="icon" href="favicon.svg" />
     <link rel="manifest" href="manifest.webmanifest" />
-    <link rel="stylesheet" href="styles.css?v=20261015-1" />
-    <script src="catalog.js?v=20261015-1" defer></script>
-    <script src="app.js?v=20261015-1" defer></script>
+    <link rel="stylesheet" href="styles.css?v=20261015-2" />
+    <script src="catalog.js?v=20261015-2" defer></script>
+    <script src="app.js?v=20261015-2" defer></script>
   </head>
   <body>
     <main>
@@ -74,6 +74,7 @@
             <span>View</span>
             <button type="button" class="active" id="compact-view" aria-pressed="true">Compact</button>
             <button type="button" id="classic-view" aria-pressed="false">Classic</button>
+            <button type="button" id="list-view" aria-pressed="false">List</button>
           </div>
           <label class="select-filter status-filter">
             <span>Status</span>
@@ -99,6 +100,7 @@
             </div>
           </details>
           <button class="clear-filters" id="clear-filters">Clear filters</button>
+          <button class="compare-lockers-trigger" id="compare-lockers-trigger" type="button">Compare Lockers</button>
           <button class="admin-codes-trigger" id="admin-codes-trigger" type="button">Admin Codes <span id="admin-codes-count">0</span></button>
         </div>
       </div>
@@ -112,6 +114,7 @@
       <section class="tracker" id="sprite-checklist" tabindex="-1" aria-labelledby="checklist-heading">
         <h2 class="visually-hidden" id="checklist-heading">Sprite checklist</h2>
         <div class="sprite-list compact-view" id="sprite-list"></div>
+        <div id="locker-tools-host" hidden></div>
       </section>
 
       <aside class="sync-note">

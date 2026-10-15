@@ -6,7 +6,9 @@ const FOCUSABLE_SELECTOR = 'a[href], button:not([disabled]), input:not([disabled
 let season = CATALOGS.find((item) => item.seasonId === BUNDLE.defaultSeasonId)
   || CATALOGS[0];
 let filter = "all";
-let viewMode = "compact";
+let viewMode = location.hash.startsWith("#locker=") ? "list" : "compact";
+let lockerTools = null;
+let lockerToolsLoading = false;
 const selectedSprites = new Set();
 const selectedVariants = new Set();
 let query = "";
@@ -152,6 +154,53 @@ function updateSeasonUi() {
 
 function render() {
   const list = document.querySelector("#sprite-list");
+  const toolsHost = document.querySelector("#locker-tools-host");
+  list.hidden = viewMode === "list";
+  toolsHost.hidden = viewMode !== "list";
+  for (const mode of ["compact", "classic", "list"]) {
+    const button = document.querySelector(`#${mode}-view`);
+    button.classList.toggle("active", viewMode === mode);
+    button.setAttribute("aria-pressed", String(viewMode === mode));
+  }
+  if (viewMode === "list") {
+    if (!lockerTools) {
+      if (!lockerToolsLoading) {
+        lockerToolsLoading = true;
+        toolsHost.textContent = "Loading locker tools…";
+        import(`./locker-tools.js?v=${RELEASE_VERSION}`).then(({ createLockerTools }) => {
+          lockerTools = createLockerTools(toolsHost);
+          render();
+        }).catch(() => { lockerToolsLoading = false; toolsHost.textContent = "Locker tools could not load. Select List again to retry."; });
+      }
+      updateCounts();
+      return;
+    }
+    const families = sprites().map((family) => ({ ...family, variants: family.variants.filter((variant) => {
+      if (selectedVariants.size && !selectedVariants.has(variant)) return false;
+      const state = stateFor(family.name, variant);
+      if (filter === "missing") return !state.acquired;
+      if (filter === "not-mastered") return !state.mastered;
+      if (filter === "acquired") return state.acquired;
+      if (filter === "acquired-unmastered") return state.acquired && !state.mastered;
+      if (filter === "mastered") return state.mastered;
+      return true;
+    }) })).filter((family) => (!selectedSprites.size || selectedSprites.has(family.name)) && family.name.toLowerCase().includes(query.trim().toLowerCase()));
+    lockerTools.update({ season, catalogs: CATALOGS, families, progress,
+      imageFor: (name, variant) => `${season.imageBase}/${slugFor(name)}-${variantSlugFor(variant)}-256.webp`,
+      onToggle: (name, variant, field) => {
+        const key = keyFor(name, variant);
+        const next = { ...stateFor(name, variant) };
+        next[field] = !next[field];
+        if (field === "mastered" && next.mastered) next.acquired = true;
+        if (field === "acquired" && !next.acquired) next.mastered = false;
+        if (!next.acquired && !next.mastered) delete progress[key]; else progress[key] = next;
+        save(); render();
+      },
+      onSeason: (id) => { seasonSelect.value = id; seasonSelect.dispatchEvent(new Event("change")); },
+    });
+    updateCounts();
+    return;
+  }
   list.replaceChildren();
   list.className = `sprite-list ${viewMode === "compact" ? "compact-view" : "classic-view"}`;
   let shown = 0;
@@ -683,7 +732,7 @@ document.querySelector("#sprite-list").addEventListener("click", (event) => {
   render();
 });
 
-for (const [id, mode] of [["#compact-view", "compact"], ["#classic-view", "classic"]]) {
+for (const [id, mode] of [["#compact-view", "compact"], ["#classic-view", "classic"], ["#list-view", "list"]]) {
   document.querySelector(id).addEventListener("click", () => {
     viewMode = mode;
     document.querySelector("#compact-view").classList.toggle("active", viewMode === "compact");
@@ -693,6 +742,12 @@ for (const [id, mode] of [["#compact-view", "compact"], ["#classic-view", "class
     render();
   });
 }
+
+document.querySelector("#compare-lockers-trigger").addEventListener("click", () => {
+  document.querySelector("#clear-filters").click();
+  viewMode = "list";
+  render();
+});
 
 function syncProgressFromStorage() {
   const latest = loadProgress();
