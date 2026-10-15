@@ -1,9 +1,16 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { readFile } from 'node:fs/promises';
-import { makeSnapshot, encodeSnapshot, decodeSnapshot, matchesComparison, matchesGroupComparison, addFriendSnapshot } from "../public/locker-tools.js";
+import { makeSnapshot, encodeSnapshot, decodeSnapshot, matchesComparison, matchesGroupComparison, addFriendSnapshot, friendCollectionCounts } from "../public/locker-tools.js";
 
 const season = { seasonId: "test-season", families: [{ name: "Honey", variants: ["Base", "Gold"] }, { name: "One Wish Willow", variants: ["Base"] }] };
+
+test('friend counts include mastery in acquired, ignore extra cards, and distinguish unknown variants', () => {
+  const friend = { entries: new Map([['Honey::Base', 1], ['Honey::Gold', 2], ['Extra::Base', 2]]) };
+  assert.deepEqual(friendCollectionCounts(friend, season), { acquired: 2, mastered: 1, total: 3, unknown: 1 });
+  friend.entries.set('One Wish Willow::Base', 0);
+  assert.deepEqual(friendCollectionCounts(friend, season), { acquired: 2, mastered: 1, total: 3, unknown: 0 });
+});
 
 test('real catalog uses a short stable link and preserves every progress state', async () => {
   const current = JSON.parse(await readFile(new URL('../data/catalog.json', import.meta.url), 'utf8'));

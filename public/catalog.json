@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-season-4",
-  "assetVersion": "20261015-7",
+  "assetVersion": "20261015-8",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -14,7 +14,7 @@
       "legacyStorageKeys": [],
       "updatedDate": "October 15, 2026",
       "patch": "v42.40",
-      "assetVersion": "20261015-7",
+      "assetVersion": "20261015-8",
       "familyOrder": [
         "Dumpster Dive",
         "Jonesy",
@@ -54,13 +54,12 @@
         "Quack"
       ],
       "whatsNew": {
-        "title": "Keep your squad connected",
-        "intro": "Saved friends and optional live sharing, season by season.",
+        "title": "Friends’ collection totals at a glance",
+        "intro": "See each friend’s progress beside their name.",
         "items": [
-          "Added friends stay attached after refresh, with last saved lockers kept separately for each season.",
-          "Opt in to live sharing for the selected season. Your existing live link updates as you change progress in this browser; pause anytime.",
-          "Live friends refresh about once a minute while the page is visible, or use Refresh friends. Offline or expired links keep their last saved snapshot.",
-          "Live sharing is off by default. Existing snapshot links remain fixed snapshots and your local checklist is never overwritten."
+          "Each friend’s bar now shows Acquired and Mastered counts for their season, including archived lockers.",
+          "Mastered Sprites also count as acquired. Totals cover the full season, regardless of comparison filters.",
+          "Live counts update when the friend’s locker refreshes. Older snapshots identify unknown variants rather than assuming they are missing."
         ]
       },
       "unlockCodes": [

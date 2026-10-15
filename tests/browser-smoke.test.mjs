@@ -116,6 +116,9 @@ window.addEventListener("load", async () => {
     result.comparisonDoesNotOverwrite = before === localStorage.getItem(season.storageKey);
     result.listCount = document.querySelectorAll('.locker-list-row').length;
     result.namedFriendHeader = [...document.querySelectorAll('.locker-list-head span')].some(el => el.textContent === 'Test friend');
+    const initialFriendBar = document.querySelector('.locker-friend-summary');
+    const totalVariants = season.families.reduce((n, f) => n + f.variants.length, 0);
+    result.friendCounts = initialFriendBar.querySelector('.locker-friend-count.acquired').textContent === 'Acquired 1/' + totalVariants && initialFriendBar.querySelector('.locker-friend-count.mastered').textContent === 'Mastered 0/' + totalVariants;
     result.readOnlyStatuses = document.querySelectorAll('.locker-list-row button').length === 0 && document.querySelectorAll('.locker-my-status').length === result.listCount;
     const comparisonFilter = document.querySelector('.locker-compare-filter');
     comparisonFilter.value = 'i-need';
@@ -286,6 +289,7 @@ test("live static tracker works at 320px in a real browser", async (context) => 
     assert.equal(audit.sharedMastered, true);
     assert.equal(audit.nicknameRequired, true);
     assert.equal(audit.namedFriendHeader, true);
+    assert.equal(audit.friendCounts, true);
     assert.equal(audit.readOnlyStatuses, true);
     assert.equal(audit.comparisonDoesNotOverwrite, true);
     assert.equal(audit.listCount, catalog.families.reduce((n, f) => n + f.variants.length, 0));

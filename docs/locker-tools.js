@@ -1,6 +1,6 @@
-import catalogs from './locker-catalogs.js?v=20261015-7';
-import { SHARE_ORIGIN, sharedLockerId, publishSharedSnapshot } from './locker-sharing.js?v=20261015-7';
-import { createLockerSync } from './locker-state.js?v=20261015-7';
+import catalogs from './locker-catalogs.js?v=20261015-8';
+import { SHARE_ORIGIN, sharedLockerId, publishSharedSnapshot } from './locker-sharing.js?v=20261015-8';
+import { createLockerSync } from './locker-state.js?v=20261015-8';
 let backgroundSync;
 export function startLockerBackground(catalogs) {
   if (!backgroundSync) backgroundSync = createLockerSync(catalogs, { makeSnapshot, encodeSnapshot, decodeSnapshot });
@@ -75,6 +75,18 @@ export function matchesComparison(mode, mine, theirs) {
 }
 
 const statusName = (status) => status === 2 ? "Mastered" : status === 1 ? "Acquired" : status === 0 ? "Missing" : "Not in snapshot";
+
+export function friendCollectionCounts(friend, season) {
+  const counts = { acquired: 0, mastered: 0, total: 0, unknown: 0 };
+  for (const family of season.families) for (const variant of family.variants) {
+    const status = friend.entries.get(`${family.name}::${variant}`);
+    counts.total++;
+    if (status === 1 || status === 2) counts.acquired++;
+    if (status === 2) counts.mastered++;
+    if (status === undefined) counts.unknown++;
+  }
+  return counts;
+}
 
 export function matchesGroupComparison(mode, mine, statuses) {
   if (mode === 'all') return true;
@@ -238,10 +250,18 @@ export function createLockerTools(host) {
       const card = document.createElement('div'); card.className = 'locker-friend-summary';
       const description = document.createElement('div');
       const name = document.createElement('strong'); name.textContent = friend.name;
+      const heading = document.createElement('div'); heading.className = 'locker-friend-heading'; heading.append(name);
+      const catalog = options.catalogs.find(s => s.seasonId === friend.season);
+      const counts = friendCollectionCounts(friend, catalog);
+      for (const [field, label] of [['acquired', 'Acquired'], ['mastered', 'Mastered']]) {
+        const badge = document.createElement('span'); badge.className = `locker-friend-count ${field}`; badge.textContent = `${label} ${counts[field]}/${counts.total}`; heading.append(badge);
+      }
       const date = document.createElement('p'); date.className = 'locker-friend-date';
       date.textContent = `${friend.live ? 'Live' : friend.liveLink ? 'Paused — last saved snapshot' : 'Snapshot'} · Updated ${new Date((friend.updatedAt || Date.parse(friend.date) / 1000) * 1000).toLocaleString()} · ${options.catalogs.find(s => s.seasonId === friend.season)?.chapter} ${options.catalogs.find(s => s.seasonId === friend.season)?.season}${friend.season !== options.season.seasonId ? ' · Archived season' : ''}${friend.error ? ' · ' + friend.error : ''}`;
       const remove = document.createElement('button'); remove.type = 'button'; remove.dataset.friendIndex = String(index); remove.textContent = 'Remove'; remove.setAttribute('aria-label', `Remove ${friend.name}`);
-      description.append(name, date); card.append(description, remove); $('.locker-friends').append(card);
+      description.append(heading, date);
+      if (counts.unknown) { const note = document.createElement('p'); note.className = 'locker-friend-date'; note.textContent = `${counts.unknown} variant${counts.unknown === 1 ? '' : 's'} not in this snapshot; those statuses are unknown.`; description.append(note); }
+      card.append(description, remove); $('.locker-friends').append(card);
       if (friend.season !== options.season.seasonId) {
         const view = document.createElement('button'); view.type = 'button'; view.textContent = 'View season'; view.addEventListener('click', () => options.onSeason(friend.season)); card.append(view);
       }
