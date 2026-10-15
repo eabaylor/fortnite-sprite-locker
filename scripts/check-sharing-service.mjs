@@ -26,4 +26,23 @@ const blocked = await fetch(`${base}/api/lockers/ticket`, { method: 'POST', head
 assert.equal(blocked.status, 403);
 const preflight = await fetch(`${base}/api/lockers`, { method: 'OPTIONS', headers: { Origin: origin, 'Access-Control-Request-Method': 'POST', 'Access-Control-Request-Headers': 'content-type,x-locker-share-token' } });
 assert.equal(preflight.status, 204);
+if (process.argv.includes('--live')) {
+  const fresh = await fetch(`${base}/api/lockers/ticket`, { method: 'POST', headers: { Origin: origin } });
+  const authorization = await fresh.json();
+  const liveResponse = await fetch(`${base}/api/lockers`, { method: 'POST', headers: { Origin: origin, 'Content-Type': 'application/json', 'X-Locker-Share-Token': authorization.ticket }, body: JSON.stringify({ token, live: true }) });
+  assert.equal(liveResponse.status, 201);
+  const owner = await liveResponse.json(); assert.match(owner.writeKey, /^[A-Za-z0-9_-]{43}$/);
+  const publicView = await (await fetch(`${base}/api/lockers/${owner.id}`)).json();
+  assert.equal(publicView.live, true); assert.ok(!JSON.stringify(publicView).includes(owner.writeKey));
+  await new Promise(resolve => setTimeout(resolve, 2500));
+  const updatedToken = encodeSnapshot(makeSnapshot(catalog, { 'Honey::Gold': { acquired: true, mastered: true } }, 'Sharing service test'));
+  const updated = await fetch(`${base}/api/lockers/${owner.id}`, { method: 'PUT', headers: { Origin: origin, 'Content-Type': 'application/json', 'X-Locker-Write-Key': owner.writeKey }, body: JSON.stringify({ token: updatedToken, revision: owner.revision }) });
+  assert.equal(updated.status, 200, await updated.clone().text());
+  const after = await (await fetch(`${base}/api/lockers/${owner.id}`)).json();
+  assert.equal(decodeSnapshot(after.token).entries.get('Honey::Gold'), 2);
+  const paused = await fetch(`${base}/api/lockers/${owner.id}/pause`, { method: 'POST', headers: { Origin: origin, 'X-Locker-Write-Key': owner.writeKey } });
+  assert.equal(paused.status, 200);
+  assert.equal((await (await fetch(`${base}/api/lockers/${owner.id}`)).json()).live, false);
+  console.log('Live update, private key isolation, and pause: passed. Synthetic test locker left paused.');
+}
 console.log(JSON.stringify({ status: 'passed', variantCount: snapshot.entries.size, shortLink: share.url, linkLength: share.url.length, redirect: redirect.headers.get('location'), cors: 'passed', originGuard: 'passed' }));

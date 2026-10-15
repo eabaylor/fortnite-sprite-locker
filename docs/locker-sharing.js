@@ -19,20 +19,33 @@ async function request(path, options = {}) {
   const response = await fetch(`${SHARE_ORIGIN}${path}`, { ...options, credentials: 'omit', cache: 'no-store', signal: AbortSignal.timeout(15000) });
   let data;
   try { data = await response.json(); } catch { throw new Error('Sharing service unavailable. Try again, or create a portable link.'); }
-  if (!response.ok) throw new Error(data.error || 'The sharing request could not be completed.');
+  if (!response.ok) { const error = new Error(data.error || 'The sharing request could not be completed.'); error.status = response.status; error.revision = data.revision; throw error; }
   return data;
 }
 
-export async function publishSharedSnapshot(token) {
+export async function publishSharedSnapshot(token, live = false) {
   const { ticket } = await request('/api/lockers/ticket', { method: 'POST' });
-  const result = await request('/api/lockers', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Locker-Share-Token': ticket }, body: JSON.stringify({ token }) });
+  const result = await request('/api/lockers', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Locker-Share-Token': ticket }, body: JSON.stringify({ token, live }) });
   if (!idPattern.test(result.id || '')) throw new Error('Sharing service returned an invalid link.');
-  return { url: `${SHARE_ORIGIN}/s/${result.id}`, expiresAt: result.expiresAt };
+  return { ...result, url: `${SHARE_ORIGIN}/s/${result.id}` };
+}
+
+export async function readSharedLocker(id) {
+  if (!idPattern.test(id || '')) throw new Error('This short locker link is invalid.');
+  return request(`/api/lockers/${id}`);
+}
+
+export async function controlLiveLocker(owner, enabled) {
+  return request(`/api/lockers/${owner.id}/${enabled ? 'resume' : 'pause'}`, { method: 'POST', headers: { 'X-Locker-Write-Key': owner.writeKey } });
+}
+
+export async function updateLiveLocker(owner, token) {
+  return request(`/api/lockers/${owner.id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Locker-Write-Key': owner.writeKey }, body: JSON.stringify({ token, revision: owner.revision }) });
 }
 
 export async function loadSharedSnapshot(id) {
   if (!idPattern.test(id || '')) throw new Error('This short locker link is invalid.');
-  const result = await request(`/api/lockers/${id}`);
+  const result = await readSharedLocker(id);
   if (typeof result.token !== 'string') throw new Error('This shared locker is unavailable.');
   return result.token;
 }

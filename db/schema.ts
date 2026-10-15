@@ -5,6 +5,11 @@ export const lockerShares = sqliteTable('locker_shares', {
   payload: text('payload').notNull(),
   createdAt: integer('created_at').notNull(),
   expiresAt: integer('expires_at').notNull(),
+  writeKeyHash: text('write_key_hash'),
+  liveSeason: text('live_season'),
+  liveEnabled: integer('live_enabled').notNull().default(0),
+  revision: integer('revision').notNull().default(0),
+  updatedAt: integer('updated_at'),
 }, table => [index('locker_shares_expiry').on(table.expiresAt)]);
 
 export const shareTickets = sqliteTable('share_tickets', {

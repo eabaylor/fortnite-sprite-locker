@@ -292,8 +292,10 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (ready) localStorage.setItem(activeSeason.storageKey, JSON.stringify(progress));
+    if (ready) { localStorage.setItem(activeSeason.storageKey, JSON.stringify(progress)); window.dispatchEvent(new Event('sprite-locker-progress-changed')); }
   }, [activeSeason.storageKey, progress, ready]);
+
+  useEffect(() => { if (ready) void import('../public/locker-tools.js').then(({ startLockerBackground }) => startLockerBackground(CATALOGS)); }, [ready]);
 
   useEffect(() => {
     if (ready) localStorage.setItem(adminCodeStorageKey, JSON.stringify(redeemedAdminCodes));

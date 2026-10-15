@@ -356,6 +356,16 @@ footer p { margin: 0; text-align: right; }
 .locker-tools button:focus-visible, .locker-tools input:focus-visible, .locker-tools textarea:focus-visible, .locker-tools select:focus-visible { outline: 3px solid var(--code-blue); outline-offset: 2px; }
 .locker-share-actions, .locker-import { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 10px; margin-top: 14px; }
 .locker-share-actions .locker-portable { grid-column: 1 / -1; justify-self: start; }
+.locker-live { margin: 16px 0; padding: 12px; border: 1px solid #a8c6b8; border-radius: 10px; min-width: 0; }
+.locker-live legend { font-size: 13px; font-weight: 900; padding: 0 5px; }
+.locker-live .locker-live-optin { display: flex; align-items: center; gap: 10px; min-height: 44px; font-size: 14px; }
+.locker-tools .locker-live-enabled { width: 22px; height: 22px; flex: none; accent-color: var(--green-dark); }
+.locker-live-status { font-size: 12px; color: var(--green-dark); overflow-wrap: anywhere; }
+.locker-live-link-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: end; }
+.locker-live-link-row > label { flex: 1 1 220px; min-width: 0; }
+.locker-comparison > .locker-help { flex: 1 1 100%; margin: 0; }
+.locker-friend-summary { flex-wrap: wrap; }
+.locker-friend-summary > div { flex: 1 1 160px; }
 .locker-tools button:disabled { opacity: .6; cursor: wait; }
 .locker-tools .locker-share, .locker-import button { background: var(--green-dark); color: white; }
 .locker-share-result { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 8px; padding-top: 12px; }

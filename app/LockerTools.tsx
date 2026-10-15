@@ -20,7 +20,7 @@ export default function LockerTools(props: Props) {
   const tools = useRef<ReturnType<typeof createLockerTools> | null>(null);
   useEffect(() => {
     if (host.current) tools.current = createLockerTools(host.current);
-    return () => { tools.current = null; };
+    return () => { tools.current?.dispose(); tools.current = null; };
   }, []);
   useEffect(() => { tools.current?.update(props); }, [props]);
   return <div ref={host} />;

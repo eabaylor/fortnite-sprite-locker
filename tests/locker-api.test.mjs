@@ -6,7 +6,7 @@ import { handleLockerRequest, SHARE_ORIGIN, TRACKER_URL, SHARE_TTL } from '../wo
 import { makeSnapshot, encodeSnapshot, decodeSnapshot } from '../public/locker-tools.js';
 import { sharedLockerId } from '../public/locker-sharing.js';
 
-const schema = await readFile(new URL('../drizzle/0000_closed_doomsday.sql', import.meta.url), 'utf8');
+const schema = await readFile(new URL('../drizzle/0000_closed_doomsday.sql', import.meta.url), 'utf8') + await readFile(new URL('../drizzle/0001_concerned_gorilla_man.sql', import.meta.url), 'utf8');
 const catalog = JSON.parse(await readFile(new URL('../data/catalog.json', import.meta.url), 'utf8'));
 function database() {
   const sql = new DatabaseSync(':memory:'); sql.exec(schema);
@@ -63,5 +63,30 @@ test('writes require trusted origin, capability, valid payload, and obey rate li
     assert.equal((await handleLockerRequest(req('/api/lockers/ticket', { method: 'POST' }), db, now)).status, 429);
     assert.equal(db.sql.prepare('SELECT COUNT(*) AS n FROM locker_shares').get().n, 0);
     assert.equal(sharedLockerId('https://evil.example/s/AbCdEf0123456789'), null);
+  } finally { db.sql.close(); }
+});
+
+test('live sharing requires its private key, rejects stale revisions, preserves season, and pauses', async () => {
+  const db = database();
+  try {
+    const capability = await ticket(db);
+    const created = await handleLockerRequest(req('/api/lockers', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Locker-Share-Token': capability }, body: JSON.stringify({ token, live: true }) }), db, now);
+    const owner = await created.json();
+    assert.match(owner.writeKey, /^[A-Za-z0-9_-]{43}$/);
+    const get = () => handleLockerRequest(req(`/api/lockers/${owner.id}`), db, now + 10);
+    assert.ok(!(await (await get()).clone().text()).includes(owner.writeKey));
+    const updatedToken = encodeSnapshot(makeSnapshot(catalog, {}, 'Eric'));
+    const put = (key, revision, bodyToken = updatedToken, at = now + 3) => handleLockerRequest(req(`/api/lockers/${owner.id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Locker-Write-Key': key }, body: JSON.stringify({ token: bodyToken, revision }) }), db, at);
+    assert.equal((await put('a'.repeat(43), 0)).status, 403);
+    assert.equal((await put(owner.writeKey, 0)).status, 200);
+    assert.equal((await put(owner.writeKey, 0, updatedToken, now + 6)).status, 409);
+    assert.equal(decodeSnapshot((await (await get()).json()).token).entries.get('Honey::Gold'), 0);
+    const control = enabled => handleLockerRequest(req(`/api/lockers/${owner.id}/${enabled ? 'resume' : 'pause'}`, { method: 'POST', headers: { 'X-Locker-Write-Key': owner.writeKey } }), db, now + 7);
+    assert.equal((await control(false)).status, 200);
+    assert.equal((await (await get()).json()).live, false);
+    assert.equal((await put(owner.writeKey, 2, updatedToken, now + 8)).status, 409);
+    assert.equal((await control(true)).status, 200);
+    assert.equal((await put(owner.writeKey, 3, encodeSnapshot(makeSnapshot({ ...catalog, seasonId: 'other-season' }, {}, 'Eric')), now + 9)).status, 409);
+    assert.equal((await put(owner.writeKey, 3, updatedToken, now + 10)).status, 200);
   } finally { db.sql.close(); }
 });

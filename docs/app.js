@@ -111,6 +111,7 @@ redeemedAdminCodes = loadRedeemedAdminCodes();
 
 function save() {
   localStorage.setItem(season.storageKey, JSON.stringify(progress));
+  window.dispatchEvent(new Event('sprite-locker-progress-changed'));
 }
 
 function saveRedeemedAdminCodes() {
@@ -793,6 +794,7 @@ updateSeasonUi();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").catch(() => {});
 render();
 void checkForUpdate();
+void import(`./locker-tools.js?v=${RELEASE_VERSION}`).then(({ startLockerBackground }) => startLockerBackground(CATALOGS)).catch(() => {});
 try {
   if (localStorage.getItem(WHATS_NEW_STORAGE_KEY) !== RELEASE_VERSION) openWhatsNew();
 } catch {

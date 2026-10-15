@@ -112,6 +112,7 @@ window.addEventListener("load", async () => {
     const before = localStorage.getItem(season.storageKey);
     document.querySelector('.locker-import-url').value = tools.encodeSnapshot(tools.makeSnapshot(season, friendProgress, 'Test friend'));
     document.querySelector('.locker-import').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+    await Promise.resolve(); await Promise.resolve();
     result.comparisonDoesNotOverwrite = before === localStorage.getItem(season.storageKey);
     result.listCount = document.querySelectorAll('.locker-list-row').length;
     result.namedFriendHeader = [...document.querySelectorAll('.locker-list-head span')].some(el => el.textContent === 'Test friend');
@@ -127,6 +128,7 @@ window.addEventListener("load", async () => {
     for (const nickname of ['Laura', 'Chris', 'Alex', 'Fifth']) {
       document.querySelector('.locker-import-url').value = tools.encodeSnapshot(tools.makeSnapshot(season, nickname === 'Chris' ? {} : friendProgress, nickname));
       document.querySelector('.locker-import').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+      await Promise.resolve(); await Promise.resolve();
     }
     result.fourFriendsMaximum = document.querySelectorAll('.locker-friend-summary').length === 4 && document.querySelector('.locker-message').textContent.includes('four friends');
     result.allNamedHeaders = [...document.querySelectorAll('.locker-list-head span')].map(el => el.textContent);
@@ -148,13 +150,15 @@ window.addEventListener("load", async () => {
     document.querySelector('button[aria-label="Remove Laura"]').click();
     result.removeFriend = document.querySelectorAll('.locker-friend-summary').length === groupBeforeRemove - 1;
     const originalFetch = window.fetch;
-    let reads = 0;
+    let reads = 0, liveWrites = 0, pausedOnline = false;
     const shortId = 'AbCdEf0123456789';
     window.fetch = async (input, init) => {
       const url = String(input);
       if (!url.startsWith('https://sprite-locker-checklist.eabaylor.chatgpt.site/api/lockers')) return originalFetch(input, init);
       if (url.endsWith('/ticket')) return Response.json({ ticket: shortId });
-      if (init?.method === 'POST') return Response.json({ id: shortId, expiresAt: 2000000000 });
+      if (url.endsWith('/pause')) { pausedOnline = true; return Response.json({ revision: 2 }); }
+      if (init?.method === 'PUT') { liveWrites++; return Response.json({ revision: 1, updatedAt: Date.now() / 1000 }); }
+      if (init?.method === 'POST') return Response.json({ id: shortId, expiresAt: 2000000000, ...(JSON.parse(init.body || '{}').live ? { writeKey: 'a'.repeat(43), revision: 0, updatedAt: Date.now() / 1000 } : {}) });
       reads++;
       return Response.json({ token: tools.encodeSnapshot(tools.makeSnapshot(season, friendProgress, 'Test friend')) });
     };
@@ -168,6 +172,20 @@ window.addEventListener("load", async () => {
     for (let i = 0; i < 100 && !document.querySelector('.locker-message').textContent.includes('snapshot updated'); i++) await new Promise(resolve => setTimeout(resolve, 20));
     result.shortLinkImported = reads === 1 && document.querySelector('.locker-message').textContent.includes('snapshot updated');
     result.shortSharingPreservesProgress = localStorage.getItem(season.storageKey) === progressBeforeSharing;
+    const liveToggle = document.querySelector('.locker-live-enabled');
+    result.liveOffByDefault = !liveToggle.checked;
+    liveToggle.checked = true; liveToggle.dispatchEvent(new Event('change'));
+    for (let i = 0; i < 100 && document.querySelector('.locker-live-link-row').hidden; i++) await new Promise(resolve => setTimeout(resolve, 20));
+    result.liveOptedIn = !document.querySelector('.locker-live-link-row').hidden && document.querySelector('.locker-live-url').value.endsWith('/s/' + shortId);
+    document.querySelector('#classic-view').click();
+    document.querySelector('[data-name="' + CSS.escape(target.name) + '"][data-variant="' + CSS.escape(target.variants[0]) + '"][data-field="mastered"]').click();
+    for (let i = 0; i < 100 && !liveWrites; i++) await new Promise(resolve => setTimeout(resolve, 20));
+    result.liveSyncsOutsideList = liveWrites > 0;
+    document.querySelector('#list-view').click();
+    liveToggle.checked = false; liveToggle.dispatchEvent(new Event('change'));
+    for (let i = 0; i < 100 && !pausedOnline; i++) await new Promise(resolve => setTimeout(resolve, 20));
+    result.livePauseWorks = pausedOnline && !liveToggle.checked;
+    result.friendsStored = JSON.parse(localStorage.getItem('sprite-locker-friends-v1')).length === 3;
     window.fetch = originalFetch;
     result.listNoOverflow = document.documentElement.scrollWidth === document.documentElement.clientWidth;
   } catch (error) { result.comparisonError = error.message; }
@@ -283,6 +301,11 @@ test("live static tracker works at 320px in a real browser", async (context) => 
     assert.equal(audit.shortLinkCreated, true);
     assert.equal(audit.shortLinkImported, true);
     assert.equal(audit.shortSharingPreservesProgress, true);
+    assert.equal(audit.liveOffByDefault, true);
+    assert.equal(audit.liveOptedIn, true);
+    assert.equal(audit.liveSyncsOutsideList, true);
+    assert.equal(audit.livePauseWorks, true);
+    assert.equal(audit.friendsStored, true);
     assert.equal(audit.listNoOverflow, true);
     assert.deepEqual(audit.familyNames, catalog.familyOrder);
     assert.deepEqual(audit.firstVariants, ["Base", "Gold", "Cheat Master", "Loot Hacker", "Bounty Hunter", "Trick or Treat"]);
