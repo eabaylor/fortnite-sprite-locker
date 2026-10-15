@@ -390,9 +390,11 @@ footer p { margin: 0; text-align: right; }
 .locker-friend-summary > div { min-width: 0; }
 .locker-friend-summary strong { overflow-wrap: anywhere; }
 .locker-friend-heading { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
-.locker-friend-count { display: inline-block; border-radius: 6px; padding: 4px 7px; font-size: 11px; font-weight: 800; white-space: nowrap; }
-.locker-friend-count.acquired { color: var(--green-dark); background: #d5eee2; }
-.locker-friend-count.mastered { color: #594000; background: #ffe8a6; }
+.locker-player-heading { display: grid; gap: 4px; justify-items: center; text-align: center; }
+.locker-column-name { display: block; font-size: 12px; overflow-wrap: anywhere; }
+.locker-column-count { display: block; font-size: 10px; line-height: 1.35; font-weight: 700; overflow-wrap: normal; }
+.locker-column-count.acquired { color: #a5efd0; }
+.locker-column-count.mastered { color: #ffe49a; }
 .locker-friend-summary button { flex: none; }
 .locker-list-head { padding: 8px; background: var(--ink); color: white; font-size: 11px; font-weight: 900; border-radius: 9px 9px 0 0; }
 .locker-friend-column { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

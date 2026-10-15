@@ -115,10 +115,12 @@ window.addEventListener("load", async () => {
     await Promise.resolve(); await Promise.resolve();
     result.comparisonDoesNotOverwrite = before === localStorage.getItem(season.storageKey);
     result.listCount = document.querySelectorAll('.locker-list-row').length;
-    result.namedFriendHeader = [...document.querySelectorAll('.locker-list-head span')].some(el => el.textContent === 'Test friend');
-    const initialFriendBar = document.querySelector('.locker-friend-summary');
+    result.namedFriendHeader = [...document.querySelectorAll('.locker-column-name')].some(el => el.textContent === 'Test friend');
+    const initialFriendHeader = document.querySelectorAll('.locker-player-heading')[1];
     const totalVariants = season.families.reduce((n, f) => n + f.variants.length, 0);
-    result.friendCounts = initialFriendBar.querySelector('.locker-friend-count.acquired').textContent === 'Acquired 1/' + totalVariants && initialFriendBar.querySelector('.locker-friend-count.mastered').textContent === 'Mastered 0/' + totalVariants;
+    result.friendCounts = initialFriendHeader.querySelector('.locker-column-count.acquired').textContent === 'Acquired 1/' + totalVariants && initialFriendHeader.querySelector('.locker-column-count.mastered').textContent === 'Mastered 0/' + totalVariants;
+    const ownHeader = document.querySelector('.locker-player-heading');
+    result.ownHeaderCounts = ownHeader.querySelector('.locker-column-count.acquired').textContent === 'Acquired 1/' + totalVariants && ownHeader.querySelector('.locker-column-count.mastered').textContent === 'Mastered 1/' + totalVariants;
     result.readOnlyStatuses = document.querySelectorAll('.locker-list-row button').length === 0 && document.querySelectorAll('.locker-my-status').length === result.listCount;
     const comparisonFilter = document.querySelector('.locker-compare-filter');
     comparisonFilter.value = 'i-need';
@@ -134,7 +136,7 @@ window.addEventListener("load", async () => {
       await Promise.resolve(); await Promise.resolve();
     }
     result.fourFriendsMaximum = document.querySelectorAll('.locker-friend-summary').length === 4 && document.querySelector('.locker-message').textContent.includes('four friends');
-    result.allNamedHeaders = [...document.querySelectorAll('.locker-list-head span')].map(el => el.textContent);
+    result.allNamedHeaders = ['Sprite / variant', ...[...document.querySelectorAll('.locker-column-name')].map(el => el.textContent)];
     const targetFilter = document.querySelector('.locker-compare-target');
     const modeFilter = document.querySelector('.locker-compare-filter');
     modeFilter.value = 'they-need'; modeFilter.dispatchEvent(new Event('change'));
@@ -290,6 +292,7 @@ test("live static tracker works at 320px in a real browser", async (context) => 
     assert.equal(audit.nicknameRequired, true);
     assert.equal(audit.namedFriendHeader, true);
     assert.equal(audit.friendCounts, true);
+    assert.equal(audit.ownHeaderCounts, true);
     assert.equal(audit.readOnlyStatuses, true);
     assert.equal(audit.comparisonDoesNotOverwrite, true);
     assert.equal(audit.listCount, catalog.families.reduce((n, f) => n + f.variants.length, 0));

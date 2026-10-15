@@ -9,7 +9,7 @@
   "legacyStorageKeys": [],
   "updatedDate": "October 15, 2026",
   "patch": "v42.40",
-  "assetVersion": "20261015-8",
+  "assetVersion": "20261015-9",
   "familyOrder": [
     "Dumpster Dive",
     "Jonesy",
@@ -49,12 +49,12 @@
     "Quack"
   ],
   "whatsNew": {
-    "title": "Friends’ collection totals at a glance",
-    "intro": "See each friend’s progress beside their name.",
+    "title": "Totals above each locker column",
+    "intro": "Collection counts now sit directly under each player’s name in the comparison table.",
     "items": [
-      "Each friend’s bar now shows Acquired and Mastered counts for their season, including archived lockers.",
-      "Mastered Sprites also count as acquired. Totals cover the full season, regardless of comparison filters.",
-      "Live counts update when the friend’s locker refreshes. Older snapshots identify unknown variants rather than assuming they are missing."
+      "Your column and each friend’s column show Acquired and Mastered counts in the table header.",
+      "Counts have been moved out of the separate friend bars, keeping them aligned with the statuses below.",
+      "Totals still cover the full selected season and update with your progress or a friend’s live refresh."
     ]
   },
   "unlockCodes": [

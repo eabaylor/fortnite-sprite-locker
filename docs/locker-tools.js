@@ -1,6 +1,6 @@
-import catalogs from './locker-catalogs.js?v=20261015-8';
-import { SHARE_ORIGIN, sharedLockerId, publishSharedSnapshot } from './locker-sharing.js?v=20261015-8';
-import { createLockerSync } from './locker-state.js?v=20261015-8';
+import catalogs from './locker-catalogs.js?v=20261015-9';
+import { SHARE_ORIGIN, sharedLockerId, publishSharedSnapshot } from './locker-sharing.js?v=20261015-9';
+import { createLockerSync } from './locker-state.js?v=20261015-9';
 let backgroundSync;
 export function startLockerBackground(catalogs) {
   if (!backgroundSync) backgroundSync = createLockerSync(catalogs, { makeSnapshot, encodeSnapshot, decodeSnapshot });
@@ -253,9 +253,6 @@ export function createLockerTools(host) {
       const heading = document.createElement('div'); heading.className = 'locker-friend-heading'; heading.append(name);
       const catalog = options.catalogs.find(s => s.seasonId === friend.season);
       const counts = friendCollectionCounts(friend, catalog);
-      for (const [field, label] of [['acquired', 'Acquired'], ['mastered', 'Mastered']]) {
-        const badge = document.createElement('span'); badge.className = `locker-friend-count ${field}`; badge.textContent = `${label} ${counts[field]}/${counts.total}`; heading.append(badge);
-      }
       const date = document.createElement('p'); date.className = 'locker-friend-date';
       date.textContent = `${friend.live ? 'Live' : friend.liveLink ? 'Paused — last saved snapshot' : 'Snapshot'} · Updated ${new Date((friend.updatedAt || Date.parse(friend.date) / 1000) * 1000).toLocaleString()} · ${options.catalogs.find(s => s.seasonId === friend.season)?.chapter} ${options.catalogs.find(s => s.seasonId === friend.season)?.season}${friend.season !== options.season.seasonId ? ' · Archived season' : ''}${friend.error ? ' · ' + friend.error : ''}`;
       const remove = document.createElement('button'); remove.type = 'button'; remove.dataset.friendIndex = String(index); remove.textContent = 'Remove'; remove.setAttribute('aria-label', `Remove ${friend.name}`);
@@ -274,8 +271,19 @@ export function createLockerTools(host) {
     targetSelect.disabled = !comparing;
     $('.locker-compare-filter').disabled = !comparing;
     const headers = $('.locker-list-head'); headers.replaceChildren();
-    for (const label of ['Sprite / variant', $('.locker-nickname').value.trim() ? `${$('.locker-nickname').value.trim()} (You)` : 'You', ...activeFriends.map(f => f.name)]) {
-      const heading = document.createElement('span'); heading.textContent = label; heading.title = label; headers.append(heading);
+    const spriteHeading = document.createElement('span'); spriteHeading.textContent = 'Sprite / variant'; headers.append(spriteHeading);
+    const ownEntries = new Map(options.season.families.flatMap(f => f.variants.map(v => {
+      const key = `${f.name}::${v}`; const state = options.progress[key] || {}; return [key, state.mastered ? 2 : state.acquired ? 1 : 0];
+    })));
+    const players = [{ name: $('.locker-nickname').value.trim() ? `${$('.locker-nickname').value.trim()} (You)` : 'You', entries: ownEntries }, ...activeFriends];
+    for (const player of players) {
+      const heading = document.createElement('span'); heading.className = 'locker-player-heading'; heading.title = player.name;
+      const name = document.createElement('strong'); name.className = 'locker-column-name'; name.textContent = player.name; heading.append(name);
+      const counts = friendCollectionCounts(player, options.season);
+      for (const [field, label] of [['acquired', 'Acquired'], ['mastered', 'Mastered']]) {
+        const badge = document.createElement('small'); badge.className = `locker-column-count ${field}`; badge.textContent = `${label} ${counts[field]}/${counts.total}`; heading.append(badge);
+      }
+      headers.append(heading);
     }
     host.style.setProperty('--locker-players', String(activeFriends.length + 1));
     host.classList.toggle('locker-multi', activeFriends.length > 1);
