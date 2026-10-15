@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { readFile } from 'node:fs/promises';
-import { makeSnapshot, encodeSnapshot, decodeSnapshot, matchesComparison } from "../public/locker-tools.js";
+import { makeSnapshot, encodeSnapshot, decodeSnapshot, matchesComparison, matchesGroupComparison, addFriendSnapshot } from "../public/locker-tools.js";
 
 const season = { seasonId: "test-season", families: [{ name: "Honey", variants: ["Base", "Gold"] }, { name: "One Wish Willow", variants: ["Base"] }] };
 
@@ -10,7 +10,7 @@ test('real catalog uses a short stable link and preserves every progress state',
   const progress = {};
   let i = 0;
   for (const f of current.families) for (const v of f.variants) { progress[`${f.name}::${v}`] = { acquired: i % 3 > 0, mastered: i++ % 3 === 2 }; }
-  const snapshot = makeSnapshot(current, progress);
+  const snapshot = makeSnapshot(current, progress, 'Eric');
   const encoded = encodeSnapshot(snapshot);
   assert.ok(encoded.length < 200, `Token too long: ${encoded.length}`);
   const decoded = decodeSnapshot(encoded);
@@ -36,10 +36,34 @@ test("share links round-trip Unicode names and explicit statuses without catalog
 test("invalid or oversized snapshots are rejected before use", () => {
   assert.throws(() => decodeSnapshot("not a link"));
   assert.throws(() => decodeSnapshot("a".repeat(40001)));
-  const snapshot = makeSnapshot(season, {});
+  const snapshot = makeSnapshot(season, {}, 'Eric');
   assert.throws(() => decodeSnapshot(encodeSnapshot({ ...snapshot, v: 2 })));
   assert.throws(() => decodeSnapshot(encodeSnapshot({ ...snapshot, states: "9" })));
   assert.throws(() => decodeSnapshot(encodeSnapshot({ ...snapshot, families: [["Honey", ["Base", "Base", "Base"]]] })));
+});
+
+test('new shares require a real nickname; old unnamed links remain decodable', () => {
+  assert.throws(() => makeSnapshot(season, {}, '  '), /nickname/);
+  assert.equal(decodeSnapshot(encodeSnapshot({ ...makeSnapshot(season, {}, 'Eric'), name: 'Friend' })).name, 'Friend');
+});
+
+test('four friends maximum, named reimports replace snapshots without consuming a slot', () => {
+  let friends = [];
+  for (const name of ['Eric', 'Laura', 'Chris', 'Alex']) friends = addFriendSnapshot(friends, makeSnapshot(season, {}, name));
+  assert.equal(friends.length, 4);
+  assert.throws(() => addFriendSnapshot(friends, makeSnapshot(season, {}, 'Fifth')), /four friends/);
+  friends = addFriendSnapshot(friends, makeSnapshot(season, { 'Honey::Gold': { mastered: true } }, 'LAURA'));
+  assert.equal(friends.length, 4);
+  assert.equal(friends[1].states, '020');
+});
+
+test('group comparisons distinguish any friend from everyone missing and ignore unknowns', () => {
+  assert.equal(matchesGroupComparison('i-need', 0, [0, 2]), true);
+  assert.equal(matchesGroupComparison('they-need', 1, [2, 0]), true);
+  assert.equal(matchesGroupComparison('both-missing', 0, [0, 0]), true);
+  assert.equal(matchesGroupComparison('both-missing', 0, [0, undefined]), false);
+  assert.equal(matchesGroupComparison('not-mastered', 2, [2, 1]), true);
+  assert.equal(matchesGroupComparison('not-mastered', 0, [undefined]), false);
 });
 
 test("comparison filters handle missing, acquired, mastered, and older snapshots", () => {

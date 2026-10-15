@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-season-4",
-  "assetVersion": "20261015-4",
+  "assetVersion": "20261015-5",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -14,7 +14,7 @@
       "legacyStorageKeys": [],
       "updatedDate": "October 15, 2026",
       "patch": "v42.40",
-      "assetVersion": "20261015-4",
+      "assetVersion": "20261015-5",
       "familyOrder": [
         "Dumpster Dive",
         "Jonesy",
@@ -54,12 +54,13 @@
         "Quack"
       ],
       "whatsNew": {
-        "title": "A fresh look for shared links",
-        "intro": "The link preview now matches the current tracker.",
+        "title": "Compare your whole squad",
+        "intro": "Named comparisons for you and up to four friends.",
         "items": [
-          "Shared links use the current logo and real Sprite artwork instead of the old 91-variant image.",
-          "The preview highlights tracking and comparing lockers without a quickly outdated count.",
-          "Your collection progress and existing share links are unchanged."
+          "Your column now shows one Missing, Acquired, or Mastered status, just like your friends’ columns.",
+          "Nicknames are required for new share links and appear above each friend’s locker.",
+          "Add up to four friends and filter against one friend or the group. Reimport the same nickname to update their snapshot.",
+          "Swipe the comparison table sideways on mobile; Sprite names stay visible. Update your own progress in Compact or Classic view."
         ]
       },
       "unlockCodes": [

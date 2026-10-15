@@ -1,12 +1,13 @@
 import catalogs from './locker-catalogs.js';
 /** Versioned, immutable dictionaries keep small links safe across catalog reordering. */
 export function makeSnapshot(season, progress, nickname = "") {
+  if (!nickname.trim()) throw new Error('Enter your nickname before creating a share link.');
   const families = season.families.map(({ name, variants }) => [name, [...variants]]);
   const states = families.flatMap(([name, variants]) => variants.map((variant) => {
     const state = progress[`${name}::${variant}`];
     return state?.mastered ? "2" : state?.acquired ? "1" : "0";
   })).join("");
-  return { v: 1, season: season.seasonId, name: nickname.trim().slice(0, 40) || "Friend", date: new Date().toISOString(), families, states };
+  return { v: 1, season: season.seasonId, name: nickname.trim().slice(0, 40), date: new Date().toISOString(), families, states };
 }
 
 export function encodeSnapshot(snapshot) {
@@ -68,44 +69,72 @@ export function matchesComparison(mode, mine, theirs) {
 
 const statusName = (status) => status === 2 ? "Mastered" : status === 1 ? "Acquired" : status === 0 ? "Missing" : "Not in snapshot";
 
+export function matchesGroupComparison(mode, mine, statuses) {
+  if (mode === 'all') return true;
+  if (!statuses.some(s => s !== undefined)) return false;
+  if (mode === 'i-need') return mine === 0 && statuses.some(s => s > 0);
+  if (mode === 'they-need') return mine > 0 && statuses.some(s => s === 0);
+  if (mode === 'both-missing') return mine === 0 && statuses.every(s => s === 0);
+  if (mode === 'not-mastered') return mine < 2 || statuses.some(s => s !== undefined && s < 2);
+  return true;
+}
+
+export function addFriendSnapshot(friends, snapshot) {
+  const index = friends.findIndex(f => f.season === snapshot.season && f.name.toLocaleLowerCase() === snapshot.name.toLocaleLowerCase());
+  if (index >= 0) return friends.map((f, i) => i === index ? snapshot : f);
+  if (friends.length >= 4) throw new Error('You can compare with up to four friends. Remove a friend before adding another.');
+  return [...friends, snapshot];
+}
+
 /** One shared DOM implementation keeps the React and GitHub Pages tools identical. */
 export function createLockerTools(host) {
   let options;
-  let friend = null;
+  let friends = [];
+  let target = '*';
   let mode = "all";
   let importPending = location.hash.startsWith("#locker=") ? location.hash : null;
   host.className = "locker-tools";
   host.innerHTML = `
     <details class="locker-sharing" open>
       <summary>Share & compare lockers</summary>
-      <p class="locker-help">Share a snapshot of this season’s checklist. Links include your collection and optional nickname. Anyone with the link can view it; updates require a fresh link.</p>
-      <div class="locker-share-actions"><label>Your nickname (optional)<input class="locker-nickname" maxlength="40" placeholder="Player name" autocomplete="off"></label><button type="button" class="locker-share">Create share link</button></div>
+      <p class="locker-help">Compare your locker with up to four friends. Links include your collection and nickname. Anyone with the link can view it; updates require a fresh link. Reimporting the same nickname updates that friend’s column. Comparison is read-only; update your collection in Compact or Classic view.</p>
+      <div class="locker-share-actions"><label>Your nickname (required)<input class="locker-nickname" maxlength="40" placeholder="Player name" autocomplete="off" required></label><button type="button" class="locker-share">Create share link</button></div>
       <div class="locker-share-result" hidden><label>Your share link<input class="locker-share-url" readonly aria-label="Your locker share link"></label><button type="button" class="locker-copy">Copy link</button><p>Send this link to your friend. Their saved progress stays separate.</p></div>
-      <form class="locker-import"><label>Friend’s locker link<textarea class="locker-import-url" rows="2" maxlength="40000" placeholder="Paste a friend’s share link" required></textarea></label><button type="submit">Compare locker</button></form>
+      <form class="locker-import"><label>Add a friend’s locker link<textarea class="locker-import-url" rows="2" maxlength="40000" placeholder="Paste a friend’s share link" required></textarea></label><button type="submit">Add friend</button></form>
       <p class="locker-message" role="status" aria-live="polite"></p>
     </details>
-    <div class="locker-comparison" hidden><div><strong class="locker-friend-name"></strong><p class="locker-friend-date"></p></div><button type="button" class="locker-remove">Remove comparison</button>
-      <label>Compare<select class="locker-compare-filter" aria-label="Filter locker comparison"><option value="all">All Sprites</option><option value="i-need">I need / they have</option><option value="they-need">They need / I have</option><option value="both-missing">Both missing</option><option value="not-mastered">Either player not mastered</option></select></label>
+    <div class="locker-comparison" hidden><div class="locker-friends"></div>
+      <label>Compare against<select class="locker-compare-target" aria-label="Choose comparison friend"></select></label>
+      <label>Show<select class="locker-compare-filter" aria-label="Filter locker comparison"><option value="all">All Sprites</option><option value="i-need">I need / a friend has</option><option value="they-need">A friend needs / I have</option><option value="both-missing">Everyone missing</option><option value="not-mastered">Someone not mastered</option></select></label>
     </div>
     <p class="locker-count" role="status" aria-live="polite"></p>
-    <div class="locker-list-head"><span>Sprite / variant</span><span>You</span><span class="locker-friend-column" hidden>Friend</span></div>
-    <div class="locker-list" role="list" aria-label="Sprite locker comparison"></div>`;
+    <p class="locker-scroll-hint" hidden>Swipe the table sideways to see every player. Sprite names stay in place.</p>
+    <div class="locker-table-scroll" tabindex="0" role="region" aria-label="Locker comparison table, scroll horizontally for more players"><div class="locker-table">
+      <div class="locker-list-head"></div>
+      <div class="locker-list" role="list" aria-label="Sprite locker comparison"></div>
+    </div></div>`;
   const $ = (selector) => host.querySelector(selector);
   const message = (text) => { $(".locker-message").textContent = text; };
   const importFriend = (input) => {
     try {
       const snapshot = decodeSnapshot(input);
       if (!options.catalogs.some((s) => s.seasonId === snapshot.season)) throw new Error("This link uses a season that isn’t available in this tracker yet.");
-      friend = snapshot;
+      const replacing = friends.some(f => f.season === snapshot.season && f.name.toLocaleLowerCase() === snapshot.name.toLocaleLowerCase());
+      friends = addFriendSnapshot(friends, snapshot);
+      target = '*';
       mode = "all";
       $(".locker-compare-filter").value = mode;
       $(".locker-share-result").hidden = true;
       if (snapshot.season !== options.season.seasonId) options.onSeason(snapshot.season);
-      message("Snapshot loaded. Your own checklist has not been changed.");
+      message(`${snapshot.name}’s snapshot ${replacing ? 'updated' : 'added'}. Your own checklist has not been changed.`);
+      $('.locker-import-url').value = '';
       render();
     } catch (error) { message(error.message); }
   };
   $(".locker-share").addEventListener("click", () => {
+    const nickname = $('.locker-nickname');
+    nickname.setCustomValidity(nickname.value.trim() ? '' : 'Enter your nickname.');
+    if (!nickname.reportValidity()) return;
     const snapshot = makeSnapshot(options.season, options.progress, $(".locker-nickname").value);
     const url = new URL(location.href);
     url.search = "";
@@ -114,43 +143,61 @@ export function createLockerTools(host) {
     $(".locker-share-result").hidden = false;
     message("Share link created. It captures your progress right now; create a new link after further updates.");
   });
+  $('.locker-nickname').addEventListener('input', () => { $('.locker-nickname').setCustomValidity(''); render(); });
   $(".locker-copy").addEventListener("click", async () => {
     try { await navigator.clipboard.writeText($(".locker-share-url").value); message("Locker link copied."); }
     catch { $(".locker-share-url").focus(); $(".locker-share-url").select(); message("Copy the selected link to share it."); }
   });
   $(".locker-import").addEventListener("submit", (event) => { event.preventDefault(); importFriend($(".locker-import-url").value); });
-  $(".locker-remove").addEventListener("click", () => {
-    friend = null; mode = "all";
+  $(".locker-friends").addEventListener("click", (event) => {
+    const button = event.target.closest('button[data-friend-index]');
+    if (!button) return;
+    friends = friends.filter((_, i) => i !== Number(button.dataset.friendIndex)); target = '*';
     if (location.hash.startsWith("#locker=")) history.replaceState(null, "", location.pathname + location.search);
-    message("Comparison removed. Your checklist is unchanged."); render();
+    message("Friend removed. Your checklist is unchanged."); render();
   });
   $(".locker-compare-filter").addEventListener("change", (event) => { mode = event.target.value; render(); });
-  $(".locker-list").addEventListener("click", (event) => {
-    const button = event.target.closest("button[data-field]");
-    if (button) options.onToggle(button.dataset.name, button.dataset.variant, button.dataset.field);
-  });
+  $('.locker-compare-target').addEventListener('change', event => { target = event.target.value; render(); });
   function render() {
     if (!options) return;
-    const comparing = friend?.season === options.season.seasonId;
-    $(".locker-comparison").hidden = !comparing;
-    $(".locker-friend-column").hidden = !comparing;
+    const activeFriends = friends.filter(f => f.season === options.season.seasonId);
+    const comparing = activeFriends.length > 0;
+    $(".locker-comparison").hidden = friends.length === 0;
     host.classList.toggle("is-comparing", comparing);
-    if (comparing) {
-      $(".locker-friend-name").textContent = `${friend.name} · ${options.season.chapter} ${options.season.season}`;
-      $(".locker-friend-date").textContent = `Snapshot from ${new Date(friend.date).toLocaleString()}. Progress may have changed since sharing.`;
-      $(".locker-friend-column").textContent = friend.name;
+    $('.locker-scroll-hint').hidden = !comparing;
+    $('.locker-friends').replaceChildren();
+    friends.forEach((friend, index) => {
+      const card = document.createElement('div'); card.className = 'locker-friend-summary';
+      const description = document.createElement('div');
+      const name = document.createElement('strong'); name.textContent = friend.name;
+      const date = document.createElement('p'); date.className = 'locker-friend-date';
+      date.textContent = `Snapshot: ${new Date(friend.date).toLocaleString()} · ${options.catalogs.find(s => s.seasonId === friend.season)?.chapter} ${options.catalogs.find(s => s.seasonId === friend.season)?.season}. Updates require a fresh link.`;
+      const remove = document.createElement('button'); remove.type = 'button'; remove.dataset.friendIndex = String(index); remove.textContent = 'Remove'; remove.setAttribute('aria-label', `Remove ${friend.name}`);
+      description.append(name, date); card.append(description, remove); $('.locker-friends').append(card);
+    });
+    const targetSelect = $('.locker-compare-target'); targetSelect.replaceChildren();
+    const everyone = document.createElement('option'); everyone.value = '*'; everyone.textContent = 'All friends in this season'; targetSelect.append(everyone);
+    activeFriends.forEach((friend, i) => { const option = document.createElement('option'); option.value = String(i); option.textContent = friend.name; targetSelect.append(option); });
+    if (target !== '*' && !activeFriends[Number(target)]) target = '*';
+    targetSelect.value = target;
+    targetSelect.disabled = !comparing;
+    $('.locker-compare-filter').disabled = !comparing;
+    const headers = $('.locker-list-head'); headers.replaceChildren();
+    for (const label of ['Sprite / variant', $('.locker-nickname').value.trim() ? `${$('.locker-nickname').value.trim()} (You)` : 'You', ...activeFriends.map(f => f.name)]) {
+      const heading = document.createElement('span'); heading.textContent = label; heading.title = label; headers.append(heading);
     }
+    host.style.setProperty('--locker-players', String(activeFriends.length + 1));
+    host.classList.toggle('locker-multi', activeFriends.length > 1);
     const list = $(".locker-list");
-    const focus = document.activeElement?.closest("button[data-field]");
-    const focusedKey = focus && host.contains(focus) ? [focus.dataset.name, focus.dataset.variant, focus.dataset.field] : null;
     list.replaceChildren();
     let count = 0;
     for (const family of options.families) for (const variant of family.variants) {
       const key = `${family.name}::${variant}`;
       const state = options.progress[key] || {};
       const mine = state.mastered ? 2 : state.acquired ? 1 : 0;
-      const theirs = comparing ? friend.entries.get(key) : undefined;
-      if (comparing && !matchesComparison(mode, mine, theirs)) continue;
+      const statuses = activeFriends.map(friend => friend.entries.get(key));
+      const selected = target === '*' ? statuses : [statuses[Number(target)]];
+      if (comparing && !matchesGroupComparison(mode, mine, selected)) continue;
       count++;
       const row = document.createElement("div");
       row.className = "locker-list-row"; row.setAttribute("role", "listitem");
@@ -158,16 +205,9 @@ export function createLockerTools(host) {
       const image = document.createElement("img"); image.src = options.imageFor(family.name, variant); image.alt = ""; image.loading = "lazy"; image.width = 42; image.height = 42;
       const text = document.createElement("span"); const strong = document.createElement("strong"); strong.textContent = family.name;
       const small = document.createElement("small"); small.textContent = variant; text.append(strong, small); identity.append(image, text); row.append(identity);
-      const actions = document.createElement("div"); actions.className = "locker-own-status";
-      for (const [field, label, pressed] of [["acquired", "Acquired", mine > 0], ["mastered", "Mastered", mine === 2]]) {
-        const button = document.createElement("button"); button.type = "button"; button.textContent = label;
-        button.dataset.name = family.name; button.dataset.variant = variant; button.dataset.field = field;
-        button.className = `locker-status ${field}`; button.setAttribute("aria-pressed", String(pressed)); button.setAttribute("aria-label", `${family.name} ${variant} ${label}`); actions.append(button);
-        if (focusedKey?.join("::") === [family.name, variant, field].join("::")) queueMicrotask(() => button.focus({ preventScroll: true }));
-      }
-      row.append(actions);
-      if (comparing) {
-        const badge = document.createElement("span"); badge.className = `locker-friend-status state-${theirs ?? "unknown"}`; badge.textContent = statusName(theirs); row.append(badge);
+      for (const [index, status] of [mine, ...statuses].entries()) {
+        const badge = document.createElement('span'); badge.className = `locker-friend-status ${index === 0 ? 'locker-my-status' : ''} state-${status ?? 'unknown'}`; badge.textContent = statusName(status);
+        badge.setAttribute('aria-label', `${index === 0 ? 'You' : activeFriends[index - 1].name}: ${family.name} ${variant}, ${statusName(status)}`); row.append(badge);
       }
       list.append(row);
     }
@@ -177,7 +217,7 @@ export function createLockerTools(host) {
   return { update(next) {
     const seasonChanged = options && options.season.seasonId !== next.season.seasonId;
     options = next;
-    if (seasonChanged) { $(".locker-share-result").hidden = true; if (friend && friend.season !== next.season.seasonId) message("This friend’s snapshot is from another season. Switch back to its season to compare."); }
+    if (seasonChanged) { $(".locker-share-result").hidden = true; target = '*'; }
     if (importPending) { const input = importPending; importPending = null; importFriend(input); }
     render();
   } };
