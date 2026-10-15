@@ -1,0 +1,38 @@
+export const SHARE_ORIGIN = 'https://sprite-locker-checklist.eabaylor.chatgpt.site';
+const idPattern = /^[A-Za-z0-9_-]{16}$/;
+
+export function sharedLockerId(input) {
+  let url;
+  try { url = new URL(input); } catch { return null; }
+  if (url.origin === SHARE_ORIGIN) {
+    const match = url.pathname.match(/^\/s\/([A-Za-z0-9_-]{16})\/?$/);
+    if (match) return match[1];
+  }
+  if (url.origin === 'https://eabaylor.github.io' && url.pathname === '/fortnite-sprite-locker/') {
+    const id = url.searchParams.get('s');
+    if (idPattern.test(id || '')) return id;
+  }
+  return null;
+}
+
+async function request(path, options = {}) {
+  const response = await fetch(`${SHARE_ORIGIN}${path}`, { ...options, credentials: 'omit', cache: 'no-store', signal: AbortSignal.timeout(15000) });
+  let data;
+  try { data = await response.json(); } catch { throw new Error('Sharing service unavailable. Try again, or create a portable link.'); }
+  if (!response.ok) throw new Error(data.error || 'The sharing request could not be completed.');
+  return data;
+}
+
+export async function publishSharedSnapshot(token) {
+  const { ticket } = await request('/api/lockers/ticket', { method: 'POST' });
+  const result = await request('/api/lockers', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Locker-Share-Token': ticket }, body: JSON.stringify({ token }) });
+  if (!idPattern.test(result.id || '')) throw new Error('Sharing service returned an invalid link.');
+  return { url: `${SHARE_ORIGIN}/s/${result.id}`, expiresAt: result.expiresAt };
+}
+
+export async function loadSharedSnapshot(id) {
+  if (!idPattern.test(id || '')) throw new Error('This short locker link is invalid.');
+  const result = await request(`/api/lockers/${id}`);
+  if (typeof result.token !== 'string') throw new Error('This shared locker is unavailable.');
+  return result.token;
+}

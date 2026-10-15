@@ -355,6 +355,8 @@ footer p { margin: 0; text-align: right; }
 .locker-tools button { min-height: 42px; cursor: pointer; border: 1px solid #a6bcae; border-radius: 8px; padding: 8px 12px; font-size: 12px; font-weight: 800; color: var(--ink); background: var(--paper); }
 .locker-tools button:focus-visible, .locker-tools input:focus-visible, .locker-tools textarea:focus-visible, .locker-tools select:focus-visible { outline: 3px solid var(--code-blue); outline-offset: 2px; }
 .locker-share-actions, .locker-import { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 10px; margin-top: 14px; }
+.locker-share-actions .locker-portable { grid-column: 1 / -1; justify-self: start; }
+.locker-tools button:disabled { opacity: .6; cursor: wait; }
 .locker-tools .locker-share, .locker-import button { background: var(--green-dark); color: white; }
 .locker-share-result { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 8px; padding-top: 12px; }
 .locker-share-result p { grid-column: 1 / -1; margin: 0; }

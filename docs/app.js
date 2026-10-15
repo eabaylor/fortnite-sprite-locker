@@ -6,7 +6,7 @@ const FOCUSABLE_SELECTOR = 'a[href], button:not([disabled]), input:not([disabled
 let season = CATALOGS.find((item) => item.seasonId === BUNDLE.defaultSeasonId)
   || CATALOGS[0];
 let filter = "all";
-let viewMode = location.hash.startsWith("#locker=") ? "list" : "compact";
+let viewMode = location.hash.startsWith("#locker=") || /^[A-Za-z0-9_-]{16}$/.test(new URLSearchParams(location.search).get('s') || '') ? "list" : "compact";
 let lockerTools = null;
 let lockerToolsLoading = false;
 const selectedSprites = new Set();

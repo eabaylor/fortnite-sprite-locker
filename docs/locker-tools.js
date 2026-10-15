@@ -1,4 +1,5 @@
-import catalogs from './locker-catalogs.js';
+import catalogs from './locker-catalogs.js?v=20261015-6';
+import { SHARE_ORIGIN, sharedLockerId, publishSharedSnapshot, loadSharedSnapshot } from './locker-sharing.js?v=20261015-6';
 /** Versioned, immutable dictionaries keep small links safe across catalog reordering. */
 export function makeSnapshot(season, progress, nickname = "") {
   if (!nickname.trim()) throw new Error('Enter your nickname before creating a share link.');
@@ -27,7 +28,7 @@ export function encodeSnapshot(snapshot) {
 
 export function decodeSnapshot(input) {
   const trimmed = input.trim();
-  const token = trimmed.includes("#locker=") ? trimmed.split("#locker=")[1] : trimmed.replace(/^#locker=/, "");
+  const token = (trimmed.includes("#locker=") ? trimmed.split("#locker=")[1] : trimmed.replace(/^#locker=/, "")).split(/[?&]/)[0];
   if (!token || token.length > 40000 || !/^[A-Za-z0-9_-]+$/.test(token)) throw new Error("Paste a complete locker share link.");
   let value;
   try {
@@ -92,13 +93,16 @@ export function createLockerTools(host) {
   let friends = [];
   let target = '*';
   let mode = "all";
-  let importPending = location.hash.startsWith("#locker=") ? location.hash : null;
+  const initialId = new URLSearchParams(location.search).get('s');
+  let importPending = location.hash.startsWith("#locker=") ? location.hash : /^[A-Za-z0-9_-]{16}$/.test(initialId || '') ? `${SHARE_ORIGIN}/s/${initialId}` : null;
+  let sharing = false;
   host.className = "locker-tools";
   host.innerHTML = `
     <details class="locker-sharing" open>
       <summary>Share & compare lockers</summary>
-      <p class="locker-help">Compare your locker with up to four friends. Links include your collection and nickname. Anyone with the link can view it; updates require a fresh link. Reimporting the same nickname updates that friend’s column. Comparison is read-only; update your collection in Compact or Classic view.</p>
-      <div class="locker-share-actions"><label>Your nickname (required)<input class="locker-nickname" maxlength="40" placeholder="Player name" autocomplete="off" required></label><button type="button" class="locker-share">Create share link</button></div>
+      <p class="locker-help">Compare your locker with up to four friends. Creating a short link uploads a snapshot and your nickname, viewable by anyone with the link for 90 days. Only explicitly shared snapshots go online; your editable progress stays in this browser. Reimporting the same nickname updates that friend’s column. Comparison is read-only; update your collection in Compact or Classic view.</p>
+      <p class="locker-help">Opening from Messenger? Use the same browser where you normally track your locker, so your saved progress is available. A different browser may show an empty local locker.</p>
+      <div class="locker-share-actions"><label>Your nickname (required)<input class="locker-nickname" maxlength="40" placeholder="Player name" autocomplete="off" required></label><button type="button" class="locker-share">Create short link</button><button type="button" class="locker-portable">Portable link (no upload)</button></div>
       <div class="locker-share-result" hidden><label>Your share link<input class="locker-share-url" readonly aria-label="Your locker share link"></label><button type="button" class="locker-copy">Copy link</button><p>Send this link to your friend. Their saved progress stays separate.</p></div>
       <form class="locker-import"><label>Add a friend’s locker link<textarea class="locker-import-url" rows="2" maxlength="40000" placeholder="Paste a friend’s share link" required></textarea></label><button type="submit">Add friend</button></form>
       <p class="locker-message" role="status" aria-live="polite"></p>
@@ -115,9 +119,11 @@ export function createLockerTools(host) {
     </div></div>`;
   const $ = (selector) => host.querySelector(selector);
   const message = (text) => { $(".locker-message").textContent = text; };
-  const importFriend = (input) => {
+  const importFriend = async (input) => {
     try {
-      const snapshot = decodeSnapshot(input);
+      const shareId = sharedLockerId(input);
+      if (shareId) message('Loading shared locker…');
+      const snapshot = decodeSnapshot(shareId ? await loadSharedSnapshot(shareId) : input);
       if (!options.catalogs.some((s) => s.seasonId === snapshot.season)) throw new Error("This link uses a season that isn’t available in this tracker yet.");
       const replacing = friends.some(f => f.season === snapshot.season && f.name.toLocaleLowerCase() === snapshot.name.toLocaleLowerCase());
       friends = addFriendSnapshot(friends, snapshot);
@@ -131,18 +137,35 @@ export function createLockerTools(host) {
       render();
     } catch (error) { message(error.message); }
   };
-  $(".locker-share").addEventListener("click", () => {
+  const createShare = async online => {
+    if (sharing) return;
     const nickname = $('.locker-nickname');
     nickname.setCustomValidity(nickname.value.trim() ? '' : 'Enter your nickname.');
     if (!nickname.reportValidity()) return;
-    const snapshot = makeSnapshot(options.season, options.progress, $(".locker-nickname").value);
-    const url = new URL(location.href);
-    url.search = "";
-    url.hash = `locker=${encodeSnapshot(snapshot)}`;
-    $(".locker-share-url").value = url.href;
-    $(".locker-share-result").hidden = false;
-    message("Share link created. It captures your progress right now; create a new link after further updates.");
-  });
+    const snapshot = makeSnapshot(options.season, options.progress, nickname.value);
+    const token = encodeSnapshot(snapshot);
+    $('.locker-share-result').hidden = true;
+    sharing = true;
+    $('.locker-share').disabled = true;
+    $('.locker-portable').disabled = true;
+    try {
+      let link;
+      if (online) {
+        message('Creating your short link…');
+        const result = await publishSharedSnapshot(token);
+        link = result.url;
+      } else {
+        const url = new URL(location.href); url.search = ''; url.hash = `locker=${token}`; link = url.href;
+      }
+      if (options.season.seasonId !== snapshot.season) { message('The season changed while sharing. Switch back to create its link.'); return; }
+      $('.locker-share-url').value = link;
+      $('.locker-share-result').hidden = false;
+      message(online ? 'Short link created. It expires in 90 days. Share a fresh link after updating your progress.' : 'Portable link created without uploading your snapshot. This longer link contains the data and has no service expiry.');
+    } catch (error) { message(`${error.message} Your local progress is safe. You can use a portable link instead.`); }
+    finally { sharing = false; $('.locker-share').disabled = false; $('.locker-portable').disabled = false; }
+  };
+  $('.locker-share').addEventListener('click', () => createShare(true));
+  $('.locker-portable').addEventListener('click', () => createShare(false));
   $('.locker-nickname').addEventListener('input', () => { $('.locker-nickname').setCustomValidity(''); render(); });
   $(".locker-copy").addEventListener("click", async () => {
     try { await navigator.clipboard.writeText($(".locker-share-url").value); message("Locker link copied."); }
@@ -153,7 +176,9 @@ export function createLockerTools(host) {
     const button = event.target.closest('button[data-friend-index]');
     if (!button) return;
     friends = friends.filter((_, i) => i !== Number(button.dataset.friendIndex)); target = '*';
-    if (location.hash.startsWith("#locker=")) history.replaceState(null, "", location.pathname + location.search);
+    const cleanUrl = new URL(location.href); cleanUrl.searchParams.delete('s'); cleanUrl.searchParams.delete('shareExpired');
+    if (cleanUrl.hash.startsWith('#locker=')) cleanUrl.hash = '';
+    history.replaceState(null, '', cleanUrl.pathname + cleanUrl.search + cleanUrl.hash);
     message("Friend removed. Your checklist is unchanged."); render();
   });
   $(".locker-compare-filter").addEventListener("change", (event) => { mode = event.target.value; render(); });

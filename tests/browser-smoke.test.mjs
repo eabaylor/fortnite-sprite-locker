@@ -102,7 +102,7 @@ window.addEventListener("load", async () => {
     document.querySelector('.locker-share').click();
     result.nicknameRequired = document.querySelector('.locker-share-result').hidden;
     document.querySelector('.locker-nickname').value = 'My locker';
-    document.querySelector('.locker-share').click();
+    document.querySelector('.locker-portable').click();
     const shared = tools.decodeSnapshot(document.querySelector('.locker-share-url').value);
     result.sharedMastered = shared.entries.get(name + '::' + variant) === 2;
     const season = window.SPRITE_CATALOGS.seasons[0];
@@ -147,6 +147,28 @@ window.addEventListener("load", async () => {
     const groupBeforeRemove = document.querySelectorAll('.locker-friend-summary').length;
     document.querySelector('button[aria-label="Remove Laura"]').click();
     result.removeFriend = document.querySelectorAll('.locker-friend-summary').length === groupBeforeRemove - 1;
+    const originalFetch = window.fetch;
+    let reads = 0;
+    const shortId = 'AbCdEf0123456789';
+    window.fetch = async (input, init) => {
+      const url = String(input);
+      if (!url.startsWith('https://sprite-locker-checklist.eabaylor.chatgpt.site/api/lockers')) return originalFetch(input, init);
+      if (url.endsWith('/ticket')) return Response.json({ ticket: shortId });
+      if (init?.method === 'POST') return Response.json({ id: shortId, expiresAt: 2000000000 });
+      reads++;
+      return Response.json({ token: tools.encodeSnapshot(tools.makeSnapshot(season, friendProgress, 'Test friend')) });
+    };
+    const progressBeforeSharing = localStorage.getItem(season.storageKey);
+    document.querySelector('.locker-share').click();
+    for (let i = 0; i < 100 && document.querySelector('.locker-share-result').hidden; i++) await new Promise(resolve => setTimeout(resolve, 20));
+    const shortUrl = document.querySelector('.locker-share-url').value;
+    result.shortLinkCreated = shortUrl === 'https://sprite-locker-checklist.eabaylor.chatgpt.site/s/' + shortId;
+    document.querySelector('.locker-import-url').value = shortUrl + '?fbclid=messenger-tracking';
+    document.querySelector('.locker-import').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+    for (let i = 0; i < 100 && !document.querySelector('.locker-message').textContent.includes('snapshot updated'); i++) await new Promise(resolve => setTimeout(resolve, 20));
+    result.shortLinkImported = reads === 1 && document.querySelector('.locker-message').textContent.includes('snapshot updated');
+    result.shortSharingPreservesProgress = localStorage.getItem(season.storageKey) === progressBeforeSharing;
+    window.fetch = originalFetch;
     result.listNoOverflow = document.documentElement.scrollWidth === document.documentElement.clientWidth;
   } catch (error) { result.comparisonError = error.message; }
   const output = document.createElement("pre");
@@ -258,6 +280,9 @@ test("live static tracker works at 320px in a real browser", async (context) => 
     assert.equal(audit.comparisonScrolls, true);
     assert.equal(audit.spriteColumnSticky, true);
     assert.equal(audit.removeFriend, true);
+    assert.equal(audit.shortLinkCreated, true);
+    assert.equal(audit.shortLinkImported, true);
+    assert.equal(audit.shortSharingPreservesProgress, true);
     assert.equal(audit.listNoOverflow, true);
     assert.deepEqual(audit.familyNames, catalog.familyOrder);
     assert.deepEqual(audit.firstVariants, ["Base", "Gold", "Cheat Master", "Loot Hacker", "Bounty Hunter", "Trick or Treat"]);

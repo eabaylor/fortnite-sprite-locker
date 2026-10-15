@@ -217,7 +217,7 @@ export default function Home() {
     const savedProgress = loadProgress(initialSeason);
     queueMicrotask(() => {
       setSelectedSeasonId(initialSeason.seasonId);
-      if (window.location.hash.startsWith("#locker=")) setViewMode("list");
+      if (window.location.hash.startsWith("#locker=") || /^[A-Za-z0-9_-]{16}$/.test(new URLSearchParams(window.location.search).get('s') || '')) setViewMode("list");
       setProgress(savedProgress);
       try {
         const savedCodes = JSON.parse(localStorage.getItem(`sprite-locker-redeemed-admin-codes-${initialSeason.seasonId}`) ?? "[]");

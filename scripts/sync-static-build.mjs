@@ -25,7 +25,11 @@ for (const season of bundle.seasons) {
 const dictionaryModule = `export default ${JSON.stringify(dictionaries, null, 2)};\n`;
 await writeFile(new URL('public/locker-catalogs.js', root), dictionaryModule);
 await writeFile(new URL('docs/locker-catalogs.js', root), dictionaryModule);
-await writeFile(new URL("docs/locker-tools.js", root), await readFile(new URL("public/locker-tools.js", root)));
+const toolUrl = new URL('public/locker-tools.js', root);
+const tools = (await readFile(toolUrl, 'utf8')).replace(/(locker-(?:catalogs|sharing)\.js)(?:\?v=[^']+)?'/g, `$1?v=${current.assetVersion}'`);
+await writeFile(toolUrl, tools);
+await writeFile(new URL('docs/locker-tools.js', root), tools);
+await writeFile(new URL('docs/locker-sharing.js', root), await readFile(new URL('public/locker-sharing.js', root)));
 await writeFile(new URL("docs/catalog.js", root), `window.SPRITE_CATALOGS = ${JSON.stringify(bundle, null, 2)};\n`);
 await writeFile(new URL("public/catalog.json", root), `${JSON.stringify(bundle, null, 2)}\n`);
 const version = `${JSON.stringify({ assetVersion: current.assetVersion, updatedDate: current.updatedDate }, null, 2)}\n`;

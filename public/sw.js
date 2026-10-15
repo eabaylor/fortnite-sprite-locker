@@ -1,4 +1,4 @@
-const CACHE = "sprite-locker-20261015-5";
+const CACHE = "sprite-locker-20261015-6";
 const SHELL = ["./", "./locker-tools.js", "./manifest.webmanifest", "./favicon.svg", "./fortnite-sprite-locker-logo-transparent.png", "./catalog.json", "./version.json"];
 
 self.addEventListener("install", (event) => {
@@ -11,6 +11,7 @@ self.addEventListener("activate", (event) => {
 
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET" || new URL(event.request.url).origin !== self.location.origin) return;
+  if (new URL(event.request.url).pathname.startsWith('/api/lockers') || new URL(event.request.url).pathname.startsWith('/s/')) return;
   const destination = event.request.destination;
   if (destination === "image" || destination === "font") {
     event.respondWith(caches.match(event.request).then((cached) => cached || fetch(event.request).then((response) => {

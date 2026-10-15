@@ -1,7 +1,7 @@
 window.SPRITE_CATALOGS = {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-season-4",
-  "assetVersion": "20261015-5",
+  "assetVersion": "20261015-6",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -14,7 +14,7 @@ window.SPRITE_CATALOGS = {
       "legacyStorageKeys": [],
       "updatedDate": "October 15, 2026",
       "patch": "v42.40",
-      "assetVersion": "20261015-5",
+      "assetVersion": "20261015-6",
       "familyOrder": [
         "Dumpster Dive",
         "Jonesy",
@@ -54,13 +54,13 @@ window.SPRITE_CATALOGS = {
         "Quack"
       ],
       "whatsNew": {
-        "title": "Compare your whole squad",
-        "intro": "Named comparisons for you and up to four friends.",
+        "title": "Truly short locker links",
+        "intro": "Share your locker using a short random ID, with no login required.",
         "items": [
-          "Your column now shows one Missing, Acquired, or Mastered status, just like your friends’ columns.",
-          "Nicknames are required for new share links and appear above each friend’s locker.",
-          "Add up to four friends and filter against one friend or the group. Reimport the same nickname to update their snapshot.",
-          "Swipe the comparison table sideways on mobile; Sprite names stay visible. Update your own progress in Compact or Classic view."
+          "Create short link uploads only the snapshot and nickname you choose to share. Anyone with the link can view it for 90 days.",
+          "Short links open the GitHub tracker and tolerate added Messenger tracking parameters. Use your usual browser to compare with your saved locker.",
+          "Portable link remains available without uploading data, and previously shared links still work.",
+          "Shared snapshots never overwrite your locally saved progress."
         ]
       },
       "unlockCodes": [
