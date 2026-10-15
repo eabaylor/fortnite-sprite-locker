@@ -1,8 +1,22 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { readFile } from 'node:fs/promises';
 import { makeSnapshot, encodeSnapshot, decodeSnapshot, matchesComparison } from "../public/locker-tools.js";
 
 const season = { seasonId: "test-season", families: [{ name: "Honey", variants: ["Base", "Gold"] }, { name: "One Wish Willow", variants: ["Base"] }] };
+
+test('real catalog uses a short stable link and preserves every progress state', async () => {
+  const current = JSON.parse(await readFile(new URL('../data/catalog.json', import.meta.url), 'utf8'));
+  const progress = {};
+  let i = 0;
+  for (const f of current.families) for (const v of f.variants) { progress[`${f.name}::${v}`] = { acquired: i % 3 > 0, mastered: i++ % 3 === 2 }; }
+  const snapshot = makeSnapshot(current, progress);
+  const encoded = encodeSnapshot(snapshot);
+  assert.ok(encoded.length < 200, `Token too long: ${encoded.length}`);
+  const decoded = decodeSnapshot(encoded);
+  assert.equal([...decoded.entries.values()].join(''), snapshot.states);
+  assert.deepEqual(decoded.families, snapshot.families);
+});
 
 test("share links round-trip Unicode names and explicit statuses without catalog indexes", () => {
   const progress = { "Honey::Gold": { acquired: true, mastered: true }, "One Wish Willow::Base": { acquired: true, mastered: false } };

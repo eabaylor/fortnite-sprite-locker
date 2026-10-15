@@ -1,4 +1,5 @@
-/** Portable snapshot format uses explicit names, so catalog reordering cannot move checkmarks. */
+import catalogs from './locker-catalogs.js';
+/** Versioned, immutable dictionaries keep small links safe across catalog reordering. */
 export function makeSnapshot(season, progress, nickname = "") {
   const families = season.families.map(({ name, variants }) => [name, [...variants]]);
   const states = families.flatMap(([name, variants]) => variants.map((variant) => {
@@ -9,6 +10,16 @@ export function makeSnapshot(season, progress, nickname = "") {
 }
 
 export function encodeSnapshot(snapshot) {
+  const dictionary = Object.entries(catalogs).find(([, item]) => item.season === snapshot.season && JSON.stringify(item.families) === JSON.stringify(snapshot.families));
+  if (dictionary && snapshot.v === 1 && /^[012]+$/.test(snapshot.states)) {
+    const bytes = [];
+    for (let i = 0; i < snapshot.states.length; i += 5) {
+      let value = 0;
+      for (let j = 0; j < 5; j++) value = value * 3 + Number(snapshot.states[i + j] || 0);
+      bytes.push(value);
+    }
+    snapshot = [3, dictionary[0], snapshot.name, Math.floor(Date.parse(snapshot.date) / 60000), btoa(String.fromCharCode(...bytes)).replaceAll('+', '-').replaceAll('/', '_').replace(/=+$/, '')];
+  }
   return btoa(String.fromCharCode(...new TextEncoder().encode(JSON.stringify(snapshot))))
     .replaceAll("+", "-").replaceAll("/", "_").replace(/=+$/, "");
 }
@@ -22,6 +33,16 @@ export function decodeSnapshot(input) {
     const base64 = token.replaceAll("-", "+").replaceAll("_", "/");
     value = JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(Uint8Array.from(atob(base64), (c) => c.charCodeAt(0))));
   } catch { throw new Error("This locker link is incomplete or damaged. Ask your friend to share it again."); }
+  if (Array.isArray(value) && value[0] === 3) {
+    const [, id, name, minute, packed] = value;
+    const dictionary = catalogs[id];
+    if (!dictionary || !Number.isSafeInteger(minute) || typeof packed !== 'string' || !/^[A-Za-z0-9_-]+$/.test(packed)) throw new Error('This locker link needs a newer tracker. Refresh the page and try again.');
+    const count = dictionary.families.reduce((n, [, variants]) => n + variants.length, 0);
+    const bytes = [...atob(packed.replaceAll('-', '+').replaceAll('_', '/'))].map(c => c.charCodeAt(0));
+    if (bytes.length !== Math.ceil(count / 5) || bytes.some(b => b > 242)) throw new Error('This locker snapshot has invalid progress.');
+    const states = bytes.map(b => b.toString(3).padStart(5, '0')).join('').slice(0, count);
+    value = { v: 1, season: dictionary.season, families: dictionary.families, name, date: new Date(minute * 60000).toISOString(), states };
+  }
   const text = (s, max) => typeof s === "string" && s.length > 0 && s.length <= max && !s.includes("::");
   if (value?.v !== 1 || !text(value.season, 80) || typeof value.name !== "string" || !value.name.length || value.name.length > 40 || typeof value.date !== "string" || !Number.isFinite(Date.parse(value.date))
     || !Array.isArray(value.families) || value.families.length > 100 || !value.families.length

@@ -1,4 +1,5 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { createHash } from 'node:crypto';
 
 const root = new URL("../", import.meta.url);
 const current = JSON.parse(await readFile(new URL("data/catalog.json", root), "utf8"));
@@ -12,6 +13,17 @@ const bundle = {
 const total = current.families.reduce((sum, family) => sum + family.variants.length, 0);
 
 await mkdir(new URL("docs/", root), { recursive: true });
+// Never remove dictionary versions: previously shared links must keep their original mapping.
+const dictionaries = (await import(new URL('public/locker-catalogs.js', root))).default;
+for (const season of bundle.seasons) {
+  const item = { season: season.seasonId, families: season.families.map(({ name, variants }) => [name, variants]) };
+  const id = createHash('sha256').update(JSON.stringify(item)).digest('hex').slice(0, 16);
+  if (dictionaries[id] && JSON.stringify(dictionaries[id]) !== JSON.stringify(item)) throw new Error('Snapshot dictionary collision');
+  dictionaries[id] = item;
+}
+const dictionaryModule = `export default ${JSON.stringify(dictionaries, null, 2)};\n`;
+await writeFile(new URL('public/locker-catalogs.js', root), dictionaryModule);
+await writeFile(new URL('docs/locker-catalogs.js', root), dictionaryModule);
 await writeFile(new URL("docs/locker-tools.js", root), await readFile(new URL("public/locker-tools.js", root)));
 await writeFile(new URL("docs/catalog.js", root), `window.SPRITE_CATALOGS = ${JSON.stringify(bundle, null, 2)};\n`);
 await writeFile(new URL("public/catalog.json", root), `${JSON.stringify(bundle, null, 2)}\n`);
