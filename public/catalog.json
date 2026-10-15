@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-season-4",
-  "assetVersion": "20261015-3",
+  "assetVersion": "20261015-4",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -14,7 +14,7 @@
       "legacyStorageKeys": [],
       "updatedDate": "October 15, 2026",
       "patch": "v42.40",
-      "assetVersion": "20261015-3",
+      "assetVersion": "20261015-4",
       "familyOrder": [
         "Dumpster Dive",
         "Jonesy",
@@ -54,12 +54,12 @@
         "Quack"
       ],
       "whatsNew": {
-        "title": "Much shorter locker links",
-        "intro": "Sharing your collection just got easier.",
+        "title": "A fresh look for shared links",
+        "intro": "The link preview now matches the current tracker.",
         "items": [
-          "New share links pack your progress into a compact format instead of repeating every Sprite name.",
-          "Previously shared links still work, and your saved progress is unchanged.",
-          "Create a fresh share link to use the shorter format."
+          "Shared links use the current logo and real Sprite artwork instead of the old 91-variant image.",
+          "The preview highlights tracking and comparing lockers without a quickly outdated count.",
+          "Your collection progress and existing share links are unchanged."
         ]
       },
       "unlockCodes": [

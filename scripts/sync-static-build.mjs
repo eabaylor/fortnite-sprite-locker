@@ -1,5 +1,6 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { createHash } from 'node:crypto';
+import './social-preview.mjs';
 
 const root = new URL("../", import.meta.url);
 const current = JSON.parse(await readFile(new URL("data/catalog.json", root), "utf8"));
@@ -50,6 +51,7 @@ index = index
   .replace(/styles\.css\?v=[^"]+/g, `styles.css?v=${current.assetVersion}`)
   .replace(/catalog\.js\?v=[^"]+/g, `catalog.js?v=${current.assetVersion}`)
   .replace(/app\.js\?v=[^"]+/g, `app.js?v=${current.assetVersion}`);
+index = index.replace(/sprite-locker-share-v2\.png\?v=[^"]+/g, `sprite-locker-share-v2.png?v=${current.assetVersion}`);
 await writeFile(indexUrl, index);
 
 for (const path of ["public/sw.js", "docs/sw.js"]) {

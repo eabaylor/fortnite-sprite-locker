@@ -13,14 +13,15 @@ export const metadata: Metadata = {
   manifest: "/manifest.webmanifest",
   openGraph: {
     title: "Fortnite Sprite Locker",
-    description: `Track every ${catalog.chapter} ${catalog.season} Sprite variant—acquired and mastered.`,
-    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Fortnite Sprite Locker" }],
+    type: "website",
+    description: "Track acquired and mastered Sprites, explore Admin Codes, and compare lockers with friends.",
+    images: [{ url: `/sprite-locker-share-v2.png?v=${catalog.assetVersion}`, width: 1200, height: 630, alt: "Fortnite Sprite Locker — Track, collect and compare, with actual Sprite artwork." }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Fortnite Sprite Locker",
     description: `Track every ${catalog.chapter} ${catalog.season} Sprite variant—acquired and mastered.`,
-    images: ["/og.png"],
+    images: [`/sprite-locker-share-v2.png?v=${catalog.assetVersion}`],
   },
 };
 
