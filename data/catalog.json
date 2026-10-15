@@ -7,9 +7,9 @@
   "imageBase": "sprites",
   "storageKey": "sprite-locker-progress-chapter-7-season-4",
   "legacyStorageKeys": [],
-  "updatedDate": "October 13, 2026",
-  "patch": "v42.30",
-  "assetVersion": "20261013-6",
+  "updatedDate": "October 15, 2026",
+  "patch": "v42.40",
+  "assetVersion": "20261015-1",
   "familyOrder": [
     "Dumpster Dive",
     "Jonesy",
@@ -35,7 +35,9 @@
     "Morgana",
     "Spooky Dash",
     "The Deer",
-    "Vampire"
+    "Vampire",
+    "Honey",
+    "One Wish Willow"
   ],
   "variantOrder": [
     "Base",
@@ -43,15 +45,16 @@
     "Cheat Master",
     "Loot Hacker",
     "Bounty Hunter",
-    "Trick or Treat"
+    "Trick or Treat",
+    "Quack"
   ],
   "whatsNew": {
-    "title": "Sprite order matches PlayStation",
-    "intro": "Find each family in the order shown in your game:",
+    "title": "Honey, Willow, and Quack Sprites",
+    "intro": "17 released Sprite variants join the v42.40 checklist:",
     "items": [
-      "Dumpster Dive is first, followed by Jonesy, Adventure, and Bush.",
-      "Pond follows Overshield; The Deer appears before Vampire.",
-      "All 25 current-season families and 145 variants remain available with your saved progress."
+      "Honey and One Wish Willow each have six variants to track.",
+      "Quack variants are now available for Jonesy, Adventure, Bush, Klombo, and Spooky Dash.",
+      "The current season now includes 27 Sprite families and 162 variants. Your saved checkmarks stay in place."
     ]
   },
   "unlockCodes": [
@@ -154,17 +157,17 @@
     { "code": "DontBlockMe", "reward": "Temporarily change the Tetris block lobby transformation", "category": "Lobby Effect", "useType": "reusable", "verifiedDate": "August 27, 2026", "sourceUrl": "https://allthings.how/fortnite-admin-panel-codes/" }
   ],
   "families": [
-    { "name": "Adventure", "rarity": "Rare", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
+    { "name": "Adventure", "rarity": "Rare", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat", "Quack"] },
     { "name": "Birthday", "rarity": "Rare", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
     { "name": "Blinky", "rarity": "Legendary", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
-    { "name": "Bush", "rarity": "Rare", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
+    { "name": "Bush", "rarity": "Rare", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat", "Quack"] },
     { "name": "Crash Bandicoot", "rarity": "Legendary", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
     { "name": "Crown", "rarity": "Mythic", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
     { "name": "Dumpster Dive", "rarity": "Epic", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
     { "name": "Jackrabbit", "rarity": "Legendary", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
-    { "name": "Jonesy", "rarity": "Rare", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
+    { "name": "Jonesy", "rarity": "Rare", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat", "Quack"] },
     { "name": "Killswitch", "rarity": "Epic", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
-    { "name": "Klombo", "rarity": "Mythic", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
+    { "name": "Klombo", "rarity": "Mythic", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat", "Quack"] },
     { "name": "Mega Man", "rarity": "Rare", "variants": ["Base"] },
     { "name": "Morgana", "rarity": "Epic", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
     { "name": "Onigiri", "rarity": "Rare", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
@@ -172,12 +175,14 @@
     { "name": "Pond", "rarity": "Epic", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
     { "name": "Shadow", "rarity": "Epic", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
     { "name": "Sonic", "rarity": "Epic", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
-    { "name": "Spooky Dash", "rarity": "Mythic", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
+    { "name": "Spooky Dash", "rarity": "Mythic", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat", "Quack"] },
     { "name": "Storm Scout", "rarity": "Rare", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
     { "name": "Tails", "rarity": "Epic", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
     { "name": "The Deer", "rarity": "Legendary", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
     { "name": "Vampire", "rarity": "Legendary", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
     { "name": "X-Ray", "rarity": "Legendary", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
-    { "name": "8-Bit", "rarity": "Rare", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] }
+    { "name": "8-Bit", "rarity": "Rare", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
+    { "name": "Honey", "rarity": "Epic", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
+    { "name": "One Wish Willow", "rarity": "Mythic", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] }
   ]
 }

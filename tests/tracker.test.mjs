@@ -35,12 +35,12 @@ async function render() {
 test("catalog has unique active entries and matching artwork", async () => {
   assert.equal(catalog.seasonId, "chapter-7-season-4");
   assert.equal(catalog.storageKey, "sprite-locker-progress-chapter-7-season-4");
-  assert.equal(entries.length, 145);
+  assert.equal(entries.length, 162);
   assert.ok(catalog.whatsNew.items.length >= 1 && catalog.whatsNew.items.length <= 4);
   assert.deepEqual(catalog.familyOrder, [
-    "Dumpster Dive", "Jonesy", "Adventure", "Bush", "Sonic", "Tails", "Shadow", "8-Bit", "Jackrabbit", "Crown", "Killswitch", "Klombo", "Mega Man", "Overshield", "Pond", "X-Ray", "Onigiri", "Storm Scout", "Blinky", "Birthday", "Crash Bandicoot", "Morgana", "Spooky Dash", "The Deer", "Vampire",
+    "Dumpster Dive", "Jonesy", "Adventure", "Bush", "Sonic", "Tails", "Shadow", "8-Bit", "Jackrabbit", "Crown", "Killswitch", "Klombo", "Mega Man", "Overshield", "Pond", "X-Ray", "Onigiri", "Storm Scout", "Blinky", "Birthday", "Crash Bandicoot", "Morgana", "Spooky Dash", "The Deer", "Vampire", "Honey", "One Wish Willow",
   ]);
-  assert.deepEqual(catalog.variantOrder, ["Base", "Gold", "Cheat Master", "Loot Hacker", "Bounty Hunter", "Trick or Treat"]);
+  assert.deepEqual(catalog.variantOrder, ["Base", "Gold", "Cheat Master", "Loot Hacker", "Bounty Hunter", "Trick or Treat", "Quack"]);
   assert.deepEqual(new Set(catalog.familyOrder), new Set(catalog.families.map(({ name }) => name)));
   assert.deepEqual(new Set(catalog.variantOrder), new Set(catalog.families.flatMap(({ variants }) => variants)));
 
@@ -125,7 +125,7 @@ test("server renders the real tracker with current season and all cards", async 
   assert.doesNotMatch(html, /Sprite Codes/);
   assert.doesNotMatch(html, /Other Codes/);
   assert.doesNotMatch(html, /class="whats-new-trigger"/);
-  assert.equal((html.match(/class="sprite-card /g) ?? []).length, 145);
+  assert.equal((html.match(/class="sprite-card /g) ?? []).length, 162);
   const familyNames = [...html.matchAll(/<h3>([^<]+)<\/h3>/g)].map((match) => match[1]);
   assert.deepEqual(familyNames, catalog.familyOrder);
   assert.doesNotMatch(html, /Your site is taking shape|Building your site/);

@@ -1,7 +1,7 @@
 window.SPRITE_CATALOGS = {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-season-4",
-  "assetVersion": "20261013-6",
+  "assetVersion": "20261015-1",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -12,9 +12,9 @@ window.SPRITE_CATALOGS = {
       "imageBase": "sprites",
       "storageKey": "sprite-locker-progress-chapter-7-season-4",
       "legacyStorageKeys": [],
-      "updatedDate": "October 13, 2026",
-      "patch": "v42.30",
-      "assetVersion": "20261013-6",
+      "updatedDate": "October 15, 2026",
+      "patch": "v42.40",
+      "assetVersion": "20261015-1",
       "familyOrder": [
         "Dumpster Dive",
         "Jonesy",
@@ -40,7 +40,9 @@ window.SPRITE_CATALOGS = {
         "Morgana",
         "Spooky Dash",
         "The Deer",
-        "Vampire"
+        "Vampire",
+        "Honey",
+        "One Wish Willow"
       ],
       "variantOrder": [
         "Base",
@@ -48,15 +50,16 @@ window.SPRITE_CATALOGS = {
         "Cheat Master",
         "Loot Hacker",
         "Bounty Hunter",
-        "Trick or Treat"
+        "Trick or Treat",
+        "Quack"
       ],
       "whatsNew": {
-        "title": "Sprite order matches PlayStation",
-        "intro": "Find each family in the order shown in your game:",
+        "title": "Honey, Willow, and Quack Sprites",
+        "intro": "17 released Sprite variants join the v42.40 checklist:",
         "items": [
-          "Dumpster Dive is first, followed by Jonesy, Adventure, and Bush.",
-          "Pond follows Overshield; The Deer appears before Vampire.",
-          "All 25 current-season families and 145 variants remain available with your saved progress."
+          "Honey and One Wish Willow each have six variants to track.",
+          "Quack variants are now available for Jonesy, Adventure, Bush, Klombo, and Spooky Dash.",
+          "The current season now includes 27 Sprite families and 162 variants. Your saved checkmarks stay in place."
         ]
       },
       "unlockCodes": [
@@ -523,7 +526,8 @@ window.SPRITE_CATALOGS = {
             "Cheat Master",
             "Gold",
             "Loot Hacker",
-            "Trick or Treat"
+            "Trick or Treat",
+            "Quack"
           ]
         },
         {
@@ -559,7 +563,8 @@ window.SPRITE_CATALOGS = {
             "Cheat Master",
             "Gold",
             "Loot Hacker",
-            "Trick or Treat"
+            "Trick or Treat",
+            "Quack"
           ]
         },
         {
@@ -619,7 +624,8 @@ window.SPRITE_CATALOGS = {
             "Cheat Master",
             "Gold",
             "Loot Hacker",
-            "Trick or Treat"
+            "Trick or Treat",
+            "Quack"
           ]
         },
         {
@@ -643,7 +649,8 @@ window.SPRITE_CATALOGS = {
             "Cheat Master",
             "Gold",
             "Loot Hacker",
-            "Trick or Treat"
+            "Trick or Treat",
+            "Quack"
           ]
         },
         {
@@ -734,7 +741,8 @@ window.SPRITE_CATALOGS = {
             "Cheat Master",
             "Gold",
             "Loot Hacker",
-            "Trick or Treat"
+            "Trick or Treat",
+            "Quack"
           ]
         },
         {
@@ -800,6 +808,30 @@ window.SPRITE_CATALOGS = {
         {
           "name": "8-Bit",
           "rarity": "Rare",
+          "variants": [
+            "Base",
+            "Bounty Hunter",
+            "Cheat Master",
+            "Gold",
+            "Loot Hacker",
+            "Trick or Treat"
+          ]
+        },
+        {
+          "name": "Honey",
+          "rarity": "Epic",
+          "variants": [
+            "Base",
+            "Bounty Hunter",
+            "Cheat Master",
+            "Gold",
+            "Loot Hacker",
+            "Trick or Treat"
+          ]
+        },
+        {
+          "name": "One Wish Willow",
+          "rarity": "Mythic",
           "variants": [
             "Base",
             "Bounty Hunter",
