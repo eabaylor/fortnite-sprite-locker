@@ -15,6 +15,13 @@
       "when": 1792095569426,
       "tag": "0001_concerned_gorilla_man",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1792111641406,
+      "tag": "0002_bored_junta",
+      "breakpoints": true
     }
   ]
 }

@@ -357,7 +357,20 @@ footer p { margin: 0; text-align: right; }
 .locker-live { margin: 16px 0; padding: 12px; border: 1px solid #a8c6b8; border-radius: 10px; min-width: 0; }
 .locker-live legend { font-size: 13px; font-weight: 900; padding: 0 5px; }
 .locker-live .locker-live-optin { display: flex; align-items: center; gap: 10px; min-height: 44px; font-size: 14px; }
-.locker-tools .locker-live-enabled { width: 22px; height: 22px; flex: none; accent-color: var(--green-dark); }
+.locker-tools .locker-live-enabled, .locker-tools .locker-listing-enabled { width: 22px; height: 22px; flex: none; accent-color: var(--green-dark); }
+.locker-player-directory { border: 1px solid var(--line); border-radius: 10px; padding: 12px; margin: 14px 0; }
+.locker-player-directory h3 { margin: 0; font-family: inherit; font-size: 16px; }
+.locker-directory-search { display: flex; gap: 8px; align-items: end; flex-wrap: wrap; }
+.locker-directory-search > label { flex: 1 1 180px; }
+.locker-players-status, .locker-listing-status { color: var(--muted); font-size: 12px; line-height: 1.4; }
+.locker-player-list { display: grid; gap: 6px; }
+.locker-directory-player { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 8px; border-radius: 8px; background: #eef1e9; }
+.locker-directory-player > div { min-width: 0; }
+.locker-directory-player strong, .locker-directory-player small { display: block; overflow-wrap: anywhere; }
+.locker-directory-player small { color: var(--muted); font-size: 11px; margin-top: 3px; }
+.locker-directory-player button { flex: none; }
+.locker-link-backup { margin: 14px 0; }
+.locker-link-backup summary { font-size: 13px; }
 .locker-live-status { font-size: 12px; color: var(--green-dark); overflow-wrap: anywhere; }
 .locker-live-link-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: end; }
 .locker-live-link-row > label { flex: 1 1 220px; min-width: 0; }

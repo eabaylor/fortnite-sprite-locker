@@ -96,6 +96,8 @@ window.addEventListener("load", async () => {
   };
   menu.open = false;
   try {
+    const directoryNetworkFetch = window.fetch;
+    window.fetch = async (input, init) => String(input).includes('/api/lockers/players?') ? Response.json({ players: [{ id: 'Player0000000001', name: 'Directory friend', season: window.SPRITE_CATALOGS.seasons[0].seasonId, live: 1 }], more: false }) : directoryNetworkFetch(input, init);
     const tools = await import('./locker-tools.js');
     document.querySelector('#list-view').click();
     for (let i = 0; i < 100 && !document.querySelector('.locker-share'); i++) await new Promise(resolve => setTimeout(resolve, 20));
@@ -155,17 +157,19 @@ window.addEventListener("load", async () => {
     document.querySelector('button[aria-label="Remove Laura"]').click();
     result.removeFriend = document.querySelectorAll('.locker-friend-summary').length === groupBeforeRemove - 1;
     const originalFetch = window.fetch;
-    let reads = 0, liveWrites = 0, pausedOnline = false;
+    let reads = 0, liveWrites = 0, pausedOnline = false, listingEnabled = false;
     const shortId = 'AbCdEf0123456789';
     window.fetch = async (input, init) => {
       const url = String(input);
       if (!url.startsWith('https://sprite-locker-checklist.eabaylor.chatgpt.site/api/lockers')) return originalFetch(input, init);
+      if (url.includes('/players?')) return originalFetch(input, init);
+      if (url.endsWith('/listing')) { listingEnabled = JSON.parse(init.body).enabled; return Response.json({ listed: listingEnabled, ...(listingEnabled ? { nickname: 'My locker' } : {}) }); }
       if (url.endsWith('/ticket')) return Response.json({ ticket: shortId });
       if (url.endsWith('/pause')) { pausedOnline = true; return Response.json({ revision: 2 }); }
       if (init?.method === 'PUT') { liveWrites++; return Response.json({ revision: 1, updatedAt: Date.now() / 1000 }); }
       if (init?.method === 'POST') return Response.json({ id: shortId, expiresAt: 2000000000, ...(JSON.parse(init.body || '{}').live ? { writeKey: 'a'.repeat(43), revision: 0, updatedAt: Date.now() / 1000 } : {}) });
       reads++;
-      return Response.json({ token: tools.encodeSnapshot(tools.makeSnapshot(season, friendProgress, 'Test friend')) });
+      return Response.json({ token: tools.encodeSnapshot(tools.makeSnapshot(season, friendProgress, url.endsWith('/Player0000000001') ? 'Directory friend' : 'Test friend')) });
     };
     const progressBeforeSharing = localStorage.getItem(season.storageKey);
     document.querySelector('.locker-share').click();
@@ -177,11 +181,27 @@ window.addEventListener("load", async () => {
     for (let i = 0; i < 100 && !document.querySelector('.locker-message').textContent.includes('snapshot updated'); i++) await new Promise(resolve => setTimeout(resolve, 20));
     result.shortLinkImported = reads === 1 && document.querySelector('.locker-message').textContent.includes('snapshot updated');
     result.shortSharingPreservesProgress = localStorage.getItem(season.storageKey) === progressBeforeSharing;
+    for (let i = 0; i < 100 && !document.querySelector('button[data-player-id="Player0000000001"]'); i++) await new Promise(resolve => setTimeout(resolve, 20));
+    const nicknameSearch = document.querySelector('.locker-player-search'); nicknameSearch.value = 'nobody matches'; nicknameSearch.dispatchEvent(new Event('input'));
+    result.directorySearch = document.querySelectorAll('.locker-directory-player').length === 0;
+    nicknameSearch.value = ''; nicknameSearch.dispatchEvent(new Event('input'));
+    document.querySelector('button[data-player-id="Player0000000001"]').click();
+    for (let i = 0; i < 100 && !document.querySelector('button[aria-label="Remove Directory friend"]'); i++) await new Promise(resolve => setTimeout(resolve, 20));
+    result.directoryAddWithoutLink = [...document.querySelectorAll('.locker-column-name')].some(el => el.textContent === 'Directory friend');
+    document.querySelector('button[aria-label="Remove Directory friend"]').click();
     const liveToggle = document.querySelector('.locker-live-enabled');
     result.liveOffByDefault = !liveToggle.checked;
     liveToggle.checked = true; liveToggle.dispatchEvent(new Event('change'));
     for (let i = 0; i < 100 && document.querySelector('.locker-live-link-row').hidden; i++) await new Promise(resolve => setTimeout(resolve, 20));
     result.liveOptedIn = !document.querySelector('.locker-live-link-row').hidden && document.querySelector('.locker-live-url').value.endsWith('/s/' + shortId);
+    const listingToggle = document.querySelector('.locker-listing-enabled');
+    result.directoryOffByDefault = !listingToggle.checked;
+    listingToggle.checked = true; listingToggle.dispatchEvent(new Event('change'));
+    for (let i = 0; i < 100 && !listingEnabled; i++) await new Promise(resolve => setTimeout(resolve, 20));
+    result.directoryOptIn = listingEnabled;
+    listingToggle.checked = false; listingToggle.dispatchEvent(new Event('change'));
+    for (let i = 0; i < 100 && listingEnabled; i++) await new Promise(resolve => setTimeout(resolve, 20));
+    result.directoryOptOut = !listingEnabled;
     document.querySelector('#classic-view').click();
     document.querySelector('[data-name="' + CSS.escape(target.name) + '"][data-variant="' + CSS.escape(target.variants[0]) + '"][data-field="mastered"]').click();
     for (let i = 0; i < 100 && !liveWrites; i++) await new Promise(resolve => setTimeout(resolve, 20));
@@ -308,6 +328,11 @@ test("live static tracker works at 320px in a real browser", async (context) => 
     assert.equal(audit.shortLinkCreated, true);
     assert.equal(audit.shortLinkImported, true);
     assert.equal(audit.shortSharingPreservesProgress, true);
+    assert.equal(audit.directorySearch, true);
+    assert.equal(audit.directoryAddWithoutLink, true);
+    assert.equal(audit.directoryOffByDefault, true);
+    assert.equal(audit.directoryOptIn, true);
+    assert.equal(audit.directoryOptOut, true);
     assert.equal(audit.liveOffByDefault, true);
     assert.equal(audit.liveOptedIn, true);
     assert.equal(audit.liveSyncsOutsideList, true);

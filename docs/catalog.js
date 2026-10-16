@@ -1,7 +1,7 @@
 window.SPRITE_CATALOGS = {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-season-4",
-  "assetVersion": "20261015-9",
+  "assetVersion": "20261015-10",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -14,7 +14,7 @@ window.SPRITE_CATALOGS = {
       "legacyStorageKeys": [],
       "updatedDate": "October 15, 2026",
       "patch": "v42.40",
-      "assetVersion": "20261015-9",
+      "assetVersion": "20261015-10",
       "familyOrder": [
         "Dumpster Dive",
         "Jonesy",
@@ -54,12 +54,12 @@ window.SPRITE_CATALOGS = {
         "Quack"
       ],
       "whatsNew": {
-        "title": "Totals above each locker column",
-        "intro": "Collection counts now sit directly under each player’s name in the comparison table.",
+        "title": "Find friends by nickname",
+        "intro": "Choose a friend from the searchable player list—no shared link needed.",
         "items": [
-          "Your column and each friend’s column show Acquired and Mastered counts in the table header.",
-          "Counts have been moved out of the separate friend bars, keeping them aligned with the statuses below.",
-          "Totals still cover the full selected season and update with your progress or a friend’s live refresh."
+          "Search the selected season’s player list and press Add to comparison beside a friend’s nickname.",
+          "Enable live sharing, then opt in to Show me in the searchable player list to let friends find you. Existing lockers remain unlisted by default.",
+          "Nicknames are unique per season. You can update your listed nickname or remove yourself anytime; saved friends and existing links still work."
         ]
       },
       "unlockCodes": [

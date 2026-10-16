@@ -1,6 +1,12 @@
 export const SHARE_ORIGIN = 'https://sprite-locker-checklist.eabaylor.chatgpt.site';
 const idPattern = /^[A-Za-z0-9_-]{16}$/;
 
+export function directoryNickname(value) {
+  const name = typeof value === 'string' ? value.normalize('NFKC').trim().replace(/\s+/g, ' ') : '';
+  if (name.length < 2 || name.length > 40 || !/^[\p{L}\p{N} ._'’-]+$/u.test(name)) throw new Error('Use 2–40 letters, numbers, spaces, dots, underscores, apostrophes, or hyphens for your searchable nickname.');
+  return { name, key: name.toLowerCase() };
+}
+
 export function sharedLockerId(input) {
   let url;
   try { url = new URL(input); } catch { return null; }
@@ -41,6 +47,16 @@ export async function controlLiveLocker(owner, enabled) {
 
 export async function updateLiveLocker(owner, token) {
   return request(`/api/lockers/${owner.id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Locker-Write-Key': owner.writeKey }, body: JSON.stringify({ token, revision: owner.revision }) });
+}
+
+export async function setPlayerListing(owner, enabled, name) {
+  return request(`/api/lockers/${owner.id}/listing`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Locker-Write-Key': owner.writeKey }, body: JSON.stringify({ enabled, name }) });
+}
+
+export async function searchPlayers(season, query = '') {
+  const result = await request(`/api/lockers/players?${new URLSearchParams({ season, q: query })}`);
+  if (!Array.isArray(result.players)) throw new Error('The player list is temporarily unavailable.');
+  return result;
 }
 
 export async function loadSharedSnapshot(id) {

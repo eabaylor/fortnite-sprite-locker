@@ -43,6 +43,20 @@ if (process.argv.includes('--live')) {
   const paused = await fetch(`${base}/api/lockers/${owner.id}/pause`, { method: 'POST', headers: { Origin: origin, 'X-Locker-Write-Key': owner.writeKey } });
   assert.equal(paused.status, 200);
   assert.equal((await (await fetch(`${base}/api/lockers/${owner.id}`)).json()).live, false);
+  if (process.argv.includes('--directory')) {
+    const nickname = `QA-${owner.id}`;
+    const listingRequest = enabled => fetch(`${base}/api/lockers/${owner.id}/listing`, { method: 'POST', headers: { Origin: origin, 'Content-Type': 'application/json', 'X-Locker-Write-Key': owner.writeKey }, body: JSON.stringify({ enabled, name: nickname }) });
+    try {
+      const listed = await listingRequest(true); assert.equal(listed.status, 200, await listed.clone().text());
+      const foundResponse = await fetch(`${base}/api/lockers/players?${new URLSearchParams({ season: catalog.seasonId, q: nickname })}`, { headers: { Origin: origin } });
+      assert.equal(foundResponse.status, 200);
+      const found = await foundResponse.json(); assert.equal(found.players.length, 1); assert.equal(found.players[0].id, owner.id); assert.equal(found.players[0].name, nickname);
+      assert.ok(!JSON.stringify(found).includes(owner.writeKey));
+    } finally { const removed = await listingRequest(false); assert.equal(removed.status, 200); }
+    const afterRemoval = await (await fetch(`${base}/api/lockers/players?${new URLSearchParams({ season: catalog.seasonId, q: nickname })}`, { headers: { Origin: origin } })).json();
+    assert.equal(afterRemoval.players.length, 0);
+    console.log('Searchable player listing, nickname lookup, and opt-out: passed. Synthetic player removed.');
+  }
   console.log('Live update, private key isolation, and pause: passed. Synthetic test locker left paused.');
 }
 console.log(JSON.stringify({ status: 'passed', variantCount: snapshot.entries.size, shortLink: share.url, linkLength: share.url.length, redirect: redirect.headers.get('location'), cors: 'passed', originGuard: 'passed' }));

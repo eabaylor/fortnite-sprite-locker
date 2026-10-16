@@ -1,4 +1,5 @@
 import { decodeSnapshot, encodeSnapshot } from '../public/locker-tools.js';
+import { directoryNickname } from '../public/locker-sharing.js';
 
 export const SHARE_ORIGIN = 'https://sprite-locker-checklist.eabaylor.chatgpt.site';
 export const TRACKER_URL = 'https://eabaylor.github.io/fortnite-sprite-locker/';
@@ -32,11 +33,46 @@ export async function handleLockerRequest(request, db, now = Math.floor(Date.now
       return new Response(null, { status: 302, headers: { ...headers, Location: `${TRACKER_URL}?s=${shortPath[1]}${row ? '' : '&shareExpired=1'}` } });
     }
     const id = url.pathname.slice('/api/lockers/'.length);
+    if (request.method === 'GET' && url.pathname === '/api/lockers/players') {
+      const season = url.searchParams.get('season') || ''; const query = (url.searchParams.get('q') || '').normalize('NFKC').trim().toLowerCase();
+      if (!/^[A-Za-z0-9-]{1,80}$/.test(season) || query.length > 40) return json({ error: 'Select a valid season and a shorter nickname search.' }, 400);
+      const result = await db.prepare('SELECT p.share_id AS id, p.name, p.season, s.live_enabled AS live FROM locker_players p JOIN locker_shares s ON s.id = p.share_id WHERE p.season = ? AND s.expires_at > ? AND instr(p.name_key, ?) > 0 ORDER BY p.name_key LIMIT 51').bind(season, now, query).all();
+      return json({ players: result.results.slice(0, 50), more: result.results.length > 50 });
+    }
     if (request.method === 'GET' && ID.test(id)) {
-      const row = await db.prepare('SELECT payload, expires_at, live_enabled, revision, updated_at, created_at, live_season FROM locker_shares WHERE id = ? AND expires_at > ?').bind(id, now).first();
-      return row ? json({ token: row.payload, expiresAt: row.expires_at, live: row.live_enabled === 1, liveLink: !!row.live_season, revision: row.revision, updatedAt: row.updated_at ?? row.created_at }) : json({ error: 'This shared locker has expired or is unavailable. Ask your friend for a fresh link.' }, 404);
+      const row = await db.prepare('SELECT payload, expires_at, live_enabled, revision, updated_at, created_at, live_season, (SELECT name FROM locker_players WHERE share_id = locker_shares.id) AS nickname FROM locker_shares WHERE id = ? AND expires_at > ?').bind(id, now).first();
+      return row ? json({ token: row.payload, expiresAt: row.expires_at, live: row.live_enabled === 1, liveLink: !!row.live_season, revision: row.revision, updatedAt: row.updated_at ?? row.created_at, ...(row.nickname ? { nickname: row.nickname } : {}) }) : json({ error: 'This shared locker has expired or is unavailable. Ask your friend for a fresh link.' }, 404);
     }
     if (!trusted || !['POST', 'PUT'].includes(request.method)) return json({ error: 'This request is not allowed.' }, 403);
+    const listing = url.pathname.match(/^\/api\/lockers\/([A-Za-z0-9_-]{16})\/listing$/);
+    if (listing && request.method === 'POST') {
+      const key = request.headers.get('X-Locker-Write-Key');
+      if (!WRITE_KEY.test(key || '')) return json({ error: 'The private sharing key is required.' }, 401);
+      const owner = await db.prepare('SELECT live_season FROM locker_shares WHERE id = ? AND write_key_hash = ? AND expires_at > ?').bind(listing[1], await hash(key), now).first();
+      if (!owner?.live_season) return json({ error: 'This browser cannot manage that player listing.' }, 403);
+      let body;
+      try {
+        if (!request.headers.get('Content-Type')?.startsWith('application/json')) return json({ error: 'Expected JSON.' }, 415);
+        const reader = request.body?.getReader(); if (!reader) throw new Error();
+        let size = 0; const chunks = [];
+        for (;;) { const { value, done } = await reader.read(); if (done) break; size += value.length; if (size > 512) { await reader.cancel(); return json({ error: 'Listing settings are too large.' }, 413); } chunks.push(value); }
+        const bytes = new Uint8Array(size); let offset = 0; for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.length; }
+        body = JSON.parse(new TextDecoder().decode(bytes)); if (typeof body.enabled !== 'boolean') throw new Error();
+      } catch { return json({ error: 'Invalid listing settings.' }, 400); }
+      if (!body.enabled) { await db.prepare('DELETE FROM locker_players WHERE share_id = ?').bind(listing[1]).run(); return json({ listed: false }); }
+      let nickname;
+      try { nickname = directoryNickname(body.name); } catch (error) { return json({ error: error.message }, 400); }
+      try {
+        await db.batch([
+          db.prepare('DELETE FROM locker_players WHERE share_id = ?').bind(listing[1]),
+          db.prepare('INSERT INTO locker_players (season, name_key, name, share_id) VALUES (?, ?, ?, ?)').bind(owner.live_season, nickname.key, nickname.name, listing[1]),
+        ]);
+      } catch (error) {
+        if (/unique|constraint/i.test(String(error))) return json({ error: 'That nickname is already on this season’s list. Choose a different nickname.' }, 409);
+        throw error;
+      }
+      return json({ listed: true, nickname: nickname.name });
+    }
     const control = url.pathname.match(/^\/api\/lockers\/([A-Za-z0-9_-]{16})\/(pause|resume)$/);
     if (control && request.method === 'POST') {
       const key = request.headers.get('X-Locker-Write-Key');
@@ -53,6 +89,7 @@ export async function handleLockerRequest(request, db, now = Math.floor(Date.now
         db.prepare('DELETE FROM share_tickets WHERE expires_at < ?').bind(now),
         db.prepare('DELETE FROM share_quotas WHERE expires_at < ?').bind(now),
         db.prepare('DELETE FROM locker_shares WHERE expires_at < ?').bind(now),
+        db.prepare('DELETE FROM locker_players WHERE share_id NOT IN (SELECT id FROM locker_shares)').bind(),
       ]);
       if (quotas.slice(0, 2).some(q => !q.results?.length)) return json({ error: 'Sharing limit reached. Try again later, or use a portable link.' }, 429);
       const ticket = randomToken();

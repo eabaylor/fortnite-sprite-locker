@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer, index } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, text, integer, index, primaryKey, uniqueIndex } from 'drizzle-orm/sqlite-core';
 
 export const lockerShares = sqliteTable('locker_shares', {
   id: text('id').primaryKey(),
@@ -22,3 +22,10 @@ export const shareQuotas = sqliteTable('share_quotas', {
   count: integer('count').notNull(),
   expiresAt: integer('expires_at').notNull(),
 }, table => [index('share_quotas_expiry').on(table.expiresAt)]);
+
+export const lockerPlayers = sqliteTable('locker_players', {
+  season: text('season').notNull(),
+  nameKey: text('name_key').notNull(),
+  name: text('name').notNull(),
+  shareId: text('share_id').notNull(),
+}, table => [primaryKey({ columns: [table.season, table.nameKey] }), uniqueIndex('locker_players_share').on(table.shareId)]);
