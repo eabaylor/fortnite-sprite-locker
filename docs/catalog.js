@@ -1,7 +1,7 @@
 window.SPRITE_CATALOGS = {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-season-4",
-  "assetVersion": "20261016-2",
+  "assetVersion": "20261016-3",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -14,7 +14,7 @@ window.SPRITE_CATALOGS = {
       "legacyStorageKeys": [],
       "updatedDate": "October 16, 2026",
       "patch": "v42.40",
-      "assetVersion": "20261016-2",
+      "assetVersion": "20261016-3",
       "familyOrder": [
         "Jonesy",
         "Adventure",
@@ -54,12 +54,12 @@ window.SPRITE_CATALOGS = {
         "Quack"
       ],
       "whatsNew": {
-        "title": "Your locker list, ready on refresh",
-        "intro": "Start in List view with more room to track and compare.",
+        "title": "A cleaner list for your whole group",
+        "intro": "Keep the Show filter handy and compare up to six players.",
         "items": [
-          "List view now opens by default on every refresh; Compact and Classic remain available at the top.",
-          "Share & compare lockers starts collapsed. Open it whenever you want to manage friends or sharing.",
-          "Scroll within the Sprite list while player names and Acquired/Mastered counts stay pinned above the rows, including on mobile."
+          "Friend management, comparison targets, counts, and guidance now live inside the collapsed Share & compare lockers dropdown; Show stays visible.",
+          "Choose I’m Missing to show every Sprite you do not own, whether or not any friend has it—even with no friends added.",
+          "Compare six people total: your editable column first, plus up to five friends, including your tester account."
         ]
       },
       "unlockCodes": [

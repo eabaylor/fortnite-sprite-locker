@@ -53,5 +53,10 @@ test('opt-in only, same live ID updates, pause persists, friends survive refresh
     assert.equal(sync.friends.length, 2); assert.match(sync.friends[0].error, /Last saved snapshot/);
     assert.equal(sync.friends[0].entries.get('Honey::Gold'), 2, 'Offline keeps last known state');
     assert.ok(saved.has(LIVE_KEY));
+    for (const name of ['Carl', 'Sharon', 'MamaPjama', 'Tester']) await sync.add(codec.encodeSnapshot(codec.makeSnapshot(season, {}, name)), null);
+    assert.equal(sync.friends.filter(f => f.season === season.seasonId).length, 5);
+    await assert.rejects(() => sync.add(codec.encodeSnapshot(codec.makeSnapshot(season, {}, 'Too many')), null), /five friends/);
+    sync.dispose(); sync = createLockerSync([season, previous], codec);
+    assert.equal(sync.friends.filter(f => f.season === season.seasonId).length, 5, 'All five friends survive refresh');
   } finally { sync?.dispose(); for (const [key, value] of Object.entries(originals)) { if (value === undefined) delete globalThis[key]; else globalThis[key] = value; } }
 });

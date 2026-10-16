@@ -389,6 +389,9 @@ footer p { margin: 0; text-align: right; }
 .locker-comparison > div { flex: 1 1 220px; min-width: 0; overflow-wrap: anywhere; }
 .locker-friend-date { margin: 4px 0 0; color: var(--muted); font-size: 11px; line-height: 1.4; }
 .locker-comparison > label { flex: 1 1 100%; }
+.locker-filter-bar { border: 1px solid #aac5d8; border-radius: 12px; padding: 12px; margin-bottom: 12px; background: #e8f2fa; }
+.locker-filter-bar label { display: grid; gap: 5px; font-size: 12px; font-weight: 800; }
+.locker-filter-bar select { width: 100%; min-height: 44px; }
 .locker-count { margin: 12px 0; color: var(--muted); font-size: 12px; }
 .locker-table-scroll { max-width: 100%; max-height: max(180px, calc(100dvh - var(--locker-controls-height, 260px) - 24px)); overflow: auto; overscroll-behavior-x: contain; border-radius: 9px; scroll-margin-top: calc(var(--locker-controls-height, 260px) + 12px); }
 .locker-table-scroll:focus-visible { outline: 3px solid var(--code-blue); outline-offset: 2px; }

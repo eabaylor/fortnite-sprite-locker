@@ -1,4 +1,4 @@
-import { publishSharedSnapshot, readSharedLocker, controlLiveLocker, updateLiveLocker, setPlayerListing, directoryNickname } from './locker-sharing.js?v=20261016-2';
+import { publishSharedSnapshot, readSharedLocker, controlLiveLocker, updateLiveLocker, setPlayerListing, directoryNickname } from './locker-sharing.js?v=20261016-3';
 export const FRIENDS_KEY = 'sprite-locker-friends-v1';
 export const LIVE_KEY = 'sprite-locker-live-shares-v1';
 
@@ -18,7 +18,7 @@ export function createLockerSync(catalogs, codec) {
       try {
         const snapshot = codec.decodeSnapshot(item.token);
         if (item.shareId && owners()[snapshot.season]?.id === item.shareId) continue;
-        if (!catalogs.some(c => c.seasonId === snapshot.season) || restored.filter(f => f.season === snapshot.season).length >= 4) continue;
+        if (!catalogs.some(c => c.seasonId === snapshot.season) || restored.filter(f => f.season === snapshot.season).length >= 5) continue;
         restored.push({ ...snapshot, shareId: /^[A-Za-z0-9_-]{16}$/.test(item.shareId || '') ? item.shareId : null, live: item.live === true, liveLink: item.liveLink === true, updatedAt: Number(item.updatedAt) || Date.parse(snapshot.date) / 1000, checkedAt: Number(item.checkedAt) || 0, error: typeof item.error === 'string' ? item.error.slice(0, 200) : '', expiresAt: Number(item.expiresAt) || 0 });
       } catch { /* Keep other valid friends if one stored entry is damaged. */ }
     }
@@ -95,13 +95,13 @@ export function createLockerSync(catalogs, codec) {
     owner(seasonId) { return owners()[seasonId]; },
     subscribe(fn) { subscribers.add(fn); return () => subscribers.delete(fn); },
     async add(input, shareId) {
-      if (shareId && Object.values(owners()).some(o => o?.id === shareId)) throw new Error('That is your own locker. You are already shown in the first player column; all four friend slots remain available.');
+      if (shareId && Object.values(owners()).some(o => o?.id === shareId)) throw new Error('That is your own locker. You are already shown in the first player column; all five friend slots remain available.');
       const result = shareId ? await readSharedLocker(shareId) : null;
       const snapshot = codec.decodeSnapshot(result ? result.token : input);
       if (!catalogs.some(c => c.seasonId === snapshot.season)) throw new Error('This season is not available in the tracker yet.');
       const friend = { ...snapshot, ...result, name: result?.nickname || snapshot.name, shareId: shareId || null, checkedAt: Date.now(), updatedAt: result?.updatedAt || Date.parse(snapshot.date) / 1000, error: '' };
       const index = friends.findIndex(f => f.season === friend.season && ((shareId && f.shareId === shareId) || f.name.toLowerCase() === friend.name.toLowerCase()));
-      if (index < 0 && friends.filter(f => f.season === friend.season).length >= 4) throw new Error('You can compare with up to four friends in each season. Remove a friend before adding another.');
+      if (index < 0 && friends.filter(f => f.season === friend.season).length >= 5) throw new Error('You can compare with up to five friends in each season. Remove a friend before adding another.');
       if (index < 0 && friends.length >= 40) throw new Error('Your friend archive is full. Remove an older saved locker first.');
       const next = [...friends]; if (index >= 0) next[index] = friend; else next.push(friend);
       const previous = friends; friends = next;

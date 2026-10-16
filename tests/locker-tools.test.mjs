@@ -66,17 +66,20 @@ test('new shares require a real nickname; old unnamed links remain decodable', (
   assert.equal(decodeSnapshot(encodeSnapshot({ ...makeSnapshot(season, {}, 'Eric'), name: 'Friend' })).name, 'Friend');
 });
 
-test('four friends maximum, named reimports replace snapshots without consuming a slot', () => {
+test('five friends maximum, named reimports replace snapshots without consuming a slot', () => {
   let friends = [];
-  for (const name of ['Eric', 'Laura', 'Chris', 'Alex']) friends = addFriendSnapshot(friends, makeSnapshot(season, {}, name));
-  assert.equal(friends.length, 4);
-  assert.throws(() => addFriendSnapshot(friends, makeSnapshot(season, {}, 'Fifth')), /four friends/);
+  for (const name of ['Eric', 'Laura', 'Chris', 'Alex', 'Sharon']) friends = addFriendSnapshot(friends, makeSnapshot(season, {}, name));
+  assert.equal(friends.length, 5);
+  assert.throws(() => addFriendSnapshot(friends, makeSnapshot(season, {}, 'Sixth')), /five friends/);
   friends = addFriendSnapshot(friends, makeSnapshot(season, { 'Honey::Gold': { mastered: true } }, 'LAURA'));
-  assert.equal(friends.length, 4);
+  assert.equal(friends.length, 5);
   assert.equal(friends[1].states, '020');
 });
 
 test('group comparisons distinguish any friend from everyone missing and ignore unknowns', () => {
+  for (const statuses of [[], [0], [1], [2], [undefined], [0, 2, undefined]]) {
+    for (const mine of [0, 1, 2]) assert.equal(matchesGroupComparison('im-missing', mine, statuses), mine === 0);
+  }
   assert.equal(matchesGroupComparison('i-need', 0, [0, 2]), true);
   assert.equal(matchesGroupComparison('they-need', 1, [2, 0]), true);
   assert.equal(matchesGroupComparison('both-missing', 0, [0, 0]), true);

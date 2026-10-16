@@ -43,6 +43,12 @@ window.addEventListener("load", async () => {
   for (let i = 0; i < 100 && !document.querySelector('.locker-sharing'); i++) await new Promise(resolve => setTimeout(resolve, 20));
   const defaultList = document.querySelector('#list-view').getAttribute('aria-pressed') === 'true' && !document.querySelector('#locker-tools-host').hidden;
   const sharingCollapsed = !document.querySelector('.locker-sharing').open;
+  const friendControlsGrouped = ['.locker-comparison', '.locker-count', '.locker-party-count', '.locker-edit-hint', '.locker-scroll-hint'].every(selector => document.querySelector(selector).closest('details.locker-sharing'));
+  const showOutsideCollapsed = !document.querySelector('.locker-compare-filter').closest('details') && !document.querySelector('.locker-compare-filter').disabled;
+  const initialShow = document.querySelector('.locker-compare-filter');
+  initialShow.value = 'im-missing'; initialShow.dispatchEvent(new Event('change'));
+  const missingWithoutFriends = document.querySelectorAll('.locker-list-row').length === window.SPRITE_CATALOGS.seasons[0].families.reduce((n, f) => n + f.variants.length, 0);
+  initialShow.value = 'all'; initialShow.dispatchEvent(new Event('change'));
   document.querySelector('#compact-view').click();
   const status = document.querySelector("#status-filter");
   const defaultStatusAll = status.value === "all";
@@ -86,6 +92,9 @@ window.addEventListener("load", async () => {
     defaultStatusAll,
     defaultList,
     sharingCollapsed,
+    friendControlsGrouped,
+    showOutsideCollapsed,
+    missingWithoutFriends,
     defaultCompact,
     compactRowInsideViewport,
     fixedSixColumnWidth,
@@ -135,6 +144,8 @@ window.addEventListener("load", async () => {
     result.ownStatusesTappable = document.querySelectorAll('.locker-list-row button.locker-status-toggle').length === result.listCount;
     result.friendsReadOnly = [...document.querySelectorAll('.locker-friend-status:not(.locker-my-status)')].every(el => el.tagName !== 'BUTTON');
     const comparisonFilter = document.querySelector('.locker-compare-filter');
+    comparisonFilter.value = 'im-missing'; comparisonFilter.dispatchEvent(new Event('change'));
+    result.missingRegardlessOfFriend = document.querySelectorAll('.locker-list-row').length === totalVariants - 1;
     comparisonFilter.value = 'i-need';
     comparisonFilter.dispatchEvent(new Event('change'));
     result.iNeedCount = document.querySelectorAll('.locker-list-row').length;
@@ -150,12 +161,12 @@ window.addEventListener("load", async () => {
     const missingLabel = targetButton().textContent;
     result.tapCycle = acquiredLabel === 'Acquired' && masteredLabel === 'Mastered' && missingLabel === 'Missing' && savedMastered.acquired && savedMastered.mastered;
     targetButton().click();
-    for (const nickname of ['Laura', 'Chris', 'Alex', 'Fifth']) {
+    for (const nickname of ['Laura', 'Chris', 'Alex', 'Sharon', 'Sixth']) {
       document.querySelector('.locker-import-url').value = tools.encodeSnapshot(tools.makeSnapshot(season, nickname === 'Chris' ? {} : friendProgress, nickname));
       document.querySelector('.locker-import').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
       await Promise.resolve(); await Promise.resolve();
     }
-    result.fourFriendsMaximum = document.querySelectorAll('.locker-friend-summary').length === 4 && document.querySelector('.locker-message').textContent.includes('four friends');
+    result.fiveFriendsMaximum = document.querySelectorAll('.locker-friend-summary').length === 5 && document.querySelector('.locker-message').textContent.includes('five friends');
     result.allNamedHeaders = ['Sprite / variant', ...[...document.querySelectorAll('.locker-column-name')].map(el => el.textContent)];
     const targetFilter = document.querySelector('.locker-compare-target');
     const modeFilter = document.querySelector('.locker-compare-filter');
@@ -166,8 +177,8 @@ window.addEventListener("load", async () => {
     result.specificFriendFilter = chrisNeeds === 2 && document.querySelectorAll('.locker-list-row').length === 1;
     targetFilter.value = '*'; targetFilter.dispatchEvent(new Event('change'));
     const filter = document.querySelector('.locker-compare-filter'); filter.value = 'all'; filter.dispatchEvent(new Event('change'));
-    result.fivePlayerStatuses = [...document.querySelectorAll('.locker-list-row')].every(row => row.querySelectorAll('.locker-friend-status').length === 5);
-    result.fivePlayerColumns = document.querySelectorAll('.locker-player-heading').length === 5 && document.querySelector('.locker-player-heading').classList.contains('locker-current-player') && document.querySelector('.locker-party-count').textContent.includes('5/5 players');
+    result.sixPlayerStatuses = [...document.querySelectorAll('.locker-list-row')].every(row => row.querySelectorAll('.locker-friend-status').length === 6);
+    result.sixPlayerColumns = document.querySelectorAll('.locker-player-heading').length === 6 && document.querySelector('.locker-player-heading').classList.contains('locker-current-player') && document.querySelector('.locker-party-count').textContent.includes('6/6 players');
     const scroller = document.querySelector('.locker-table-scroll');
     const header = document.querySelector('.locker-list-head');
     const headTop = header.getBoundingClientRect().top;
@@ -180,6 +191,7 @@ window.addEventListener("load", async () => {
     const groupBeforeRemove = document.querySelectorAll('.locker-friend-summary').length;
     document.querySelector('button[aria-label="Remove Laura"]').click();
     result.removeFriend = document.querySelectorAll('.locker-friend-summary').length === groupBeforeRemove - 1;
+    document.querySelector('button[aria-label="Remove Sharon"]').click();
     const originalFetch = window.fetch;
     let reads = 0, liveWrites = 0, pausedOnline = false, listingEnabled = false;
     const shortId = 'AbCdEf0123456789';
@@ -346,6 +358,10 @@ test("live static tracker works at 320px in a real browser", async (context) => 
     assert.equal(audit.defaultStatusAll, true);
     assert.equal(audit.defaultList, true);
     assert.equal(audit.sharingCollapsed, true);
+    assert.equal(audit.friendControlsGrouped, true);
+    assert.equal(audit.showOutsideCollapsed, true);
+    assert.equal(audit.missingWithoutFriends, true);
+    assert.equal(audit.missingRegardlessOfFriend, true);
     assert.equal(audit.defaultCompact, true);
     assert.equal(audit.compactRowInsideViewport, true);
     assert.equal(audit.fixedSixColumnWidth, true);
@@ -370,10 +386,10 @@ test("live static tracker works at 320px in a real browser", async (context) => 
     assert.equal(audit.listCount, catalog.families.reduce((n, f) => n + f.variants.length, 0));
     assert.equal(audit.iNeedCount, 1);
     assert.equal(audit.comparisonReactsImmediately, true);
-    assert.equal(audit.fourFriendsMaximum, true);
-    assert.deepEqual(audit.allNamedHeaders, ['Sprite / variant', 'My locker (You)', 'Test friend', 'Laura', 'Chris', 'Alex']);
-    assert.equal(audit.fivePlayerStatuses, true);
-    assert.equal(audit.fivePlayerColumns, true);
+    assert.equal(audit.fiveFriendsMaximum, true);
+    assert.deepEqual(audit.allNamedHeaders, ['Sprite / variant', 'My locker (You)', 'Test friend', 'Laura', 'Chris', 'Alex', 'Sharon']);
+    assert.equal(audit.sixPlayerStatuses, true);
+    assert.equal(audit.sixPlayerColumns, true);
     assert.equal(audit.fivePlayersInMenu, true);
     assert.equal(audit.specificFriendFilter, true);
     assert.equal(audit.comparisonScrolls, true);
