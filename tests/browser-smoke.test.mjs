@@ -97,7 +97,7 @@ window.addEventListener("load", async () => {
   menu.open = false;
   try {
     const directoryNetworkFetch = window.fetch;
-    window.fetch = async (input, init) => String(input).includes('/api/lockers/players?') ? Response.json({ players: [{ id: 'Player0000000001', name: 'Directory friend', season: window.SPRITE_CATALOGS.seasons[0].seasonId, live: 1 }], more: false }) : directoryNetworkFetch(input, init);
+    window.fetch = async (input, init) => String(input).includes('/api/lockers/players?') ? Response.json({ players: [['Player0000000001', 'Directory friend'], ['Player0000000002', 'Ash'], ['Player0000000003', 'Casey'], ['LiveID0123456789', 'My locker'], ['Player0000000004', 'Sharon']].map(([id, name]) => ({ id, name, season: window.SPRITE_CATALOGS.seasons[0].seasonId, live: 1 })), more: false }) : directoryNetworkFetch(input, init);
     const tools = await import('./locker-tools.js');
     document.querySelector('#list-view').click();
     for (let i = 0; i < 100 && !document.querySelector('.locker-share'); i++) await new Promise(resolve => setTimeout(resolve, 20));
@@ -123,15 +123,24 @@ window.addEventListener("load", async () => {
     result.friendCounts = initialFriendHeader.querySelector('.locker-column-count.acquired').textContent === 'Acquired 1/' + totalVariants && initialFriendHeader.querySelector('.locker-column-count.mastered').textContent === 'Mastered 0/' + totalVariants;
     const ownHeader = document.querySelector('.locker-player-heading');
     result.ownHeaderCounts = ownHeader.querySelector('.locker-column-count.acquired').textContent === 'Acquired 1/' + totalVariants && ownHeader.querySelector('.locker-column-count.mastered').textContent === 'Mastered 1/' + totalVariants;
-    result.readOnlyStatuses = document.querySelectorAll('.locker-list-row button').length === 0 && document.querySelectorAll('.locker-my-status').length === result.listCount;
+    result.ownStatusesTappable = document.querySelectorAll('.locker-list-row button.locker-status-toggle').length === result.listCount;
+    result.friendsReadOnly = [...document.querySelectorAll('.locker-friend-status:not(.locker-my-status)')].every(el => el.tagName !== 'BUTTON');
     const comparisonFilter = document.querySelector('.locker-compare-filter');
     comparisonFilter.value = 'i-need';
     comparisonFilter.dispatchEvent(new Event('change'));
     result.iNeedCount = document.querySelectorAll('.locker-list-row').length;
-    document.querySelector('#classic-view').click();
-    document.querySelector('[data-name="' + CSS.escape(target.name) + '"][data-variant="' + CSS.escape(target.variants[0]) + '"][data-field="acquired"]').click();
-    document.querySelector('#list-view').click();
+    const targetButton = () => document.querySelector('.locker-status-toggle[data-name="' + CSS.escape(target.name) + '"][data-variant="' + CSS.escape(target.variants[0]) + '"]');
+    targetButton().click();
     result.comparisonReactsImmediately = document.querySelectorAll('.locker-list-row').length === 0;
+    comparisonFilter.value = 'all'; comparisonFilter.dispatchEvent(new Event('change'));
+    const acquiredLabel = targetButton().textContent;
+    targetButton().click();
+    const masteredLabel = targetButton().textContent;
+    const savedMastered = JSON.parse(localStorage.getItem(season.storageKey))[target.name + '::' + target.variants[0]];
+    targetButton().click();
+    const missingLabel = targetButton().textContent;
+    result.tapCycle = acquiredLabel === 'Acquired' && masteredLabel === 'Mastered' && missingLabel === 'Missing' && savedMastered.acquired && savedMastered.mastered;
+    targetButton().click();
     for (const nickname of ['Laura', 'Chris', 'Alex', 'Fifth']) {
       document.querySelector('.locker-import-url').value = tools.encodeSnapshot(tools.makeSnapshot(season, nickname === 'Chris' ? {} : friendProgress, nickname));
       document.querySelector('.locker-import').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
@@ -149,6 +158,7 @@ window.addEventListener("load", async () => {
     targetFilter.value = '*'; targetFilter.dispatchEvent(new Event('change'));
     const filter = document.querySelector('.locker-compare-filter'); filter.value = 'all'; filter.dispatchEvent(new Event('change'));
     result.fivePlayerStatuses = [...document.querySelectorAll('.locker-list-row')].every(row => row.querySelectorAll('.locker-friend-status').length === 5);
+    result.fivePlayerColumns = document.querySelectorAll('.locker-player-heading').length === 5 && document.querySelector('.locker-player-heading').classList.contains('locker-current-player') && document.querySelector('.locker-party-count').textContent.includes('5/5 players');
     const scroller = document.querySelector('.locker-table-scroll');
     scroller.scrollLeft = 100;
     result.comparisonScrolls = scroller.scrollWidth > scroller.clientWidth && scroller.scrollLeft > 0;
@@ -159,6 +169,7 @@ window.addEventListener("load", async () => {
     const originalFetch = window.fetch;
     let reads = 0, liveWrites = 0, pausedOnline = false, listingEnabled = false;
     const shortId = 'AbCdEf0123456789';
+    const liveId = 'LiveID0123456789';
     window.fetch = async (input, init) => {
       const url = String(input);
       if (!url.startsWith('https://sprite-locker-checklist.eabaylor.chatgpt.site/api/lockers')) return originalFetch(input, init);
@@ -167,7 +178,7 @@ window.addEventListener("load", async () => {
       if (url.endsWith('/ticket')) return Response.json({ ticket: shortId });
       if (url.endsWith('/pause')) { pausedOnline = true; return Response.json({ revision: 2 }); }
       if (init?.method === 'PUT') { liveWrites++; return Response.json({ revision: 1, updatedAt: Date.now() / 1000 }); }
-      if (init?.method === 'POST') return Response.json({ id: shortId, expiresAt: 2000000000, ...(JSON.parse(init.body || '{}').live ? { writeKey: 'a'.repeat(43), revision: 0, updatedAt: Date.now() / 1000 } : {}) });
+      if (init?.method === 'POST') return Response.json({ id: JSON.parse(init.body || '{}').live ? liveId : shortId, expiresAt: 2000000000, ...(JSON.parse(init.body || '{}').live ? { writeKey: 'a'.repeat(43), revision: 0, updatedAt: Date.now() / 1000 } : {}) });
       reads++;
       return Response.json({ token: tools.encodeSnapshot(tools.makeSnapshot(season, friendProgress, url.endsWith('/Player0000000001') ? 'Directory friend' : 'Test friend')) });
     };
@@ -182,6 +193,7 @@ window.addEventListener("load", async () => {
     result.shortLinkImported = reads === 1 && document.querySelector('.locker-message').textContent.includes('snapshot updated');
     result.shortSharingPreservesProgress = localStorage.getItem(season.storageKey) === progressBeforeSharing;
     for (let i = 0; i < 100 && !document.querySelector('button[data-player-id="Player0000000001"]'); i++) await new Promise(resolve => setTimeout(resolve, 20));
+    result.fivePlayersInMenu = document.querySelectorAll('.locker-directory-player').length === 5 && document.querySelector('.locker-player-list').textContent.includes('Sharon');
     const nicknameSearch = document.querySelector('.locker-player-search'); nicknameSearch.value = 'nobody matches'; nicknameSearch.dispatchEvent(new Event('input'));
     result.directorySearch = document.querySelectorAll('.locker-directory-player').length === 0;
     nicknameSearch.value = ''; nicknameSearch.dispatchEvent(new Event('input'));
@@ -193,7 +205,7 @@ window.addEventListener("load", async () => {
     result.liveOffByDefault = !liveToggle.checked;
     liveToggle.checked = true; liveToggle.dispatchEvent(new Event('change'));
     for (let i = 0; i < 100 && document.querySelector('.locker-live-link-row').hidden; i++) await new Promise(resolve => setTimeout(resolve, 20));
-    result.liveOptedIn = !document.querySelector('.locker-live-link-row').hidden && document.querySelector('.locker-live-url').value.endsWith('/s/' + shortId);
+    result.liveOptedIn = !document.querySelector('.locker-live-link-row').hidden && document.querySelector('.locker-live-url').value.endsWith('/s/' + liveId);
     const listingToggle = document.querySelector('.locker-listing-enabled');
     result.directoryOffByDefault = !listingToggle.checked;
     listingToggle.checked = true; listingToggle.dispatchEvent(new Event('change'));
@@ -313,7 +325,9 @@ test("live static tracker works at 320px in a real browser", async (context) => 
     assert.equal(audit.namedFriendHeader, true);
     assert.equal(audit.friendCounts, true);
     assert.equal(audit.ownHeaderCounts, true);
-    assert.equal(audit.readOnlyStatuses, true);
+    assert.equal(audit.ownStatusesTappable, true);
+    assert.equal(audit.friendsReadOnly, true);
+    assert.equal(audit.tapCycle, true);
     assert.equal(audit.comparisonDoesNotOverwrite, true);
     assert.equal(audit.listCount, catalog.families.reduce((n, f) => n + f.variants.length, 0));
     assert.equal(audit.iNeedCount, 1);
@@ -321,6 +335,8 @@ test("live static tracker works at 320px in a real browser", async (context) => 
     assert.equal(audit.fourFriendsMaximum, true);
     assert.deepEqual(audit.allNamedHeaders, ['Sprite / variant', 'My locker (You)', 'Test friend', 'Laura', 'Chris', 'Alex']);
     assert.equal(audit.fivePlayerStatuses, true);
+    assert.equal(audit.fivePlayerColumns, true);
+    assert.equal(audit.fivePlayersInMenu, true);
     assert.equal(audit.specificFriendFilter, true);
     assert.equal(audit.comparisonScrolls, true);
     assert.equal(audit.spriteColumnSticky, true);
@@ -340,6 +356,7 @@ test("live static tracker works at 320px in a real browser", async (context) => 
     assert.equal(audit.friendsStored, true);
     assert.equal(audit.listNoOverflow, true);
     assert.deepEqual(audit.familyNames, catalog.familyOrder);
+    assert.equal(audit.familyNames.indexOf('Dumpster Dive'), audit.familyNames.indexOf('Birthday') - 1);
     assert.deepEqual(audit.firstVariants, ["Base", "Gold", "Cheat Master", "Loot Hacker", "Bounty Hunter", "Trick or Treat"]);
   } finally {
     await new Promise((resolve) => server.close(resolve));

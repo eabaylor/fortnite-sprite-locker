@@ -1,4 +1,4 @@
-import { publishSharedSnapshot, readSharedLocker, controlLiveLocker, updateLiveLocker, setPlayerListing, directoryNickname } from './locker-sharing.js?v=20261015-10';
+import { publishSharedSnapshot, readSharedLocker, controlLiveLocker, updateLiveLocker, setPlayerListing, directoryNickname } from './locker-sharing.js?v=20261015-11';
 export const FRIENDS_KEY = 'sprite-locker-friends-v1';
 export const LIVE_KEY = 'sprite-locker-live-shares-v1';
 
@@ -17,6 +17,7 @@ export function createLockerSync(catalogs, codec) {
     for (const item of Array.isArray(saved) ? saved.slice(0, 40) : []) {
       try {
         const snapshot = codec.decodeSnapshot(item.token);
+        if (item.shareId && owners()[snapshot.season]?.id === item.shareId) continue;
         if (!catalogs.some(c => c.seasonId === snapshot.season) || restored.filter(f => f.season === snapshot.season).length >= 4) continue;
         restored.push({ ...snapshot, shareId: /^[A-Za-z0-9_-]{16}$/.test(item.shareId || '') ? item.shareId : null, live: item.live === true, liveLink: item.liveLink === true, updatedAt: Number(item.updatedAt) || Date.parse(snapshot.date) / 1000, checkedAt: Number(item.checkedAt) || 0, error: typeof item.error === 'string' ? item.error.slice(0, 200) : '', expiresAt: Number(item.expiresAt) || 0 });
       } catch { /* Keep other valid friends if one stored entry is damaged. */ }
@@ -94,6 +95,7 @@ export function createLockerSync(catalogs, codec) {
     owner(seasonId) { return owners()[seasonId]; },
     subscribe(fn) { subscribers.add(fn); return () => subscribers.delete(fn); },
     async add(input, shareId) {
+      if (shareId && Object.values(owners()).some(o => o?.id === shareId)) throw new Error('That is your own locker. You are already shown in the first player column; all four friend slots remain available.');
       const result = shareId ? await readSharedLocker(shareId) : null;
       const snapshot = codec.decodeSnapshot(result ? result.token : input);
       if (!catalogs.some(c => c.seasonId === snapshot.season)) throw new Error('This season is not available in the tracker yet.');
@@ -121,6 +123,8 @@ export function createLockerSync(catalogs, codec) {
         try { saveOwner(season.seasonId, { ...result, name: nickname.trim(), signature, enabled: true, pendingPause: false, error: '' }); }
         catch { await controlLiveLocker(result, false); throw new Error('This browser cannot save the private key. Live sharing was stopped.'); }
       }
+      const ownId = owners()[season.seasonId]?.id;
+      if (friends.some(f => f.shareId === ownId)) { friends = friends.filter(f => f.shareId !== ownId); persistFriends(); }
       retryAt = 0; emit(); return owners()[season.seasonId];
     },
     async pause(seasonId) {

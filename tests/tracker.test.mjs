@@ -38,7 +38,7 @@ test("catalog has unique active entries and matching artwork", async () => {
   assert.equal(entries.length, 162);
   assert.ok(catalog.whatsNew.items.length >= 1 && catalog.whatsNew.items.length <= 4);
   assert.deepEqual(catalog.familyOrder, [
-    "Dumpster Dive", "Jonesy", "Adventure", "Bush", "Sonic", "Tails", "Shadow", "8-Bit", "Jackrabbit", "Crown", "Killswitch", "Klombo", "Mega Man", "Overshield", "Pond", "X-Ray", "Onigiri", "Storm Scout", "Blinky", "Birthday", "Crash Bandicoot", "Morgana", "Spooky Dash", "The Deer", "Vampire", "Honey", "One Wish Willow",
+    "Jonesy", "Adventure", "Bush", "Sonic", "Tails", "Shadow", "8-Bit", "Jackrabbit", "Crown", "Killswitch", "Klombo", "Mega Man", "Overshield", "Pond", "X-Ray", "Onigiri", "Storm Scout", "Blinky", "Dumpster Dive", "Birthday", "Crash Bandicoot", "Morgana", "Spooky Dash", "The Deer", "Vampire", "Honey", "One Wish Willow",
   ]);
   assert.deepEqual(catalog.variantOrder, ["Base", "Gold", "Cheat Master", "Loot Hacker", "Bounty Hunter", "Trick or Treat", "Quack"]);
   assert.deepEqual(new Set(catalog.familyOrder), new Set(catalog.families.map(({ name }) => name)));

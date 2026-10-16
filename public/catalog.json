@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-season-4",
-  "assetVersion": "20261015-10",
+  "assetVersion": "20261015-11",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -14,9 +14,8 @@
       "legacyStorageKeys": [],
       "updatedDate": "October 15, 2026",
       "patch": "v42.40",
-      "assetVersion": "20261015-10",
+      "assetVersion": "20261015-11",
       "familyOrder": [
-        "Dumpster Dive",
         "Jonesy",
         "Adventure",
         "Bush",
@@ -35,6 +34,7 @@
         "Onigiri",
         "Storm Scout",
         "Blinky",
+        "Dumpster Dive",
         "Birthday",
         "Crash Bandicoot",
         "Morgana",
@@ -54,12 +54,13 @@
         "Quack"
       ],
       "whatsNew": {
-        "title": "Find friends by nickname",
-        "intro": "Choose a friend from the searchable player list—no shared link needed.",
+        "title": "Tap to update your comparison locker",
+        "intro": "Your own statuses are editable again, with a clearer five-player layout.",
         "items": [
-          "Search the selected season’s player list and press Add to comparison beside a friend’s nickname.",
-          "Enable live sharing, then opt in to Show me in the searchable player list to let friends find you. Existing lockers remain unlisted by default.",
-          "Nicknames are unique per season. You can update your listed nickname or remove yourself anytime; saved friends and existing links still work."
+          "Dumpster Dive now appears immediately above Birthday in the current season.",
+          "Tap your own status to cycle Missing → Acquired → Mastered → Missing. Friends’ columns stay read-only.",
+          "Compare five players in vertical columns: you first on the left, then up to four friends. Your own shared locker no longer uses a friend slot.",
+          "The player list refreshes while open and explains how an unlisted friend can opt in for the selected season."
         ]
       },
       "unlockCodes": [

@@ -35,7 +35,8 @@ test('opt-in only, same live ID updates, pause persists, friends survive refresh
     localStorage.setItem(season.storageKey, JSON.stringify({ 'Honey::Gold': { acquired: true, mastered: true } }));
     await sync.sync(); assert.equal(uploads, 2); assert.equal(sync.owner(season.seasonId).id, id);
     assert.equal(codec.decodeSnapshot(record.token).entries.get('Honey::Gold'), 2);
-    await sync.add('', id);
+    await assert.rejects(() => sync.add('', id), /own locker/);
+    await sync.add('', 'Friend0000000001');
     assert.equal(sync.friends[0].live, true);
     assert.ok(!saved.get(FRIENDS_KEY).includes(writeKey), 'Friends never receive writer keys');
     await sync.add(codec.encodeSnapshot(codec.makeSnapshot(previous, {}, 'Archived friend')), null);

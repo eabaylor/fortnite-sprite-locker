@@ -1,9 +1,21 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { readFile } from 'node:fs/promises';
-import { makeSnapshot, encodeSnapshot, decodeSnapshot, matchesComparison, matchesGroupComparison, addFriendSnapshot, friendCollectionCounts } from "../public/locker-tools.js";
+import { makeSnapshot, encodeSnapshot, decodeSnapshot, matchesComparison, matchesGroupComparison, addFriendSnapshot, friendCollectionCounts, nextLockerAction } from "../public/locker-tools.js";
 
 const season = { seasonId: "test-season", families: [{ name: "Honey", variants: ["Base", "Gold"] }, { name: "One Wish Willow", variants: ["Base"] }] };
+
+test('own comparison status cycles without breaking mastery implies acquired', () => {
+  let state = { acquired: false, mastered: false };
+  const expected = [1, 2, 0];
+  for (const wanted of expected) {
+    const current = state.mastered ? 2 : state.acquired ? 1 : 0;
+    const field = nextLockerAction(current); state[field] = !state[field];
+    if (field === 'mastered' && state.mastered) state.acquired = true;
+    if (field === 'acquired' && !state.acquired) state.mastered = false;
+    assert.equal(state.mastered ? 2 : state.acquired ? 1 : 0, wanted);
+  }
+});
 
 test('friend counts include mastery in acquired, ignore extra cards, and distinguish unknown variants', () => {
   const friend = { entries: new Map([['Honey::Base', 1], ['Honey::Gold', 2], ['Extra::Base', 2]]) };
