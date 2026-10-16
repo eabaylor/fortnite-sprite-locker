@@ -1,0 +1,8 @@
+# October 16 catalog and code verification
+
+- Official Battle Pass still identifies Chapter 7 Season 4 (Override): https://www.fortnite.com/battle-pass . No rollover or progress-key changes.
+- Epic's v42.40 notes confirm Honey, One Wish Willow, and Quack mastery rewards already present in the tracker: https://communities.epicgames.com/thread/v42-40-fortnite-override-battle-royale-update-notes/AKuW?lang=id . Fortnite.GG still lists 162 released current-season cards: https://fortnite.gg/sprites . No Sprite catalog additions.
+- Added three active lobby music codes corroborated by https://beebom.com/fortnite-lobby-hack-codes/ (updated October 16) and https://fortnite.gg/lobby-hacks : LUHLEAKYZ (Time Passed), PR1VAT3J3T (MARCHING), B1GBODYSW3RVE (Lil Krazy), all by Yeat. They are effects, not permanent Jam Track rewards or Sprite unlocks.
+- Neither corroborating source establishes a music-code-specific repeatability rule. Their useType is unverified, labeled Reuse limit unverified in both builds. Copy remains enabled; no one-time Mark used control is offered. Existing code classifications and redeemed-code storage remain unchanged. Conflicting guide claims about other existing rewards, expiration, and Geno rules were not applied.
+- Admin Codes totals: 7 Sprite codes + 48 Other rewards = 55 codes.
+- Official October 17 Power Hours start at 2 PM and 9 PM Eastern (11 AM and 6 PM Pacific). The existing Saturday 11:15 AM / 6:15 PM Pacific automation already matches. No additional official Sprite/code event starts were found before tomorrow's daily refresh. Daily refresh remains 6:30 AM Pacific; no duplicate event schedules created.

@@ -1,7 +1,7 @@
 window.SPRITE_CATALOGS = {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-season-4",
-  "assetVersion": "20261015-11",
+  "assetVersion": "20261016-1",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -12,9 +12,9 @@ window.SPRITE_CATALOGS = {
       "imageBase": "sprites",
       "storageKey": "sprite-locker-progress-chapter-7-season-4",
       "legacyStorageKeys": [],
-      "updatedDate": "October 15, 2026",
+      "updatedDate": "October 16, 2026",
       "patch": "v42.40",
-      "assetVersion": "20261015-11",
+      "assetVersion": "20261016-1",
       "familyOrder": [
         "Jonesy",
         "Adventure",
@@ -54,13 +54,12 @@ window.SPRITE_CATALOGS = {
         "Quack"
       ],
       "whatsNew": {
-        "title": "Tap to update your comparison locker",
-        "intro": "Your own statuses are editable again, with a clearer five-player layout.",
+        "title": "Three new Admin Panel music codes",
+        "intro": "Play Yeat tracks from the lobby with the latest verified codes.",
         "items": [
-          "Dumpster Dive now appears immediately above Birthday in the current season.",
-          "Tap your own status to cycle Missing → Acquired → Mastered → Missing. Friends’ columns stay read-only.",
-          "Compare five players in vertical columns: you first on the left, then up to four friends. Your own shared locker no longer uses a friend slot.",
-          "The player list refreshes while open and explains how an unlisted friend can opt in for the selected season."
+          "Added LUHLEAKYZ for Time Passed, PR1VAT3J3T for MARCHING, and B1GBODYSW3RVE for Lil Krazy by Yeat.",
+          "Find all three under Admin Codes → Other rewards; these are lobby music effects, not Sprite unlocks.",
+          "The music codes’ reuse limits are not confirmed, so they stay copyable and are clearly labeled rather than marked one-time."
         ]
       },
       "unlockCodes": [
@@ -151,6 +150,30 @@ window.SPRITE_CATALOGS = {
         }
       ],
       "otherAdminCodes": [
+        {
+          "code": "LUHLEAKYZ",
+          "reward": "Plays Time Passed by Yeat in the lobby",
+          "category": "Lobby Effect",
+          "useType": "unverified",
+          "verifiedDate": "October 16, 2026",
+          "sourceUrl": "https://beebom.com/fortnite-lobby-hack-codes/"
+        },
+        {
+          "code": "PR1VAT3J3T",
+          "reward": "Plays MARCHING by Yeat in the lobby",
+          "category": "Lobby Effect",
+          "useType": "unverified",
+          "verifiedDate": "October 16, 2026",
+          "sourceUrl": "https://beebom.com/fortnite-lobby-hack-codes/"
+        },
+        {
+          "code": "B1GBODYSW3RVE",
+          "reward": "Plays Lil Krazy by Yeat in the lobby",
+          "category": "Lobby Effect",
+          "useType": "unverified",
+          "verifiedDate": "October 16, 2026",
+          "sourceUrl": "https://beebom.com/fortnite-lobby-hack-codes/"
+        },
         {
           "code": "DOOR2DOOR4CANDY",
           "reward": "2 Extraction Accelerators",

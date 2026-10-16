@@ -226,6 +226,28 @@ window.addEventListener("load", async () => {
     window.fetch = originalFetch;
     result.listNoOverflow = document.documentElement.scrollWidth === document.documentElement.clientWidth;
   } catch (error) { result.comparisonError = error.message; }
+  document.querySelector('#brand-whats-new').click();
+  result.whatsNewReopens = !document.querySelector('#whats-new-backdrop').hidden;
+  const whatsNewRect = document.querySelector('.whats-new-card').getBoundingClientRect();
+  result.whatsNewMobile = whatsNewRect.left >= 0 && whatsNewRect.right <= document.documentElement.clientWidth;
+  document.querySelector('#whats-new-close').click();
+  document.querySelector('#admin-codes-trigger').click();
+  result.spriteCodesRendered = document.querySelectorAll('#code-guide-list .code-entry').length;
+  document.querySelector('[data-code-view="other"]').click();
+  result.otherCodesRendered = document.querySelectorAll('#code-guide-list .code-entry').length;
+  result.adminCodeTotal = Number(document.querySelector('#admin-codes-count').textContent);
+  result.musicReuseUnverified = ['LUHLEAKYZ', 'PR1VAT3J3T', 'B1GBODYSW3RVE'].every(code => {
+    const entry = [...document.querySelectorAll('#code-guide-list .code-entry')].find(e => e.querySelector('code').textContent === code);
+    return entry?.querySelector('.code-use-type').textContent === 'Reuse limit unverified' && !entry.querySelector('[data-copy-code]').disabled && !entry.querySelector('[data-mark-admin-code]') && !entry.classList.contains('is-used');
+  });
+  const oneTime = document.querySelector('#code-guide-list [data-mark-admin-code]');
+  const usedCode = oneTime.dataset.markAdminCode; oneTime.click();
+  const codeEntries = [...document.querySelectorAll('#code-guide-list .code-entry')];
+  result.usedCodeLast = codeEntries.at(-1).querySelector('code').textContent === usedCode && codeEntries.at(-1).classList.contains('is-used') && codeEntries.at(-1).querySelector('[data-copy-code]').disabled;
+  result.reusableCodesActive = codeEntries.filter(e => e.querySelector('.code-use-type.reusable')).every(e => !e.classList.contains('is-used') && !e.querySelector('[data-copy-code]').disabled);
+  const codeRect = document.querySelector('.code-guide-card').getBoundingClientRect();
+  result.codesMobile = codeRect.left >= 0 && codeRect.right <= document.documentElement.clientWidth && document.documentElement.scrollWidth === document.documentElement.clientWidth;
+  document.querySelector('#code-guide-close').click();
   const output = document.createElement("pre");
   output.id = "browser-audit";
   output.textContent = JSON.stringify(result);
@@ -355,6 +377,15 @@ test("live static tracker works at 320px in a real browser", async (context) => 
     assert.equal(audit.livePauseWorks, true);
     assert.equal(audit.friendsStored, true);
     assert.equal(audit.listNoOverflow, true);
+    assert.equal(audit.whatsNewReopens, true);
+    assert.equal(audit.whatsNewMobile, true);
+    assert.equal(audit.spriteCodesRendered, catalog.unlockCodes.length);
+    assert.equal(audit.otherCodesRendered, catalog.otherAdminCodes.length);
+    assert.equal(audit.adminCodeTotal, catalog.unlockCodes.length + catalog.otherAdminCodes.length);
+    assert.equal(audit.musicReuseUnverified, true);
+    assert.equal(audit.usedCodeLast, true);
+    assert.equal(audit.reusableCodesActive, true);
+    assert.equal(audit.codesMobile, true);
     assert.deepEqual(audit.familyNames, catalog.familyOrder);
     assert.equal(audit.familyNames.indexOf('Dumpster Dive'), audit.familyNames.indexOf('Birthday') - 1);
     assert.deepEqual(audit.firstVariants, ["Base", "Gold", "Cheat Master", "Loot Hacker", "Bounty Hunter", "Trick or Treat"]);

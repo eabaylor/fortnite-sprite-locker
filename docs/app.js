@@ -503,7 +503,7 @@ function renderCodeGuide() {
     footer.className = "code-entry-footer";
     const useType = document.createElement("strong");
     useType.className = `code-use-type ${item.useType}`;
-    useType.textContent = item.useType === "reusable" ? "Reusable" : "One-time per account";
+    useType.textContent = item.useType === "unverified" ? "Reuse limit unverified" : item.useType === "reusable" ? "Reusable" : "One-time per account";
     const verified = document.createElement("span");
     verified.textContent = `Verified ${item.verifiedDate}`;
     const source = document.createElement("a");

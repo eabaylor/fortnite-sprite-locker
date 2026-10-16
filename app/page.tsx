@@ -20,7 +20,7 @@ type OtherAdminCode = {
   code: string;
   reward: string;
   category: string;
-  useType: "one-time" | "reusable";
+  useType: "one-time" | "reusable" | "unverified";
   requirement?: string;
   verifiedDate: string;
   sourceUrl: string;
@@ -741,7 +741,7 @@ export default function Home() {
                     </div>
                     {item.requirement && <p className="code-requirement"><strong>Requirement:</strong> {item.requirement}</p>}
                     <div className="code-entry-footer">
-                      <strong className={`code-use-type ${item.useType}`}>{item.useType === "reusable" ? "Reusable" : "One-time per account"}</strong>
+                      <strong className={`code-use-type ${item.useType}`}>{item.useType === "unverified" ? "Reuse limit unverified" : item.useType === "reusable" ? "Reusable" : "One-time per account"}</strong>
                       <span>Verified {item.verifiedDate}</span>
                       <a href={item.sourceUrl} target="_blank" rel="noreferrer">source ↗</a>
                       {item.useType === "one-time" && <button className="redeem-code" type="button" disabled={used} onClick={() => markAdminCodeUsed(item.code)}>{used ? "✓ Used" : "Mark used"}</button>}

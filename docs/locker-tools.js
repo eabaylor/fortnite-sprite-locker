@@ -1,6 +1,6 @@
-import catalogs from './locker-catalogs.js?v=20261015-11';
-import { SHARE_ORIGIN, sharedLockerId, publishSharedSnapshot, searchPlayers } from './locker-sharing.js?v=20261015-11';
-import { createLockerSync } from './locker-state.js?v=20261015-11';
+import catalogs from './locker-catalogs.js?v=20261016-1';
+import { SHARE_ORIGIN, sharedLockerId, publishSharedSnapshot, searchPlayers } from './locker-sharing.js?v=20261016-1';
+import { createLockerSync } from './locker-state.js?v=20261016-1';
 let backgroundSync;
 export function startLockerBackground(catalogs) {
   if (!backgroundSync) backgroundSync = createLockerSync(catalogs, { makeSnapshot, encodeSnapshot, decodeSnapshot });

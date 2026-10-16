@@ -55,15 +55,16 @@ test("catalog has unique active entries and matching artwork", async () => {
     assert.ok(unlock.rewards.length > 0);
     for (const reward of unlock.rewards) assert.ok(keys.includes(`${reward.name}::${reward.variant}`), `${unlock.code} has an unknown reward`);
   }
-  assert.equal(catalog.otherAdminCodes.length, 45);
+  assert.equal(catalog.otherAdminCodes.length, 48);
   const allAdminCodes = [...catalog.unlockCodes, ...catalog.otherAdminCodes];
-  assert.equal(allAdminCodes.length, 52);
+  assert.equal(allAdminCodes.length, 55);
   assert.equal(new Set(allAdminCodes.map(({ code }) => code.toLowerCase())).size, allAdminCodes.length);
   assert.equal(catalog.otherAdminCodes.filter(({ useType }) => useType === "reusable").length, 7);
+  assert.deepEqual(catalog.otherAdminCodes.filter(({ useType }) => useType === "unverified").map(({ code }) => code), ["LUHLEAKYZ", "PR1VAT3J3T", "B1GBODYSW3RVE"]);
   for (const item of catalog.otherAdminCodes) {
     assert.ok(item.reward);
     assert.ok(item.category);
-    assert.ok(["one-time", "reusable"].includes(item.useType));
+    assert.ok(["one-time", "reusable", "unverified"].includes(item.useType));
     assert.ok(item.verifiedDate);
     assert.match(item.sourceUrl, /^https:\/\//);
   }
