@@ -1,6 +1,6 @@
-import catalogs from './locker-catalogs.js?v=20261016-1';
-import { SHARE_ORIGIN, sharedLockerId, publishSharedSnapshot, searchPlayers } from './locker-sharing.js?v=20261016-1';
-import { createLockerSync } from './locker-state.js?v=20261016-1';
+import catalogs from './locker-catalogs.js?v=20261016-2';
+import { SHARE_ORIGIN, sharedLockerId, publishSharedSnapshot, searchPlayers } from './locker-sharing.js?v=20261016-2';
+import { createLockerSync } from './locker-state.js?v=20261016-2';
 let backgroundSync;
 export function startLockerBackground(catalogs) {
   if (!backgroundSync) backgroundSync = createLockerSync(catalogs, { makeSnapshot, encodeSnapshot, decodeSnapshot });
@@ -120,7 +120,7 @@ export function createLockerTools(host) {
   let players = [], directorySeason = null, directorySequence = 0, searchTimer, lastDirectoryLoad = 0;
   host.className = "locker-tools";
   host.innerHTML = `
-    <details class="locker-sharing" open>
+    <details class="locker-sharing">
       <summary>Share & compare lockers</summary>
       <p class="locker-help">Compare your locker with up to four friends. Tap your own status to cycle Missing → Acquired → Mastered → Missing; friends’ statuses are read-only. Creating a short link uploads a snapshot and your nickname, viewable by anyone with the link for 90 days. Reimporting the same nickname updates that friend’s column.</p>
       <p class="locker-help">Opening from Messenger? Use the same browser where you normally track your locker, so your saved progress is available. A different browser may show an empty local locker.</p>
@@ -150,7 +150,7 @@ export function createLockerTools(host) {
     <p class="locker-count" role="status" aria-live="polite"></p>
     <p class="locker-party-count" role="status"></p>
     <p class="locker-edit-hint">Tap your status to change it: Missing → Acquired → Mastered → Missing. The leftmost player column is always yours.</p>
-    <p class="locker-scroll-hint" hidden>Five players can be compared in vertical columns: you first, then up to four friends. On a narrow screen, swipe the table sideways to see the remaining columns. Sprite names stay in place.</p>
+    <p class="locker-scroll-hint" hidden>Scroll within the Sprite list; player names and counts stay pinned. On a narrow screen, swipe sideways to see every player. Sprite names stay in place.</p>
     <div class="locker-table-scroll" tabindex="0" role="region" aria-label="Locker comparison table, scroll horizontally for more players"><div class="locker-table">
       <div class="locker-list-head"></div>
       <div class="locker-list" role="list" aria-label="Sprite locker comparison"></div>
@@ -395,6 +395,11 @@ export function createLockerTools(host) {
     if (focusKey && !restoredFocus) queueMicrotask(() => $('.locker-compare-filter').focus({ preventScroll: true }));
     renderDirectory();
   }
+  const controls = document.querySelector('.sticky-controls');
+  const sizeList = () => host.style.setProperty('--locker-controls-height', `${controls?.getBoundingClientRect().height || 0}px`);
+  const controlsObserver = new ResizeObserver(sizeList);
+  if (controls) controlsObserver.observe(controls);
+  sizeList();
   const directoryTimer = setInterval(() => { if (options && !document.hidden && host.getClientRects().length) void loadDirectory(); }, 60000);
   return { update(next) {
     const seasonChanged = options && options.season.seasonId !== next.season.seasonId;
@@ -411,5 +416,5 @@ export function createLockerTools(host) {
     else if (Date.now() - lastDirectoryLoad > 60000 && !document.hidden && host.getClientRects().length) void loadDirectory();
     if (importPending) { const input = importPending; importPending = null; importFriend(input); }
     render();
-  }, dispose() { unsubscribe?.(); clearTimeout(searchTimer); clearInterval(directoryTimer); directorySequence++; } };
+  }, dispose() { unsubscribe?.(); clearTimeout(searchTimer); clearInterval(directoryTimer); controlsObserver.disconnect(); directorySequence++; } };
 }

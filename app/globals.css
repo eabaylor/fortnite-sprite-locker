@@ -390,7 +390,7 @@ footer p { margin: 0; text-align: right; }
 .locker-friend-date { margin: 4px 0 0; color: var(--muted); font-size: 11px; line-height: 1.4; }
 .locker-comparison > label { flex: 1 1 100%; }
 .locker-count { margin: 12px 0; color: var(--muted); font-size: 12px; }
-.locker-table-scroll { max-width: 100%; overflow-x: auto; overscroll-behavior-x: contain; border-radius: 9px; }
+.locker-table-scroll { max-width: 100%; max-height: max(180px, calc(100dvh - var(--locker-controls-height, 260px) - 24px)); overflow: auto; overscroll-behavior-x: contain; border-radius: 9px; scroll-margin-top: calc(var(--locker-controls-height, 260px) + 12px); }
 .locker-table-scroll:focus-visible { outline: 3px solid var(--code-blue); outline-offset: 2px; }
 .locker-table { min-width: calc(140px + var(--locker-players, 1) * 96px); }
 .locker-list-head, .locker-list-row { display: grid; grid-template-columns: minmax(120px, 1fr) repeat(var(--locker-players, 1), minmax(78px, 110px)); gap: 12px; align-items: center; }
@@ -416,7 +416,7 @@ footer p { margin: 0; text-align: right; }
 .locker-tools .locker-status-toggle.state-2 { background: #ffe8a6; color: #594000; }
 .locker-tools .locker-status-toggle:hover { border-color: var(--green-dark); }
 .locker-friend-summary button { flex: none; }
-.locker-list-head { padding: 8px; background: var(--ink); color: white; font-size: 11px; font-weight: 900; border-radius: 9px 9px 0 0; }
+.locker-list-head { position: sticky; top: 0; z-index: 3; padding: 8px; background: var(--ink); color: white; font-size: 11px; font-weight: 900; border-radius: 9px 9px 0 0; }
 .locker-friend-column { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .locker-list-row { padding: 7px 8px; border: 1px solid var(--line); border-top: 0; min-height: 64px; background: var(--paper); }
 .locker-list-row:nth-child(even) { background: #eef1e9; }

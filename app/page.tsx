@@ -186,7 +186,7 @@ export default function Home() {
   const [selectedSprites, setSelectedSprites] = useState<string[]>([]);
   const [selectedVariants, setSelectedVariants] = useState<string[]>([]);
   const [query, setQuery] = useState("");
-  const [viewMode, setViewMode] = useState<ViewMode>("compact");
+  const [viewMode, setViewMode] = useState<ViewMode>("list");
   const [ready, setReady] = useState(false);
   const [whatsNewOpen, setWhatsNewOpen] = useState(false);
   const [codeGuideOpen, setCodeGuideOpen] = useState(false);

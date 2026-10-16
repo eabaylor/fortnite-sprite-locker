@@ -40,6 +40,10 @@ const mime = {
 function browserHarness() {
   return `<script>
 window.addEventListener("load", async () => {
+  for (let i = 0; i < 100 && !document.querySelector('.locker-sharing'); i++) await new Promise(resolve => setTimeout(resolve, 20));
+  const defaultList = document.querySelector('#list-view').getAttribute('aria-pressed') === 'true' && !document.querySelector('#locker-tools-host').hidden;
+  const sharingCollapsed = !document.querySelector('.locker-sharing').open;
+  document.querySelector('#compact-view').click();
   const status = document.querySelector("#status-filter");
   const defaultStatusAll = status.value === "all";
   const defaultCompact = document.querySelector("#sprite-list").classList.contains("compact-view") && document.querySelector("#compact-view").getAttribute("aria-pressed") === "true";
@@ -80,6 +84,8 @@ window.addEventListener("load", async () => {
     hasSkipLink: !!document.querySelector('.skip-link[href="#sprite-checklist"]'),
     updateNoticeHidden: document.querySelector("#update-notice").hidden,
     defaultStatusAll,
+    defaultList,
+    sharingCollapsed,
     defaultCompact,
     compactRowInsideViewport,
     fixedSixColumnWidth,
@@ -101,6 +107,9 @@ window.addEventListener("load", async () => {
     const tools = await import('./locker-tools.js');
     document.querySelector('#list-view').click();
     for (let i = 0; i < 100 && !document.querySelector('.locker-share'); i++) await new Promise(resolve => setTimeout(resolve, 20));
+    document.querySelector('.locker-sharing').open = true;
+    document.querySelector('.locker-players-refresh').click();
+    for (let i = 0; i < 100 && !document.querySelector('button[data-player-id="Player0000000001"]'); i++) await new Promise(resolve => setTimeout(resolve, 20));
     document.querySelector('.locker-share').click();
     result.nicknameRequired = document.querySelector('.locker-share-result').hidden;
     document.querySelector('.locker-nickname').value = 'My locker';
@@ -160,6 +169,11 @@ window.addEventListener("load", async () => {
     result.fivePlayerStatuses = [...document.querySelectorAll('.locker-list-row')].every(row => row.querySelectorAll('.locker-friend-status').length === 5);
     result.fivePlayerColumns = document.querySelectorAll('.locker-player-heading').length === 5 && document.querySelector('.locker-player-heading').classList.contains('locker-current-player') && document.querySelector('.locker-party-count').textContent.includes('5/5 players');
     const scroller = document.querySelector('.locker-table-scroll');
+    const header = document.querySelector('.locker-list-head');
+    const headTop = header.getBoundingClientRect().top;
+    scroller.scrollTop = 600;
+    result.playerHeaderPinned = scroller.scrollTop > 0 && Math.abs(header.getBoundingClientRect().top - headTop) < 1 && getComputedStyle(header).position === 'sticky';
+    scroller.scrollTop = 0;
     scroller.scrollLeft = 100;
     result.comparisonScrolls = scroller.scrollWidth > scroller.clientWidth && scroller.scrollLeft > 0;
     result.spriteColumnSticky = getComputedStyle(document.querySelector('.locker-sprite-name')).position === 'sticky';
@@ -225,7 +239,7 @@ window.addEventListener("load", async () => {
     result.friendsStored = JSON.parse(localStorage.getItem('sprite-locker-friends-v1')).length === 3;
     window.fetch = originalFetch;
     result.listNoOverflow = document.documentElement.scrollWidth === document.documentElement.clientWidth;
-  } catch (error) { result.comparisonError = error.message; }
+  } catch (error) { result.comparisonError = error.stack || error.message; }
   document.querySelector('#brand-whats-new').click();
   result.whatsNewReopens = !document.querySelector('#whats-new-backdrop').hidden;
   const whatsNewRect = document.querySelector('.whats-new-card').getBoundingClientRect();
@@ -330,6 +344,8 @@ test("live static tracker works at 320px in a real browser", async (context) => 
     assert.equal(audit.hasSkipLink, true);
     assert.equal(audit.updateNoticeHidden, true);
     assert.equal(audit.defaultStatusAll, true);
+    assert.equal(audit.defaultList, true);
+    assert.equal(audit.sharingCollapsed, true);
     assert.equal(audit.defaultCompact, true);
     assert.equal(audit.compactRowInsideViewport, true);
     assert.equal(audit.fixedSixColumnWidth, true);
@@ -361,6 +377,7 @@ test("live static tracker works at 320px in a real browser", async (context) => 
     assert.equal(audit.fivePlayersInMenu, true);
     assert.equal(audit.specificFriendFilter, true);
     assert.equal(audit.comparisonScrolls, true);
+    assert.equal(audit.playerHeaderPinned, true);
     assert.equal(audit.spriteColumnSticky, true);
     assert.equal(audit.removeFriend, true);
     assert.equal(audit.shortLinkCreated, true);

@@ -9,7 +9,7 @@
   "legacyStorageKeys": [],
   "updatedDate": "October 16, 2026",
   "patch": "v42.40",
-  "assetVersion": "20261016-1",
+  "assetVersion": "20261016-2",
   "familyOrder": [
     "Jonesy",
     "Adventure",
@@ -49,12 +49,12 @@
     "Quack"
   ],
   "whatsNew": {
-    "title": "Three new Admin Panel music codes",
-    "intro": "Play Yeat tracks from the lobby with the latest verified codes.",
+    "title": "Your locker list, ready on refresh",
+    "intro": "Start in List view with more room to track and compare.",
     "items": [
-      "Added LUHLEAKYZ for Time Passed, PR1VAT3J3T for MARCHING, and B1GBODYSW3RVE for Lil Krazy by Yeat.",
-      "Find all three under Admin Codes → Other rewards; these are lobby music effects, not Sprite unlocks.",
-      "The music codes’ reuse limits are not confirmed, so they stay copyable and are clearly labeled rather than marked one-time."
+      "List view now opens by default on every refresh; Compact and Classic remain available at the top.",
+      "Share & compare lockers starts collapsed. Open it whenever you want to manage friends or sharing.",
+      "Scroll within the Sprite list while player names and Acquired/Mastered counts stay pinned above the rows, including on mobile."
     ]
   },
   "unlockCodes": [
