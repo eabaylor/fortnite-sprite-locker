@@ -7,9 +7,9 @@
   "imageBase": "sprites",
   "storageKey": "sprite-locker-progress-chapter-7-season-4",
   "legacyStorageKeys": [],
-  "updatedDate": "October 16, 2026",
+  "updatedDate": "October 20, 2026",
   "patch": "v42.40",
-  "assetVersion": "20261016-3",
+  "assetVersion": "20261020-1",
   "familyOrder": [
     "Jonesy",
     "Adventure",
@@ -49,12 +49,11 @@
     "Quack"
   ],
   "whatsNew": {
-    "title": "A cleaner list for your whole group",
-    "intro": "Keep the Show filter handy and compare up to six players.",
+    "title": "New Halloween supply code",
+    "intro": "SuppliesForTheHunt is now available in Admin Codes.",
     "items": [
-      "Friend management, comparison targets, counts, and guidance now live inside the collapsed Share & compare lockers dropdown; Show stays visible.",
-      "Choose I’m Missing to show every Sprite you do not own, whether or not any friend has it—even with no friends added.",
-      "Compare six people total: your editable column first, plus up to five friends, including your tester account."
+      "Added SuppliesForTheHunt for 2 Snack-O'-Lantern Gizmos under Other rewards.",
+      "The reward is verified by two current guides; its reuse limit remains labeled unverified until independently confirmed."
     ]
   },
   "unlockCodes": [
@@ -110,6 +109,14 @@
     }
   ],
   "otherAdminCodes": [
+    {
+      "code": "SuppliesForTheHunt",
+      "reward": "2 Snack-O'-Lantern Gizmos",
+      "category": "Gizmos",
+      "useType": "unverified",
+      "verifiedDate": "October 20, 2026",
+      "sourceUrl": "https://beebom.com/fortnite-lobby-hack-codes/"
+    },
     {
       "code": "LUHLEAKYZ",
       "reward": "Plays Time Passed by Yeat in the lobby",

@@ -262,7 +262,7 @@ window.addEventListener("load", async () => {
   document.querySelector('[data-code-view="other"]').click();
   result.otherCodesRendered = document.querySelectorAll('#code-guide-list .code-entry').length;
   result.adminCodeTotal = Number(document.querySelector('#admin-codes-count').textContent);
-  result.musicReuseUnverified = ['LUHLEAKYZ', 'PR1VAT3J3T', 'B1GBODYSW3RVE'].every(code => {
+  result.musicReuseUnverified = ['SuppliesForTheHunt', 'LUHLEAKYZ', 'PR1VAT3J3T', 'B1GBODYSW3RVE'].every(code => {
     const entry = [...document.querySelectorAll('#code-guide-list .code-entry')].find(e => e.querySelector('code').textContent === code);
     return entry?.querySelector('.code-use-type').textContent === 'Reuse limit unverified' && !entry.querySelector('[data-copy-code]').disabled && !entry.querySelector('[data-mark-admin-code]') && !entry.classList.contains('is-used');
   });
@@ -274,6 +274,16 @@ window.addEventListener("load", async () => {
   const codeRect = document.querySelector('.code-guide-card').getBoundingClientRect();
   result.codesMobile = codeRect.left >= 0 && codeRect.right <= document.documentElement.clientWidth && document.documentElement.scrollWidth === document.documentElement.clientWidth;
   document.querySelector('#code-guide-close').click();
+  document.querySelector('#classic-view').click();
+  status.value = 'not-mastered'; status.dispatchEvent(new Event('change'));
+  const savedSeason = window.SPRITE_CATALOGS.seasons[0];
+  const savedProgress = JSON.parse(localStorage.getItem(savedSeason.storageKey) || '{}');
+  savedProgress[name + '::' + variant] = { acquired: true, mastered: true };
+  localStorage.setItem(savedSeason.storageKey, JSON.stringify(savedProgress)); window.dispatchEvent(new Event('focus'));
+  const masteredExcluded = !document.querySelector(selector('acquired'));
+  savedProgress[name + '::' + variant] = { acquired: true, mastered: false };
+  localStorage.setItem(savedSeason.storageKey, JSON.stringify(savedProgress)); window.dispatchEvent(new Event('focus'));
+  result.notMasteredResync = masteredExcluded && document.querySelector(selector('acquired'))?.checked && !document.querySelector(selector('mastered'))?.checked;
   const output = document.createElement("pre");
   output.id = "browser-audit";
   output.textContent = JSON.stringify(result);
@@ -419,6 +429,7 @@ test("live static tracker works at 320px in a real browser", async (context) => 
     assert.equal(audit.usedCodeLast, true);
     assert.equal(audit.reusableCodesActive, true);
     assert.equal(audit.codesMobile, true);
+    assert.equal(audit.notMasteredResync, true);
     assert.deepEqual(audit.familyNames, catalog.familyOrder);
     assert.equal(audit.familyNames.indexOf('Dumpster Dive'), audit.familyNames.indexOf('Birthday') - 1);
     assert.deepEqual(audit.firstVariants, ["Base", "Gold", "Cheat Master", "Loot Hacker", "Bounty Hunter", "Trick or Treat"]);
