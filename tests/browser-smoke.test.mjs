@@ -262,12 +262,13 @@ window.addEventListener("load", async () => {
   document.querySelector('[data-code-view="other"]').click();
   result.otherCodesRendered = document.querySelectorAll('#code-guide-list .code-entry').length;
   result.adminCodeTotal = Number(document.querySelector('#admin-codes-count').textContent);
-  result.musicReuseUnverified = ['SuppliesForTheHunt', 'LUHLEAKYZ', 'PR1VAT3J3T', 'B1GBODYSW3RVE'].every(code => {
+  result.musicReuseUnverified = ['LUHLEAKYZ', 'PR1VAT3J3T', 'B1GBODYSW3RVE'].every(code => {
     const entry = [...document.querySelectorAll('#code-guide-list .code-entry')].find(e => e.querySelector('code').textContent === code);
     return entry?.querySelector('.code-use-type').textContent === 'Reuse limit unverified' && !entry.querySelector('[data-copy-code]').disabled && !entry.querySelector('[data-mark-admin-code]') && !entry.classList.contains('is-used');
   });
   const oneTime = document.querySelector('#code-guide-list [data-mark-admin-code]');
   const usedCode = oneTime.dataset.markAdminCode; oneTime.click();
+  result.suppliesOneTime = usedCode === 'SuppliesForTheHunt';
   const codeEntries = [...document.querySelectorAll('#code-guide-list .code-entry')];
   result.usedCodeLast = codeEntries.at(-1).querySelector('code').textContent === usedCode && codeEntries.at(-1).classList.contains('is-used') && codeEntries.at(-1).querySelector('[data-copy-code]').disabled;
   result.reusableCodesActive = codeEntries.filter(e => e.querySelector('.code-use-type.reusable')).every(e => !e.classList.contains('is-used') && !e.querySelector('[data-copy-code]').disabled);
@@ -427,6 +428,7 @@ test("live static tracker works at 320px in a real browser", async (context) => 
     assert.equal(audit.adminCodeTotal, catalog.unlockCodes.length + catalog.otherAdminCodes.length);
     assert.equal(audit.musicReuseUnverified, true);
     assert.equal(audit.usedCodeLast, true);
+    assert.equal(audit.suppliesOneTime, true);
     assert.equal(audit.reusableCodesActive, true);
     assert.equal(audit.codesMobile, true);
     assert.equal(audit.notMasteredResync, true);

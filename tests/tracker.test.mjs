@@ -60,7 +60,8 @@ test("catalog has unique active entries and matching artwork", async () => {
   assert.equal(allAdminCodes.length, 56);
   assert.equal(new Set(allAdminCodes.map(({ code }) => code.toLowerCase())).size, allAdminCodes.length);
   assert.equal(catalog.otherAdminCodes.filter(({ useType }) => useType === "reusable").length, 7);
-  assert.deepEqual(catalog.otherAdminCodes.filter(({ useType }) => useType === "unverified").map(({ code }) => code), ["SuppliesForTheHunt", "LUHLEAKYZ", "PR1VAT3J3T", "B1GBODYSW3RVE"]);
+  assert.deepEqual(catalog.otherAdminCodes.filter(({ useType }) => useType === "unverified").map(({ code }) => code), ["LUHLEAKYZ", "PR1VAT3J3T", "B1GBODYSW3RVE"]);
+  assert.equal(catalog.otherAdminCodes.find(({ code }) => code === 'SuppliesForTheHunt').useType, 'one-time');
   for (const item of catalog.otherAdminCodes) {
     assert.ok(item.reward);
     assert.ok(item.category);

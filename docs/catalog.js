@@ -1,7 +1,7 @@
 window.SPRITE_CATALOGS = {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-season-4",
-  "assetVersion": "20261020-1",
+  "assetVersion": "20261023-1",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -12,9 +12,9 @@ window.SPRITE_CATALOGS = {
       "imageBase": "sprites",
       "storageKey": "sprite-locker-progress-chapter-7-season-4",
       "legacyStorageKeys": [],
-      "updatedDate": "October 20, 2026",
+      "updatedDate": "October 23, 2026",
       "patch": "v42.40",
-      "assetVersion": "20261020-1",
+      "assetVersion": "20261023-1",
       "familyOrder": [
         "Jonesy",
         "Adventure",
@@ -54,11 +54,11 @@ window.SPRITE_CATALOGS = {
         "Quack"
       ],
       "whatsNew": {
-        "title": "New Halloween supply code",
-        "intro": "SuppliesForTheHunt is now available in Admin Codes.",
+        "title": "Halloween supply code: one-time reward",
+        "intro": "SuppliesForTheHunt now supports used-code tracking.",
         "items": [
-          "Added SuppliesForTheHunt for 2 Snack-O'-Lantern Gizmos under Other rewards.",
-          "The reward is verified by two current guides; its reuse limit remains labeled unverified until independently confirmed."
+          "SuppliesForTheHunt is now labeled one-time per account, following corroboration of its redemption rule.",
+          "After claiming its 2 Snack-O'-Lantern Gizmos, choose Mark used to grey it out and move it below usable codes."
         ]
       },
       "unlockCodes": [
@@ -153,8 +153,8 @@ window.SPRITE_CATALOGS = {
           "code": "SuppliesForTheHunt",
           "reward": "2 Snack-O'-Lantern Gizmos",
           "category": "Gizmos",
-          "useType": "unverified",
-          "verifiedDate": "October 20, 2026",
+          "useType": "one-time",
+          "verifiedDate": "October 23, 2026",
           "sourceUrl": "https://beebom.com/fortnite-lobby-hack-codes/"
         },
         {
