@@ -41,7 +41,8 @@ function browserHarness() {
   return `<script>
 window.addEventListener("load", async () => {
   for (let i = 0; i < 100 && !document.querySelector('.locker-sharing'); i++) await new Promise(resolve => setTimeout(resolve, 20));
-  const defaultList = document.querySelector('#list-view').getAttribute('aria-pressed') === 'true' && !document.querySelector('#locker-tools-host').hidden;
+  const defaultList = !document.querySelector('#locker-tools-host').hidden && document.querySelector('#sprite-list').hidden;
+  const listOnly = !document.querySelector('.view-switch') && !document.querySelector('#compact-view, #classic-view');
   const sharingCollapsed = !document.querySelector('.locker-sharing').open;
   const friendControlsGrouped = ['.locker-comparison', '.locker-count', '.locker-party-count', '.locker-edit-hint', '.locker-scroll-hint'].every(selector => document.querySelector(selector).closest('details.locker-sharing'));
   const showOutsideCollapsed = !document.querySelector('.locker-compare-filter').closest('details') && !document.querySelector('.locker-compare-filter').disabled;
@@ -49,35 +50,17 @@ window.addEventListener("load", async () => {
   initialShow.value = 'im-missing'; initialShow.dispatchEvent(new Event('change'));
   const missingWithoutFriends = document.querySelectorAll('.locker-list-row').length === window.SPRITE_CATALOGS.seasons[0].families.reduce((n, f) => n + f.variants.length, 0);
   initialShow.value = 'all'; initialShow.dispatchEvent(new Event('change'));
-  document.querySelector('#compact-view').click();
   const status = document.querySelector("#status-filter");
   const defaultStatusAll = status.value === "all";
-  const defaultCompact = document.querySelector("#sprite-list").classList.contains("compact-view") && document.querySelector("#compact-view").getAttribute("aria-pressed") === "true";
-  const familyNames = [...document.querySelectorAll(".sprite-row h3")].map((heading) => heading.textContent);
-  const sixVariantRow = [...document.querySelectorAll(".sprite-row")].find((row) => row.querySelectorAll(".compact-sprite-card").length === 6);
-  const firstVariants = [...sixVariantRow.querySelectorAll(".sprite-card h4")].map((heading) => heading.textContent);
-  const compactCards = [...sixVariantRow.querySelectorAll(".compact-sprite-card")];
-  const compactRowInsideViewport = compactCards.length === 6 && compactCards.every((card) => {
-    const rect = card.getBoundingClientRect();
-    return rect.left >= 0 && rect.right <= document.documentElement.clientWidth;
-  });
-  const compactCardWidth = compactCards[0].getBoundingClientRect().width;
-  let compactToggle = compactCards[0].querySelector(".compact-sprite-toggle");
-  const name = compactToggle.dataset.name;
-  const variant = compactToggle.dataset.variant;
-  status.value = "missing";
-  status.dispatchEvent(new Event("change", { bubbles: true }));
-  compactToggle = document.querySelector('.compact-sprite-toggle[data-name="' + CSS.escape(name) + '"][data-variant="' + CSS.escape(variant) + '"]');
-  compactToggle.click();
-  const filteredRow = [...document.querySelectorAll(".sprite-row")].find((row) => row.querySelector("h3")?.textContent === name);
-  const remainingCompactCard = filteredRow.querySelector(".compact-sprite-card");
-  const fixedSixColumnWidth = Math.abs(remainingCompactCard.getBoundingClientRect().width - compactCardWidth) < 1;
-  status.value = "all";
-  status.dispatchEvent(new Event("change", { bubbles: true }));
-  compactToggle = document.querySelector('.compact-sprite-toggle[data-name="' + CSS.escape(name) + '"][data-variant="' + CSS.escape(variant) + '"]');
-  compactToggle.click();
-  document.querySelector("#classic-view").click();
-  const selector = (field) => '[data-name="' + CSS.escape(name) + '"][data-variant="' + CSS.escape(variant) + '"][data-field="' + field + '"]';
+  const rows = [...document.querySelectorAll('.locker-list-row')];
+  const familyNames = [...new Set(rows.map(row => row.querySelector('.locker-status-toggle').dataset.name))];
+  const sixVariantFamily = window.SPRITE_CATALOGS.seasons[0].families.find(f => f.variants.length === 6).name;
+  const firstVariants = rows.map(row => row.querySelector('.locker-status-toggle')).filter(b => b.dataset.name === sixVariantFamily).map(b => b.dataset.variant);
+  const firstButton = rows[0].querySelector('.locker-status-toggle');
+  const {name, variant} = firstButton.dataset;
+  const ownButton = () => document.querySelector('.locker-status-toggle[data-name="' + CSS.escape(name) + '"][data-variant="' + CSS.escape(variant) + '"]');
+  ownButton().click(); ownButton().click();
+  const savedInitial = JSON.parse(localStorage.getItem(window.SPRITE_CATALOGS.seasons[0].storageKey));
   const menu = document.querySelector("#data-menu");
   menu.open = true;
   const menuRect = menu.querySelector(".data-menu-panel").getBoundingClientRect();
@@ -95,14 +78,11 @@ window.addEventListener("load", async () => {
     friendControlsGrouped,
     showOutsideCollapsed,
     missingWithoutFriends,
-    defaultCompact,
-    compactRowInsideViewport,
-    fixedSixColumnWidth,
-    classicSelectable: document.querySelector("#sprite-list").classList.contains("classic-view") && document.querySelector("#classic-view").getAttribute("aria-pressed") === "true",
+    listOnly,
     stickyControls: getComputedStyle(document.querySelector(".sticky-controls")).position === "sticky",
     stickyTopAfterScroll,
-    masteredImpliesAcquired: document.querySelector(selector("mastered")).checked && document.querySelector(selector("acquired")).checked,
-    checkHeight: Math.round(document.querySelector(".check").getBoundingClientRect().height),
+    masteredImpliesAcquired: savedInitial[name + '::' + variant].mastered && savedInitial[name + '::' + variant].acquired,
+    checkHeight: Math.round(ownButton().getBoundingClientRect().height),
     statusHeight: Math.round(document.querySelector(".select-filter").getBoundingClientRect().height),
     searchFontSize: parseFloat(getComputedStyle(document.querySelector("#search")).fontSize),
     menuInsideViewport: menuRect.left >= 0 && menuRect.right <= document.documentElement.clientWidth,
@@ -114,7 +94,6 @@ window.addEventListener("load", async () => {
     const directoryNetworkFetch = window.fetch;
     window.fetch = async (input, init) => String(input).includes('/api/lockers/players?') ? Response.json({ players: [['Player0000000001', 'Directory friend'], ['Player0000000002', 'Ash'], ['Player0000000003', 'Casey'], ['LiveID0123456789', 'My locker'], ['Player0000000004', 'Sharon']].map(([id, name]) => ({ id, name, season: window.SPRITE_CATALOGS.seasons[0].seasonId, live: 1 })), more: false }) : directoryNetworkFetch(input, init);
     const tools = await import('./locker-tools.js');
-    document.querySelector('#list-view').click();
     for (let i = 0; i < 100 && !document.querySelector('.locker-share'); i++) await new Promise(resolve => setTimeout(resolve, 20));
     document.querySelector('.locker-sharing').open = true;
     document.querySelector('.locker-players-refresh').click();
@@ -240,11 +219,9 @@ window.addEventListener("load", async () => {
     listingToggle.checked = false; listingToggle.dispatchEvent(new Event('change'));
     for (let i = 0; i < 100 && listingEnabled; i++) await new Promise(resolve => setTimeout(resolve, 20));
     result.directoryOptOut = !listingEnabled;
-    document.querySelector('#classic-view').click();
-    document.querySelector('[data-name="' + CSS.escape(target.name) + '"][data-variant="' + CSS.escape(target.variants[0]) + '"][data-field="mastered"]').click();
+    document.querySelector('.locker-status-toggle[data-name="' + CSS.escape(target.name) + '"][data-variant="' + CSS.escape(target.variants[0]) + '"]').click();
     for (let i = 0; i < 100 && !liveWrites; i++) await new Promise(resolve => setTimeout(resolve, 20));
     result.liveSyncsOutsideList = liveWrites > 0;
-    document.querySelector('#list-view').click();
     liveToggle.checked = false; liveToggle.dispatchEvent(new Event('change'));
     for (let i = 0; i < 100 && !pausedOnline; i++) await new Promise(resolve => setTimeout(resolve, 20));
     result.livePauseWorks = pausedOnline && !liveToggle.checked;
@@ -258,13 +235,15 @@ window.addEventListener("load", async () => {
   result.whatsNewMobile = whatsNewRect.left >= 0 && whatsNewRect.right <= document.documentElement.clientWidth;
   document.querySelector('#whats-new-close').click();
   document.querySelector('#admin-codes-trigger').click();
+  result.rewardsDefaultOther = document.querySelector('[data-code-view="other"]').getAttribute('aria-selected') === 'true' && document.querySelector('#admin-codes-trigger').textContent.startsWith('Rewards');
+  document.querySelector('[data-code-view="sprites"]').click();
   result.spriteCodesRendered = document.querySelectorAll('#code-guide-list .code-entry').length;
   document.querySelector('[data-code-view="other"]').click();
   result.otherCodesRendered = document.querySelectorAll('#code-guide-list .code-entry').length;
   result.adminCodeTotal = Number(document.querySelector('#admin-codes-count').textContent);
-  result.musicReuseUnverified = ['LUHLEAKYZ', 'PR1VAT3J3T', 'B1GBODYSW3RVE'].every(code => {
+  result.musicCodesReusable = ['LUHLEAKYZ', 'PR1VAT3J3T', 'B1GBODYSW3RVE'].every(code => {
     const entry = [...document.querySelectorAll('#code-guide-list .code-entry')].find(e => e.querySelector('code').textContent === code);
-    return entry?.querySelector('.code-use-type').textContent === 'Reuse limit unverified' && !entry.querySelector('[data-copy-code]').disabled && !entry.querySelector('[data-mark-admin-code]') && !entry.classList.contains('is-used');
+    return entry?.querySelector('.code-use-type').textContent === 'Reusable' && !entry.querySelector('[data-copy-code]').disabled && !entry.querySelector('[data-mark-admin-code]') && !entry.classList.contains('is-used');
   });
   const oneTime = document.querySelector('#code-guide-list [data-mark-admin-code]');
   const usedCode = oneTime.dataset.markAdminCode; oneTime.click();
@@ -275,16 +254,15 @@ window.addEventListener("load", async () => {
   const codeRect = document.querySelector('.code-guide-card').getBoundingClientRect();
   result.codesMobile = codeRect.left >= 0 && codeRect.right <= document.documentElement.clientWidth && document.documentElement.scrollWidth === document.documentElement.clientWidth;
   document.querySelector('#code-guide-close').click();
-  document.querySelector('#classic-view').click();
   status.value = 'not-mastered'; status.dispatchEvent(new Event('change'));
   const savedSeason = window.SPRITE_CATALOGS.seasons[0];
   const savedProgress = JSON.parse(localStorage.getItem(savedSeason.storageKey) || '{}');
   savedProgress[name + '::' + variant] = { acquired: true, mastered: true };
   localStorage.setItem(savedSeason.storageKey, JSON.stringify(savedProgress)); window.dispatchEvent(new Event('focus'));
-  const masteredExcluded = !document.querySelector(selector('acquired'));
+  const masteredExcluded = !ownButton();
   savedProgress[name + '::' + variant] = { acquired: true, mastered: false };
   localStorage.setItem(savedSeason.storageKey, JSON.stringify(savedProgress)); window.dispatchEvent(new Event('focus'));
-  result.notMasteredResync = masteredExcluded && document.querySelector(selector('acquired'))?.checked && !document.querySelector(selector('mastered'))?.checked;
+  result.notMasteredResync = masteredExcluded && ownButton()?.textContent.trim() === 'Acquired';
   const output = document.createElement("pre");
   output.id = "browser-audit";
   output.textContent = JSON.stringify(result);
@@ -373,10 +351,8 @@ test("live static tracker works at 320px in a real browser", async (context) => 
     assert.equal(audit.showOutsideCollapsed, true);
     assert.equal(audit.missingWithoutFriends, true);
     assert.equal(audit.missingRegardlessOfFriend, true);
-    assert.equal(audit.defaultCompact, true);
-    assert.equal(audit.compactRowInsideViewport, true);
-    assert.equal(audit.fixedSixColumnWidth, true);
-    assert.equal(audit.classicSelectable, true);
+    assert.equal(audit.listOnly, true);
+    assert.equal(audit.rewardsDefaultOther, true);
     assert.equal(audit.stickyControls, true);
     assert.equal(audit.stickyTopAfterScroll, 0);
     assert.equal(audit.masteredImpliesAcquired, true);
@@ -426,7 +402,7 @@ test("live static tracker works at 320px in a real browser", async (context) => 
     assert.equal(audit.spriteCodesRendered, catalog.unlockCodes.length);
     assert.equal(audit.otherCodesRendered, catalog.otherAdminCodes.length);
     assert.equal(audit.adminCodeTotal, catalog.unlockCodes.length + catalog.otherAdminCodes.length);
-    assert.equal(audit.musicReuseUnverified, true);
+    assert.equal(audit.musicCodesReusable, true);
     assert.equal(audit.usedCodeLast, true);
     assert.equal(audit.suppliesOneTime, true);
     assert.equal(audit.reusableCodesActive, true);

@@ -1,7 +1,7 @@
 window.SPRITE_CATALOGS = {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-season-4",
-  "assetVersion": "20261023-1",
+  "assetVersion": "20261028-1",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -12,9 +12,9 @@ window.SPRITE_CATALOGS = {
       "imageBase": "sprites",
       "storageKey": "sprite-locker-progress-chapter-7-season-4",
       "legacyStorageKeys": [],
-      "updatedDate": "October 23, 2026",
+      "updatedDate": "October 28, 2026",
       "patch": "v42.40",
-      "assetVersion": "20261023-1",
+      "assetVersion": "20261028-1",
       "familyOrder": [
         "Jonesy",
         "Adventure",
@@ -54,11 +54,11 @@ window.SPRITE_CATALOGS = {
         "Quack"
       ],
       "whatsNew": {
-        "title": "Halloween supply code: one-time reward",
-        "intro": "SuppliesForTheHunt now supports used-code tracking.",
+        "title": "List and compare, simplified",
+        "intro": "Your tracker now keeps the focus on the List and friend comparisons.",
         "items": [
-          "SuppliesForTheHunt is now labeled one-time per account, following corroboration of its redemption rule.",
-          "After claiming its 2 Snack-O'-Lantern Gizmos, choose Mark used to grey it out and move it below usable codes."
+          "List / Compare Lockers is now the only available view; Compact and Classic are hidden.",
+          "Admin Codes is now Rewards and opens on Other Rewards, with Sprite unlocks still available in their tab."
         ]
       },
       "unlockCodes": [
@@ -161,25 +161,25 @@ window.SPRITE_CATALOGS = {
           "code": "LUHLEAKYZ",
           "reward": "Plays Time Passed by Yeat in the lobby",
           "category": "Lobby Effect",
-          "useType": "unverified",
-          "verifiedDate": "October 16, 2026",
-          "sourceUrl": "https://beebom.com/fortnite-lobby-hack-codes/"
+          "useType": "reusable",
+          "verifiedDate": "October 24, 2026",
+          "sourceUrl": "https://www.gamesradar.com/games/fortnite/fortnite-lobby-hack-codes/"
         },
         {
           "code": "PR1VAT3J3T",
           "reward": "Plays MARCHING by Yeat in the lobby",
           "category": "Lobby Effect",
-          "useType": "unverified",
-          "verifiedDate": "October 16, 2026",
-          "sourceUrl": "https://beebom.com/fortnite-lobby-hack-codes/"
+          "useType": "reusable",
+          "verifiedDate": "October 24, 2026",
+          "sourceUrl": "https://www.gamesradar.com/games/fortnite/fortnite-lobby-hack-codes/"
         },
         {
           "code": "B1GBODYSW3RVE",
           "reward": "Plays Lil Krazy by Yeat in the lobby",
           "category": "Lobby Effect",
-          "useType": "unverified",
-          "verifiedDate": "October 16, 2026",
-          "sourceUrl": "https://beebom.com/fortnite-lobby-hack-codes/"
+          "useType": "reusable",
+          "verifiedDate": "October 24, 2026",
+          "sourceUrl": "https://www.gamesradar.com/games/fortnite/fortnite-lobby-hack-codes/"
         },
         {
           "code": "DOOR2DOOR4CANDY",

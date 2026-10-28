@@ -1,6 +1,6 @@
-import catalogs from './locker-catalogs.js?v=20261023-1';
-import { SHARE_ORIGIN, sharedLockerId, publishSharedSnapshot, searchPlayers } from './locker-sharing.js?v=20261023-1';
-import { createLockerSync } from './locker-state.js?v=20261023-1';
+import catalogs from './locker-catalogs.js?v=20261028-1';
+import { SHARE_ORIGIN, sharedLockerId, publishSharedSnapshot, searchPlayers } from './locker-sharing.js?v=20261028-1';
+import { createLockerSync } from './locker-state.js?v=20261028-1';
 let backgroundSync;
 export function startLockerBackground(catalogs) {
   if (!backgroundSync) backgroundSync = createLockerSync(catalogs, { makeSnapshot, encodeSnapshot, decodeSnapshot });
@@ -129,7 +129,7 @@ export function createLockerTools(host) {
       <div class="locker-share-result" hidden><label>Your share link<input class="locker-share-url" readonly aria-label="Your locker share link"></label><button type="button" class="locker-copy">Copy link</button><p>Send this link to your friend. Their saved progress stays separate.</p></div>
       <fieldset class="locker-live"><legend>Live sharing — optional</legend>
         <label class="locker-live-optin"><input type="checkbox" class="locker-live-enabled">Keep my shared locker updated for this season</label>
-        <p class="locker-help">Off by default. Enabling uploads this season’s nickname and checklist automatically while you use this browser, including Compact and Classic views. Anyone with your live link can read it. Pause anytime to stop uploads; the last shared state remains visible. A new season requires a separate opt-in. Links expire after 90 days without a sync.</p>
+        <p class="locker-help">Off by default. Enabling uploads this season’s nickname and checklist automatically while you use this browser. Anyone with your live link can read it. Pause anytime to stop uploads; the last shared state remains visible. A new season requires a separate opt-in. Links expire after 90 days without a sync.</p>
         <p class="locker-live-status" role="status" aria-live="polite"></p>
         <div class="locker-live-link-row" hidden><label>Your live locker link<input class="locker-live-url" readonly></label><button type="button" class="locker-live-copy">Copy live link</button><button type="button" class="locker-live-sync">Sync now</button></div>
         <label class="locker-live-optin"><input type="checkbox" class="locker-listing-enabled">Show me in the searchable player list for this season</label>

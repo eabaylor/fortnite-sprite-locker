@@ -59,8 +59,8 @@ test("catalog has unique active entries and matching artwork", async () => {
   const allAdminCodes = [...catalog.unlockCodes, ...catalog.otherAdminCodes];
   assert.equal(allAdminCodes.length, 56);
   assert.equal(new Set(allAdminCodes.map(({ code }) => code.toLowerCase())).size, allAdminCodes.length);
-  assert.equal(catalog.otherAdminCodes.filter(({ useType }) => useType === "reusable").length, 7);
-  assert.deepEqual(catalog.otherAdminCodes.filter(({ useType }) => useType === "unverified").map(({ code }) => code), ["LUHLEAKYZ", "PR1VAT3J3T", "B1GBODYSW3RVE"]);
+  assert.equal(catalog.otherAdminCodes.filter(({ useType }) => useType === "reusable").length, 10);
+  assert.deepEqual(catalog.otherAdminCodes.filter(({ useType }) => useType === "unverified").map(({ code }) => code), []);
   assert.equal(catalog.otherAdminCodes.find(({ code }) => code === 'SuppliesForTheHunt').useType, 'one-time');
   for (const item of catalog.otherAdminCodes) {
     assert.ok(item.reward);
@@ -123,7 +123,8 @@ test("server renders the real tracker with current season and all cards", async 
   assert.match(html, /Restore/);
   assert.match(html, /Open checklist options/);
   assert.match(html, /What’s New/);
-  assert.match(html, /Admin Codes/);
+  assert.match(html, /Rewards/);
+  assert.doesNotMatch(html, /class="view-switch"/);
   assert.doesNotMatch(html, /Sprite Codes/);
   assert.doesNotMatch(html, /Other Codes/);
   assert.doesNotMatch(html, /class="whats-new-trigger"/);

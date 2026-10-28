@@ -186,11 +186,11 @@ export default function Home() {
   const [selectedSprites, setSelectedSprites] = useState<string[]>([]);
   const [selectedVariants, setSelectedVariants] = useState<string[]>([]);
   const [query, setQuery] = useState("");
-  const [viewMode, setViewMode] = useState<ViewMode>("list");
+  const [viewMode] = useState<ViewMode>("list");
   const [ready, setReady] = useState(false);
   const [whatsNewOpen, setWhatsNewOpen] = useState(false);
   const [codeGuideOpen, setCodeGuideOpen] = useState(false);
-  const [codeGuideView, setCodeGuideView] = useState<"sprites" | "other">("sprites");
+  const [codeGuideView, setCodeGuideView] = useState<"sprites" | "other">("other");
   const [focusedCode, setFocusedCode] = useState<string | null>(null);
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
   const [redeemedAdminCodes, setRedeemedAdminCodes] = useState<string[]>([]);
@@ -217,7 +217,6 @@ export default function Home() {
     const savedProgress = loadProgress(initialSeason);
     queueMicrotask(() => {
       setSelectedSeasonId(initialSeason.seasonId);
-      if (window.location.hash.startsWith("#locker=") || /^[A-Za-z0-9_-]{16}$/.test(new URLSearchParams(window.location.search).get('s') || '')) setViewMode("list");
       setProgress(savedProgress);
       try {
         const savedCodes = JSON.parse(localStorage.getItem(`sprite-locker-redeemed-admin-codes-${initialSeason.seasonId}`) ?? "[]");
@@ -409,7 +408,7 @@ export default function Home() {
     setWhatsNewOpen(true);
   }
 
-  function openCodeGuide(code?: string, view: "sprites" | "other" = "sprites") {
+  function openCodeGuide(code?: string, view: "sprites" | "other" = code ? "sprites" : "other") {
     codeGuideReturnFocus.current = document.activeElement instanceof HTMLElement && document.activeElement !== document.body ? document.activeElement : null;
     setFocusedCode(code ?? null);
     setCodeGuideView(view);
@@ -553,12 +552,6 @@ export default function Home() {
 
         <div className="tracker-toolbar">
           <div className="filters" role="group" aria-label="Filter checklist">
-            <div className="view-switch" role="group" aria-label="Checklist view">
-              <span>View</span>
-              <button type="button" className={viewMode === "compact" ? "active" : ""} aria-pressed={viewMode === "compact"} onClick={() => setViewMode("compact")}>Compact</button>
-              <button type="button" className={viewMode === "classic" ? "active" : ""} aria-pressed={viewMode === "classic"} onClick={() => setViewMode("classic")}>Classic</button>
-              <button type="button" className={viewMode === "list" ? "active" : ""} aria-pressed={viewMode === "list"} onClick={() => setViewMode("list")}>List</button>
-            </div>
             <label className="select-filter status-filter">
               <span>Status</span>
               <select value={filter} onChange={(event) => {
@@ -571,10 +564,10 @@ export default function Home() {
             <MultiSelectFilter label="Sprites" items={sprites.map((sprite) => sprite.name)} selected={selectedSprites} onToggle={toggleSpriteFilter} onClear={() => setSelectedSprites([])} className="sprite-filter" />
             <MultiSelectFilter label="Variants" items={variants} selected={selectedVariants} onToggle={toggleVariantFilter} onClear={() => setSelectedVariants([])} className="variant-filter" />
             <button className="clear-filters" onClick={clearFilters}>Clear filters</button>
-            <button className="compare-lockers-trigger" type="button" onClick={() => { clearFilters(); setViewMode("list"); }}>Compare Lockers</button>
+            <button className="compare-lockers-trigger" type="button" onClick={clearFilters}>Compare Lockers</button>
             {!!(unlockCodes.length || otherAdminCodes.length) && (
               <button className="admin-codes-trigger" type="button" onClick={() => openCodeGuide()}>
-                Admin Codes <span>{unlockCodes.length + otherAdminCodes.length}</span>
+                Rewards <span>{unlockCodes.length + otherAdminCodes.length}</span>
               </button>
             )}
           </div>
@@ -681,7 +674,7 @@ export default function Home() {
             <header className="code-guide-header">
               <div>
                 <span>Chapter 7 · Season 4</span>
-                <h2 id="code-guide-title">Admin Panel Codes</h2>
+                <h2 id="code-guide-title">Rewards</h2>
                 <p>In the Battle Royale lobby, open <strong>…/Admin Panel</strong>, enter a code, and submit it. Reward codes work once per account; temporary lobby transformations are reusable.</p>
               </div>
               <button ref={codeGuideClose} className="code-guide-close" type="button" onClick={closeCodeGuide} aria-label="Close Admin Panel codes">×</button>

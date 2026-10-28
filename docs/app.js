@@ -6,7 +6,7 @@ const FOCUSABLE_SELECTOR = 'a[href], button:not([disabled]), input:not([disabled
 let season = CATALOGS.find((item) => item.seasonId === BUNDLE.defaultSeasonId)
   || CATALOGS[0];
 let filter = "all";
-let viewMode = "list";
+const viewMode = "list";
 let lockerTools = null;
 let lockerToolsLoading = false;
 const selectedSprites = new Set();
@@ -14,7 +14,7 @@ const selectedVariants = new Set();
 let query = "";
 let progress = {};
 let focusedCode = null;
-let codeGuideView = "sprites";
+let codeGuideView = "other";
 let redeemedAdminCodes = [];
 let whatsNewReturnFocus = null;
 let codeGuideReturnFocus = null;
@@ -158,11 +158,6 @@ function render() {
   const toolsHost = document.querySelector("#locker-tools-host");
   list.hidden = viewMode === "list";
   toolsHost.hidden = viewMode !== "list";
-  for (const mode of ["compact", "classic", "list"]) {
-    const button = document.querySelector(`#${mode}-view`);
-    button.classList.toggle("active", viewMode === mode);
-    button.setAttribute("aria-pressed", String(viewMode === mode));
-  }
   if (viewMode === "list") {
     if (!lockerTools) {
       if (!lockerToolsLoading) {
@@ -528,7 +523,7 @@ function renderCodeGuide() {
   }
 }
 
-function openCodeGuide(code = null, view = "sprites") {
+function openCodeGuide(code = null, view = code ? "sprites" : "other") {
   codeGuideReturnFocus = document.activeElement instanceof HTMLElement && document.activeElement !== document.body ? document.activeElement : null;
   focusedCode = code;
   codeGuideView = view;
@@ -733,20 +728,8 @@ document.querySelector("#sprite-list").addEventListener("click", (event) => {
   render();
 });
 
-for (const [id, mode] of [["#compact-view", "compact"], ["#classic-view", "classic"], ["#list-view", "list"]]) {
-  document.querySelector(id).addEventListener("click", () => {
-    viewMode = mode;
-    document.querySelector("#compact-view").classList.toggle("active", viewMode === "compact");
-    document.querySelector("#classic-view").classList.toggle("active", viewMode === "classic");
-    document.querySelector("#compact-view").setAttribute("aria-pressed", String(viewMode === "compact"));
-    document.querySelector("#classic-view").setAttribute("aria-pressed", String(viewMode === "classic"));
-    render();
-  });
-}
-
 document.querySelector("#compare-lockers-trigger").addEventListener("click", () => {
   document.querySelector("#clear-filters").click();
-  viewMode = "list";
   render();
 });
 
