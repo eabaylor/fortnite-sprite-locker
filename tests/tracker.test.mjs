@@ -36,10 +36,12 @@ async function render() {
 test("catalog has unique active entries and matching artwork", async () => {
   assert.equal(catalog.seasonId, "chapter-7-mini-season");
   assert.equal(catalog.storageKey, "sprite-locker-progress-chapter-7-mini-season");
-  assert.equal(entries.length, 22);
+  assert.equal(entries.length, 32);
+  assert.equal(entries.filter(({variant}) => variant === 'Cursed').length, 10);
+  assert.equal(catalog.families.find(({name}) => name === "Lil' Uzi Vert Jr.").variants.join(','), 'Cursed');
   assert.ok(catalog.whatsNew.items.length >= 1 && catalog.whatsNew.items.length <= 4);
-  assert.deepEqual(catalog.familyOrder, ["Halfpeel'd","Re-Pete","Barry O'Fish","Chester","Exmarks","Wayfinder","Kelper","Sweet Dreams","Lil' Squibbly","Lil' Flacko","Plundarrgh","Transponder Snail"]);
-  assert.deepEqual(catalog.variantOrder, ["Base", "Fortune"]);
+  assert.deepEqual(catalog.familyOrder, ["Halfpeel'd","Re-Pete","Barry O'Fish","Chester","Exmarks","Wayfinder","Kelper","Sweet Dreams","Lil' Squibbly","Lil' Flacko","Lil' Uzi Vert Jr.","Plundarrgh","Transponder Snail"]);
+  assert.deepEqual(catalog.variantOrder, ["Base", "Fortune", "Cursed"]);
   assert.deepEqual(new Set(catalog.familyOrder), new Set(catalog.families.map(({ name }) => name)));
   assert.deepEqual(new Set(catalog.variantOrder), new Set(catalog.families.flatMap(({ variants }) => variants)));
 
@@ -129,7 +131,7 @@ test("server renders the real tracker with current season and all cards", async 
   assert.doesNotMatch(html, /Sprite Codes/);
   assert.doesNotMatch(html, /Other Codes/);
   assert.doesNotMatch(html, /class="whats-new-trigger"/);
-  assert.equal((html.match(/class="sprite-card /g) ?? []).length, 22);
+  assert.equal((html.match(/class="sprite-card /g) ?? []).length, 32);
   const familyNames = [...html.matchAll(/<h3>([^<]+)<\/h3>/g)].map((match) => match[1].replaceAll('&#x27;', "'"));
   assert.deepEqual(familyNames, catalog.familyOrder);
   assert.doesNotMatch(html, /Your site is taking shape|Building your site/);

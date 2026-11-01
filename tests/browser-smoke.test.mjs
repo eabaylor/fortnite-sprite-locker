@@ -55,7 +55,7 @@ window.addEventListener("load", async () => {
   const defaultStatusAll = status.value === "all";
   const rows = [...document.querySelectorAll('.locker-list-row')];
   const familyNames = [...new Set(rows.map(row => row.querySelector('.locker-status-toggle').dataset.name))];
-  const sixVariantFamily = window.SPRITE_CATALOGS.seasons[0].families.find(f => f.variants.length === 2).name;
+  const sixVariantFamily = window.SPRITE_CATALOGS.seasons[0].families.find(f => f.variants.length === 3).name;
   const firstVariants = rows.map(row => row.querySelector('.locker-status-toggle')).filter(b => b.dataset.name === sixVariantFamily).map(b => b.dataset.variant);
   const firstButton = rows[0].querySelector('.locker-status-toggle');
   const {name, variant} = firstButton.dataset;
@@ -262,7 +262,7 @@ window.addEventListener("load", async () => {
   result.codesMobile = codeRect.left >= 0 && codeRect.right <= document.documentElement.clientWidth && document.documentElement.scrollWidth === document.documentElement.clientWidth;
   document.querySelector('#code-guide-close').click();
   seasonPicker.value = window.SPRITE_CATALOGS.defaultSeasonId; seasonPicker.dispatchEvent(new Event('change'));
-  for (let i = 0; i < 100 && document.querySelectorAll('.locker-list-row').length !== 22; i++) await new Promise(resolve => setTimeout(resolve, 20));
+  for (let i = 0; i < 100 && document.querySelectorAll('.locker-list-row').length !== 32; i++) await new Promise(resolve => setTimeout(resolve, 20));
   result.seasonProgressPreserved = localStorage.getItem(window.SPRITE_CATALOGS.seasons[0].storageKey) === currentProgressBefore;
   result.newSeasonRewardsHidden = document.querySelector('#admin-codes-trigger').hidden;
   status.value = 'not-mastered'; status.dispatchEvent(new Event('change'));
@@ -424,7 +424,7 @@ test("live static tracker works at 320px in a real browser", async (context) => 
     assert.equal(audit.archivedProgressVisible, true);
     assert.equal(audit.seasonProgressPreserved, true);
     assert.equal(audit.newSeasonRewardsHidden, true);
-    assert.deepEqual(audit.firstVariants, ["Base", "Fortune"]);
+    assert.deepEqual(audit.firstVariants, ["Base", "Fortune", "Cursed"]);
   } finally {
     await new Promise((resolve) => server.close(resolve));
     await rm(profile, { recursive: true, force: true });

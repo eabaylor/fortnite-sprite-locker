@@ -53,7 +53,7 @@ let index = await readFile(indexUrl, "utf8");
 index = index
   .replace(/(<strong id="season-name">)[^<]+/, `$1${current.season}`)
   .replace(/(<span class="season-theme" id="season-theme">)[^<]+/, `$1${current.seasonTheme}`)
-  .replace(/all \d+ currently available Fortnite Sprite variants/g, `all ${total} currently available Fortnite Sprite variants`)
+  .replace(/all \d+ (?:currently available Fortnite Sprite variants|Fortnite Sprite catalog entries)/g, `all ${total} Fortnite Sprite catalog entries`)
   .replace(/Track all \d+ available Sprite variants/g, `Track all ${total} available Sprite variants`)
   .replace(/<span class="total-count">\d+<\/span>/g, `<span class="total-count">${total}</span>`)
   .replace(/UPDATED [^<]+ · PATCH [^<]+/g, `UPDATED ${current.updatedDate.toUpperCase()} · PATCH ${current.patch.toUpperCase()}`)

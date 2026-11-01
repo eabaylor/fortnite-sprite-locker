@@ -1,7 +1,7 @@
 window.SPRITE_CATALOGS = {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-mini-season",
-  "assetVersion": "20261101-1",
+  "assetVersion": "20261101-2",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -14,7 +14,7 @@ window.SPRITE_CATALOGS = {
       "legacyStorageKeys": [],
       "updatedDate": "November 1, 2026",
       "patch": "v43.00",
-      "assetVersion": "20261101-1",
+      "assetVersion": "20261101-2",
       "familyOrder": [
         "Halfpeel'd",
         "Re-Pete",
@@ -26,20 +26,22 @@ window.SPRITE_CATALOGS = {
         "Sweet Dreams",
         "Lil' Squibbly",
         "Lil' Flacko",
+        "Lil' Uzi Vert Jr.",
         "Plundarrgh",
         "Transponder Snail"
       ],
       "variantOrder": [
         "Base",
-        "Fortune"
+        "Fortune",
+        "Cursed"
       ],
       "whatsNew": {
-        "title": "Set sail for Treasure Hunters",
-        "intro": "A fresh season checklist for the Sprites released on November 1.",
+        "title": "Cursed variants added",
+        "intro": "The tracker now includes the 10 Cursed entries you identified in game.",
         "items": [
-          "Track 22 released Sprite entries across 12 Treasure Hunters families, including Fortune variants.",
-          "Override is archived in the season selector; its saved checklist, rewards, and friend snapshots are preserved.",
-          "Treasure Hunters starts with separate progress. Unreleased Cursed variants and Lil' Uzi Vert Jr. are not included."
+          "Added Cursed Halfpeel'd, Re-Pete, Barry O'Fish, Wayfinder, Chester, Exmarks, Lil' Squibbly, Lil' Flacko, Lil' Uzi Vert Jr., and Plundarrgh.",
+          "Variants now appear as Base, Fortune, then Cursed, without catalog numbers in names.",
+          "Your existing progress is preserved. These additions bring the checklist to 32 entries; one entry in the game's reported 33 total remains unidentified."
         ]
       },
       "unlockCodes": [],
@@ -50,7 +52,8 @@ window.SPRITE_CATALOGS = {
           "rarity": "Rare",
           "variants": [
             "Base",
-            "Fortune"
+            "Fortune",
+            "Cursed"
           ]
         },
         {
@@ -58,7 +61,8 @@ window.SPRITE_CATALOGS = {
           "rarity": "Rare",
           "variants": [
             "Base",
-            "Fortune"
+            "Fortune",
+            "Cursed"
           ]
         },
         {
@@ -66,7 +70,8 @@ window.SPRITE_CATALOGS = {
           "rarity": "Rare",
           "variants": [
             "Base",
-            "Fortune"
+            "Fortune",
+            "Cursed"
           ]
         },
         {
@@ -74,7 +79,8 @@ window.SPRITE_CATALOGS = {
           "rarity": "Epic",
           "variants": [
             "Base",
-            "Fortune"
+            "Fortune",
+            "Cursed"
           ]
         },
         {
@@ -82,7 +88,8 @@ window.SPRITE_CATALOGS = {
           "rarity": "Epic",
           "variants": [
             "Base",
-            "Fortune"
+            "Fortune",
+            "Cursed"
           ]
         },
         {
@@ -90,7 +97,8 @@ window.SPRITE_CATALOGS = {
           "rarity": "Epic",
           "variants": [
             "Base",
-            "Fortune"
+            "Fortune",
+            "Cursed"
           ]
         },
         {
@@ -113,7 +121,8 @@ window.SPRITE_CATALOGS = {
           "rarity": "Epic",
           "variants": [
             "Base",
-            "Fortune"
+            "Fortune",
+            "Cursed"
           ]
         },
         {
@@ -121,7 +130,15 @@ window.SPRITE_CATALOGS = {
           "rarity": "Legendary",
           "variants": [
             "Base",
-            "Fortune"
+            "Fortune",
+            "Cursed"
+          ]
+        },
+        {
+          "name": "Lil' Uzi Vert Jr.",
+          "rarity": "Special",
+          "variants": [
+            "Cursed"
           ]
         },
         {
@@ -129,7 +146,8 @@ window.SPRITE_CATALOGS = {
           "rarity": "Mythic",
           "variants": [
             "Base",
-            "Fortune"
+            "Fortune",
+            "Cursed"
           ]
         },
         {
@@ -141,7 +159,24 @@ window.SPRITE_CATALOGS = {
         }
       ],
       "sourceUrl": "https://fortnite.gg/sprites",
-      "officialSourceUrl": "https://communities.epicgames.com/thread/set-sail-for-fortnite-treasure-hunters-the-greatest-adventure-of-all-time/Pmud"
+      "officialSourceUrl": "https://communities.epicgames.com/thread/set-sail-for-fortnite-treasure-hunters-the-greatest-adventure-of-all-time/Pmud",
+      "inGameReference": {
+        "source": "User-supplied PlayStation list and screenshot, November 1, 2026",
+        "reportedTotal": 33,
+        "cursedNumbers": {
+          "Halfpeel'd": 3,
+          "Re-Pete": 7,
+          "Barry O'Fish": 11,
+          "Wayfinder": 15,
+          "Chester": 19,
+          "Exmarks": 27,
+          "Lil' Squibbly": 31,
+          "Lil' Flacko": 39,
+          "Lil' Uzi Vert Jr.": 43,
+          "Plundarrgh": 51
+        },
+        "note": "Displayed in the in-game catalog; availability may be time-gated. These user-requested entries override third-party unreleased flags. Numbers are reference metadata only and are not displayed."
+      }
     },
     {
       "schemaVersion": 1,
