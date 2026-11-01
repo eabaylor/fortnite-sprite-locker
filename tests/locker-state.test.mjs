@@ -32,9 +32,9 @@ test('opt-in only, same live ID updates, pause persists, friends survive refresh
     assert.equal(sync.owner(season.seasonId), undefined);
     const owner = await sync.enable(season, 'Eric');
     assert.equal(owner.id, id); assert.equal(uploads, 1);
-    localStorage.setItem(season.storageKey, JSON.stringify({ 'Honey::Gold': { acquired: true, mastered: true } }));
+    localStorage.setItem(season.storageKey, JSON.stringify({ 'Chester::Fortune': { acquired: true, mastered: true } }));
     await sync.sync(); assert.equal(uploads, 2); assert.equal(sync.owner(season.seasonId).id, id);
-    assert.equal(codec.decodeSnapshot(record.token).entries.get('Honey::Gold'), 2);
+    assert.equal(codec.decodeSnapshot(record.token).entries.get('Chester::Fortune'), 2);
     await assert.rejects(() => sync.add('', id), /own locker/);
     await sync.add('', 'Friend0000000001');
     assert.equal(sync.friends[0].live, true);
@@ -51,7 +51,7 @@ test('opt-in only, same live ID updates, pause persists, friends survive refresh
     assert.equal(sync.owner(previous.seasonId), undefined, 'New seasons never opt in automatically');
     offline = true; await sync.refresh();
     assert.equal(sync.friends.length, 2); assert.match(sync.friends[0].error, /Last saved snapshot/);
-    assert.equal(sync.friends[0].entries.get('Honey::Gold'), 2, 'Offline keeps last known state');
+    assert.equal(sync.friends[0].entries.get('Chester::Fortune'), 2, 'Offline keeps last known state');
     assert.ok(saved.has(LIVE_KEY));
     for (const name of ['Carl', 'Sharon', 'MamaPjama', 'Tester']) await sync.add(codec.encodeSnapshot(codec.makeSnapshot(season, {}, name)), null);
     assert.equal(sync.friends.filter(f => f.season === season.seasonId).length, 5);

@@ -5,12 +5,13 @@ import test from "node:test";
 const root = new URL("../", import.meta.url);
 const catalog = JSON.parse(await readFile(new URL("data/catalog.json", root), "utf8"));
 const previousCatalog = JSON.parse(await readFile(new URL("archive/chapter-7-season-3.json", root), "utf8"));
+const overrideCatalog = JSON.parse(await readFile(new URL("archive/chapter-7-season-4.json", root), "utf8"));
 const entries = catalog.families.flatMap((family) => family.variants.map((variant) => ({ family, variant })));
 const bundle = {
   schemaVersion: 1,
   defaultSeasonId: catalog.seasonId,
   assetVersion: catalog.assetVersion,
-  seasons: [catalog, previousCatalog],
+  seasons: [catalog, overrideCatalog, previousCatalog],
 };
 
 const slug = (value) => value.toLowerCase().replaceAll(".", "").replaceAll(" ", "-");
@@ -33,20 +34,18 @@ async function render() {
 }
 
 test("catalog has unique active entries and matching artwork", async () => {
-  assert.equal(catalog.seasonId, "chapter-7-season-4");
-  assert.equal(catalog.storageKey, "sprite-locker-progress-chapter-7-season-4");
-  assert.equal(entries.length, 162);
+  assert.equal(catalog.seasonId, "chapter-7-mini-season");
+  assert.equal(catalog.storageKey, "sprite-locker-progress-chapter-7-mini-season");
+  assert.equal(entries.length, 22);
   assert.ok(catalog.whatsNew.items.length >= 1 && catalog.whatsNew.items.length <= 4);
-  assert.deepEqual(catalog.familyOrder, [
-    "Jonesy", "Adventure", "Bush", "Sonic", "Tails", "Shadow", "8-Bit", "Jackrabbit", "Crown", "Killswitch", "Klombo", "Mega Man", "Overshield", "Pond", "X-Ray", "Onigiri", "Storm Scout", "Blinky", "Dumpster Dive", "Birthday", "Crash Bandicoot", "Morgana", "Spooky Dash", "The Deer", "Vampire", "Honey", "One Wish Willow",
-  ]);
-  assert.deepEqual(catalog.variantOrder, ["Base", "Gold", "Cheat Master", "Loot Hacker", "Bounty Hunter", "Trick or Treat", "Quack"]);
+  assert.deepEqual(catalog.familyOrder, ["Halfpeel'd","Re-Pete","Barry O'Fish","Chester","Exmarks","Wayfinder","Kelper","Sweet Dreams","Lil' Squibbly","Lil' Flacko","Plundarrgh","Transponder Snail"]);
+  assert.deepEqual(catalog.variantOrder, ["Base", "Fortune"]);
   assert.deepEqual(new Set(catalog.familyOrder), new Set(catalog.families.map(({ name }) => name)));
   assert.deepEqual(new Set(catalog.variantOrder), new Set(catalog.families.flatMap(({ variants }) => variants)));
 
   const keys = entries.map(({ family, variant }) => `${family.name}::${variant}`);
   assert.equal(new Set(keys).size, keys.length);
-  assert.equal(catalog.unlockCodes.length, 7);
+  assert.equal(catalog.unlockCodes.length, 0);
   assert.equal(new Set(catalog.unlockCodes.map(({ code }) => code.toLowerCase())).size, catalog.unlockCodes.length);
   for (const unlock of catalog.unlockCodes) {
     assert.equal(unlock.useType, "one-time");
@@ -55,13 +54,13 @@ test("catalog has unique active entries and matching artwork", async () => {
     assert.ok(unlock.rewards.length > 0);
     for (const reward of unlock.rewards) assert.ok(keys.includes(`${reward.name}::${reward.variant}`), `${unlock.code} has an unknown reward`);
   }
-  assert.equal(catalog.otherAdminCodes.length, 49);
+  assert.equal(catalog.otherAdminCodes.length, 0);
   const allAdminCodes = [...catalog.unlockCodes, ...catalog.otherAdminCodes];
-  assert.equal(allAdminCodes.length, 56);
+  assert.equal(allAdminCodes.length, 0);
   assert.equal(new Set(allAdminCodes.map(({ code }) => code.toLowerCase())).size, allAdminCodes.length);
-  assert.equal(catalog.otherAdminCodes.filter(({ useType }) => useType === "reusable").length, 10);
+  assert.equal(overrideCatalog.otherAdminCodes.filter(({ useType }) => useType === "reusable").length, 10);
   assert.deepEqual(catalog.otherAdminCodes.filter(({ useType }) => useType === "unverified").map(({ code }) => code), []);
-  assert.equal(catalog.otherAdminCodes.find(({ code }) => code === 'SuppliesForTheHunt').useType, 'one-time');
+  assert.equal(overrideCatalog.otherAdminCodes.find(({ code }) => code === 'SuppliesForTheHunt').useType, 'one-time');
   for (const item of catalog.otherAdminCodes) {
     assert.ok(item.reward);
     assert.ok(item.category);
@@ -72,16 +71,16 @@ test("catalog has unique active entries and matching artwork", async () => {
 
   const expected = entries.map(({ family, variant }) => `${slug(family.name)}-${slug(variant)}-256.webp`).sort();
   const [publicFiles, docsFiles] = await Promise.all([
-    readdir(new URL("public/sprites/", root)),
-    readdir(new URL("docs/sprites/", root)),
+    readdir(new URL(`public/${catalog.imageBase}/`, root)),
+    readdir(new URL(`docs/${catalog.imageBase}/`, root)),
   ]);
   assert.ok(expected.every((filename) => publicFiles.includes(filename)));
   assert.ok(expected.every((filename) => docsFiles.includes(filename)));
 
   for (const filename of expected) {
     const [publicInfo, docsInfo] = await Promise.all([
-      stat(new URL(`public/sprites/${filename}`, root)),
-      stat(new URL(`docs/sprites/${filename}`, root)),
+      stat(new URL(`public/${catalog.imageBase}/${filename}`, root)),
+      stat(new URL(`docs/${catalog.imageBase}/${filename}`, root)),
     ]);
     assert.ok(publicInfo.size > 500, `${filename} is unexpectedly small`);
     assert.equal(publicInfo.size, docsInfo.size, `${filename} differs between builds`);
@@ -112,6 +111,8 @@ test("server renders the real tracker with current season and all cards", async 
   const html = await response.text();
   assert.match(html, /<title>Fortnite Sprite Locker/);
   assert.match(html, /Chapter 7/);
+  assert.match(html, /Mini Season/);
+  assert.match(html, /Treasure Hunters/);
   assert.match(html, /Season 4/);
   assert.match(html, /Season 3/);
   assert.match(html, /Override/);
@@ -123,13 +124,13 @@ test("server renders the real tracker with current season and all cards", async 
   assert.match(html, /Restore/);
   assert.match(html, /Open checklist options/);
   assert.match(html, /What’s New/);
-  assert.match(html, /Rewards/);
+  assert.doesNotMatch(html, /class="admin-codes-trigger"/);
   assert.doesNotMatch(html, /class="view-switch"/);
   assert.doesNotMatch(html, /Sprite Codes/);
   assert.doesNotMatch(html, /Other Codes/);
   assert.doesNotMatch(html, /class="whats-new-trigger"/);
-  assert.equal((html.match(/class="sprite-card /g) ?? []).length, 162);
-  const familyNames = [...html.matchAll(/<h3>([^<]+)<\/h3>/g)].map((match) => match[1]);
+  assert.equal((html.match(/class="sprite-card /g) ?? []).length, 22);
+  const familyNames = [...html.matchAll(/<h3>([^<]+)<\/h3>/g)].map((match) => match[1].replaceAll('&#x27;', "'"));
   assert.deepEqual(familyNames, catalog.familyOrder);
   assert.doesNotMatch(html, /Your site is taking shape|Building your site/);
 });

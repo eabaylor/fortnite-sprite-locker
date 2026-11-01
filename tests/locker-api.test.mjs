@@ -25,7 +25,7 @@ const now = 1792080000;
 const origin = new URL(TRACKER_URL).origin;
 function req(path, options = {}) { return new Request(`${SHARE_ORIGIN}${path}`, { ...options, headers: { Origin: origin, 'CF-Connecting-IP': '192.0.2.5', ...options.headers } }); }
 async function ticket(db) { const response = await handleLockerRequest(req('/api/lockers/ticket', { method: 'POST' }), db, now); assert.equal(response.status, 200); return (await response.json()).ticket; }
-const token = encodeSnapshot(makeSnapshot(catalog, { 'Honey::Gold': { acquired: true, mastered: true } }, 'Eric'));
+const token = encodeSnapshot(makeSnapshot(catalog, { 'Chester::Fortune': { acquired: true, mastered: true } }, 'Eric'));
 
 test('anonymous short link stores exact snapshot, redirects to GitHub, tolerates tracking, expires', async () => {
   const db = database();
@@ -39,7 +39,7 @@ test('anonymous short link stores exact snapshot, redirects to GitHub, tolerates
     assert.ok(share.url.length < 80);
     assert.equal(sharedLockerId(share.url + '?fbclid=added-by-messenger'), share.id);
     const get = await handleLockerRequest(req(`/api/lockers/${share.id}`), db, now + 1);
-    assert.equal(decodeSnapshot((await get.json()).token).entries.get('Honey::Gold'), 2);
+    assert.equal(decodeSnapshot((await get.json()).token).entries.get('Chester::Fortune'), 2);
     const redirect = await handleLockerRequest(req(`/s/${share.id}?fbclid=extra`), db, now + 1);
     assert.equal(redirect.status, 302);
     assert.equal(redirect.headers.get('Location'), `${TRACKER_URL}?s=${share.id}`);
@@ -80,7 +80,7 @@ test('live sharing requires its private key, rejects stale revisions, preserves 
     assert.equal((await put('a'.repeat(43), 0)).status, 403);
     assert.equal((await put(owner.writeKey, 0)).status, 200);
     assert.equal((await put(owner.writeKey, 0, updatedToken, now + 6)).status, 409);
-    assert.equal(decodeSnapshot((await (await get()).json()).token).entries.get('Honey::Gold'), 0);
+    assert.equal(decodeSnapshot((await (await get()).json()).token).entries.get('Chester::Fortune'), 0);
     const control = enabled => handleLockerRequest(req(`/api/lockers/${owner.id}/${enabled ? 'resume' : 'pause'}`, { method: 'POST', headers: { 'X-Locker-Write-Key': owner.writeKey } }), db, now + 7);
     assert.equal((await control(false)).status, 200);
     assert.equal((await (await get()).json()).live, false);

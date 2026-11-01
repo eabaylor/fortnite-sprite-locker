@@ -1,219 +1,140 @@
 {
   "schemaVersion": 1,
-  "seasonId": "chapter-7-season-4",
+  "seasonId": "chapter-7-mini-season",
   "chapter": "Chapter 7",
-  "season": "Season 4",
-  "seasonTheme": "Override",
-  "imageBase": "sprites",
-  "storageKey": "sprite-locker-progress-chapter-7-season-4",
+  "season": "Mini Season",
+  "seasonTheme": "Treasure Hunters",
+  "imageBase": "seasons/chapter-7-mini-season/sprites",
+  "storageKey": "sprite-locker-progress-chapter-7-mini-season",
   "legacyStorageKeys": [],
-  "updatedDate": "October 28, 2026",
-  "patch": "v42.40",
-  "assetVersion": "20261028-1",
+  "updatedDate": "November 1, 2026",
+  "patch": "v43.00",
+  "assetVersion": "20261101-1",
   "familyOrder": [
-    "Jonesy",
-    "Adventure",
-    "Bush",
-    "Sonic",
-    "Tails",
-    "Shadow",
-    "8-Bit",
-    "Jackrabbit",
-    "Crown",
-    "Killswitch",
-    "Klombo",
-    "Mega Man",
-    "Overshield",
-    "Pond",
-    "X-Ray",
-    "Onigiri",
-    "Storm Scout",
-    "Blinky",
-    "Dumpster Dive",
-    "Birthday",
-    "Crash Bandicoot",
-    "Morgana",
-    "Spooky Dash",
-    "The Deer",
-    "Vampire",
-    "Honey",
-    "One Wish Willow"
+    "Halfpeel'd",
+    "Re-Pete",
+    "Barry O'Fish",
+    "Chester",
+    "Exmarks",
+    "Wayfinder",
+    "Kelper",
+    "Sweet Dreams",
+    "Lil' Squibbly",
+    "Lil' Flacko",
+    "Plundarrgh",
+    "Transponder Snail"
   ],
   "variantOrder": [
     "Base",
-    "Gold",
-    "Cheat Master",
-    "Loot Hacker",
-    "Bounty Hunter",
-    "Trick or Treat",
-    "Quack"
+    "Fortune"
   ],
   "whatsNew": {
-    "title": "List and compare, simplified",
-    "intro": "Your tracker now keeps the focus on the List and friend comparisons.",
+    "title": "Set sail for Treasure Hunters",
+    "intro": "A fresh season checklist for the Sprites released on November 1.",
     "items": [
-      "List / Compare Lockers is now the only available view; Compact and Classic are hidden.",
-      "Admin Codes is now Rewards and opens on Other Rewards, with Sprite unlocks still available in their tab."
+      "Track 22 released Sprite entries across 12 Treasure Hunters families, including Fortune variants.",
+      "Override is archived in the season selector; its saved checklist, rewards, and friend snapshots are preserved.",
+      "Treasure Hunters starts with separate progress. Unreleased Cursed variants and Lil' Uzi Vert Jr. are not included."
     ]
   },
-  "unlockCodes": [
+  "unlockCodes": [],
+  "otherAdminCodes": [],
+  "families": [
     {
-      "code": "JonesyIsGolden",
-      "rewards": [{ "name": "Jonesy", "variant": "Gold" }],
-      "useType": "one-time",
-      "verifiedDate": "August 27, 2026",
-      "sourceUrl": "https://www.gamesradar.com/games/fortnite/fortnite-lobby-hack-codes/"
+      "name": "Halfpeel'd",
+      "rarity": "Rare",
+      "variants": [
+        "Base",
+        "Fortune"
+      ]
     },
     {
-      "code": "GatherAndCraft",
-      "rewards": [{ "name": "Bush", "variant": "Cheat Master" }],
-      "useType": "one-time",
-      "requirement": "Complete all Wrixel (Ziggy) Part 1 Story Quests before redeeming.",
-      "verifiedDate": "August 27, 2026",
-      "sourceUrl": "https://www.gamesradar.com/games/fortnite/fortnite-lobby-hack-codes/"
+      "name": "Re-Pete",
+      "rarity": "Rare",
+      "variants": [
+        "Base",
+        "Fortune"
+      ]
     },
     {
-      "code": "Play4All",
-      "rewards": [{ "name": "Jonesy", "variant": "Cheat Master" }],
-      "useType": "one-time",
-      "verifiedDate": "August 27, 2026",
-      "sourceUrl": "https://progameguides.com/fortnite/fortnite-admin-panel-codes/"
+      "name": "Barry O'Fish",
+      "rarity": "Rare",
+      "variants": [
+        "Base",
+        "Fortune"
+      ]
     },
     {
-      "code": "GottaGoFast",
-      "rewards": [{ "name": "Sonic", "variant": "Cheat Master" }],
-      "useType": "one-time",
-      "verifiedDate": "August 27, 2026",
-      "sourceUrl": "https://www.gamesradar.com/games/fortnite/fortnite-lobby-hack-codes/"
+      "name": "Chester",
+      "rarity": "Epic",
+      "variants": [
+        "Base",
+        "Fortune"
+      ]
     },
     {
-      "code": "IWannaFlyHigh",
-      "rewards": [{ "name": "Tails", "variant": "Cheat Master" }],
-      "useType": "one-time",
-      "verifiedDate": "August 27, 2026",
-      "sourceUrl": "https://www.gamesradar.com/games/fortnite/fortnite-lobby-hack-codes/"
+      "name": "Exmarks",
+      "rarity": "Epic",
+      "variants": [
+        "Base",
+        "Fortune"
+      ]
     },
     {
-      "code": "8BitBlast",
-      "rewards": [{ "name": "8-Bit", "variant": "Cheat Master" }],
-      "useType": "one-time",
-      "verifiedDate": "August 27, 2026",
-      "sourceUrl": "https://www.gamesradar.com/games/fortnite/fortnite-lobby-hack-codes/"
+      "name": "Wayfinder",
+      "rarity": "Epic",
+      "variants": [
+        "Base",
+        "Fortune"
+      ]
     },
     {
-      "code": "Born2Play",
-      "rewards": [{ "name": "Adventure", "variant": "Cheat Master" }],
-      "useType": "one-time",
-      "verifiedDate": "August 27, 2026",
-      "sourceUrl": "https://www.gamesradar.com/games/fortnite/fortnite-lobby-hack-codes/"
+      "name": "Kelper",
+      "rarity": "Epic",
+      "variants": [
+        "Base",
+        "Fortune"
+      ]
+    },
+    {
+      "name": "Sweet Dreams",
+      "rarity": "Mythic",
+      "variants": [
+        "Base"
+      ]
+    },
+    {
+      "name": "Lil' Squibbly",
+      "rarity": "Epic",
+      "variants": [
+        "Base",
+        "Fortune"
+      ]
+    },
+    {
+      "name": "Lil' Flacko",
+      "rarity": "Legendary",
+      "variants": [
+        "Base",
+        "Fortune"
+      ]
+    },
+    {
+      "name": "Plundarrgh",
+      "rarity": "Mythic",
+      "variants": [
+        "Base",
+        "Fortune"
+      ]
+    },
+    {
+      "name": "Transponder Snail",
+      "rarity": "Legendary",
+      "variants": [
+        "Base"
+      ]
     }
   ],
-  "otherAdminCodes": [
-    {
-      "code": "SuppliesForTheHunt",
-      "reward": "2 Snack-O'-Lantern Gizmos",
-      "category": "Gizmos",
-      "useType": "one-time",
-      "verifiedDate": "October 23, 2026",
-      "sourceUrl": "https://beebom.com/fortnite-lobby-hack-codes/"
-    },
-    {
-      "code": "LUHLEAKYZ",
-      "reward": "Plays Time Passed by Yeat in the lobby",
-      "category": "Lobby Effect",
-      "useType": "reusable",
-      "verifiedDate": "October 24, 2026",
-      "sourceUrl": "https://www.gamesradar.com/games/fortnite/fortnite-lobby-hack-codes/"
-    },
-    {
-      "code": "PR1VAT3J3T",
-      "reward": "Plays MARCHING by Yeat in the lobby",
-      "category": "Lobby Effect",
-      "useType": "reusable",
-      "verifiedDate": "October 24, 2026",
-      "sourceUrl": "https://www.gamesradar.com/games/fortnite/fortnite-lobby-hack-codes/"
-    },
-    {
-      "code": "B1GBODYSW3RVE",
-      "reward": "Plays Lil Krazy by Yeat in the lobby",
-      "category": "Lobby Effect",
-      "useType": "reusable",
-      "verifiedDate": "October 24, 2026",
-      "sourceUrl": "https://www.gamesradar.com/games/fortnite/fortnite-lobby-hack-codes/"
-    },
-    { "code": "DOOR2DOOR4CANDY", "reward": "2 Extraction Accelerators", "category": "Gizmos", "useType": "one-time", "verifiedDate": "October 13, 2026", "sourceUrl": "https://allthings.how/fortnite-codes/" },
-    { "code": "VeryScaryPumpkin", "reward": "3 Snack-O'-Lanterns", "category": "Gizmos", "useType": "one-time", "verifiedDate": "October 6, 2026", "sourceUrl": "https://beebom.com/fortnite-lobby-hack-codes/" },
-    { "code": "S7H-50P-R03", "reward": "Geno story voice line and lobby glitch effect", "category": "Story Event", "useType": "one-time", "requirement": "Record all three of Hope's Lobby Hack pieces during the Geno Part 2 Story Quests before redeeming.", "verifiedDate": "October 3, 2026", "sourceUrl": "https://www.vice.com/en/article/fortnite-cheat-codes-lobby-hacks/" },
-    { "code": "runSystemOverride", "reward": "5,000 Sprite Dust", "category": "Sprite Dust", "useType": "one-time", "requirement": "Complete the Geno Part 2 Story Quests and talk to The Order about the next step before redeeming.", "verifiedDate": "October 3, 2026", "sourceUrl": "https://www.vice.com/en/article/fortnite-cheat-codes-lobby-hacks/" },
-    { "code": "ImTheRealEdgelord", "reward": "5,000 Sprite Dust", "category": "Sprite Dust", "useType": "one-time", "requirement": "Complete all Wrixel (Ziggy) Story Quests before redeeming.", "verifiedDate": "October 3, 2026", "sourceUrl": "https://www.vice.com/en/article/fortnite-cheat-codes-lobby-hacks/" },
-    { "code": "MagicIsReal", "reward": "5,000 Sprite Dust", "category": "Sprite Dust", "useType": "one-time", "requirement": "Complete Bastian's Story Quest before redeeming.", "verifiedDate": "October 3, 2026", "sourceUrl": "https://www.vice.com/en/article/fortnite-cheat-codes-lobby-hacks/" },
-    { "code": "CrowsAreAfraid", "reward": "Temporarily transform into a scarecrow in the lobby", "category": "Lobby Effect", "useType": "reusable", "verifiedDate": "October 2, 2026", "sourceUrl": "https://www.nintendolife.com/guides/fortnite-lobby-hack-codes-admin-panel" },
-    { "code": "PumpkinSpiceLife", "reward": "Temporarily transform into a pumpkin in the lobby", "category": "Lobby Effect", "useType": "reusable", "verifiedDate": "October 2, 2026", "sourceUrl": "https://www.nintendolife.com/guides/fortnite-lobby-hack-codes-admin-panel" },
-    { "code": "IThinkTheKeyFoundMeChat", "reward": "1 Extraction Accelerator", "category": "Gizmos", "useType": "one-time", "verifiedDate": "October 2, 2026", "sourceUrl": "https://www.nintendolife.com/guides/fortnite-lobby-hack-codes-admin-panel" },
-    { "code": "PowerOut", "reward": "Five Nights at Freddy's lobby jumpscare", "category": "Lobby Effect", "useType": "reusable", "verifiedDate": "September 30, 2026", "sourceUrl": "https://fortnite.gg/lobby-hacks" },
-    { "code": "BoneRattler", "reward": "4 Spicy Tacos", "category": "Gizmos", "useType": "one-time", "verifiedDate": "September 30, 2026", "sourceUrl": "https://www.nintendolife.com/guides/fortnite-lobby-hack-codes-admin-panel" },
-    { "code": "WeAreTheWorldChampionsToday", "reward": "FNCS Sentry Back Bling", "category": "Back Bling", "useType": "one-time", "verifiedDate": "September 27, 2026", "sourceUrl": "https://www.vice.com/en/article/fortnite-admin-panel-codes-september-26/" },
-    { "code": "DustySprites", "reward": "5,000 Sprite Dust", "category": "Sprite Dust", "useType": "one-time", "verifiedDate": "September 27, 2026", "sourceUrl": "https://www.vice.com/en/article/fortnite-admin-panel-codes-september-26/" },
-    { "code": "WhoCrackedTheCode", "reward": "40,000 XP", "category": "XP", "useType": "one-time", "verifiedDate": "September 27, 2026", "sourceUrl": "https://www.vice.com/en/article/fortnite-admin-panel-codes-september-26/" },
-    { "code": "9YEARS", "reward": "9th Birthday Sprite Spray", "category": "Spray", "useType": "one-time", "verifiedDate": "September 22, 2026", "sourceUrl": "https://www.vice.com/en/article/fortnite-cheat-codes-lobby-hacks/" },
-    { "code": "AlmostScaringSeason", "reward": "2 Cheat Code Locators", "category": "Gizmos", "useType": "one-time", "verifiedDate": "September 22, 2026", "sourceUrl": "https://www.vice.com/en/article/fortnite-cheat-codes-lobby-hacks/" },
-    { "code": "BlinkyInkyPinkyClyde", "reward": "5,000 Sprite Dust", "category": "Sprite Dust", "useType": "one-time", "verifiedDate": "September 19, 2026", "sourceUrl": "https://www.nintendolife.com/guides/fortnite-lobby-hack-codes-admin-panel" },
-    { "code": "PlayToLevelUp", "reward": "2,000 Sprite Dust", "category": "Sprite Dust", "useType": "one-time", "verifiedDate": "September 19, 2026", "sourceUrl": "https://www.nintendolife.com/guides/fortnite-lobby-hack-codes-admin-panel" },
-    { "code": "ChatFindMeAnotherCode", "reward": "2 Cheat Code Locators", "category": "Gizmos", "useType": "one-time", "verifiedDate": "September 19, 2026", "sourceUrl": "https://www.nintendolife.com/guides/fortnite-lobby-hack-codes-admin-panel" },
-    { "code": "NOCTURNEOP55N1", "reward": "2 Extraction Accelerators", "category": "Gizmos", "useType": "one-time", "verifiedDate": "September 19, 2026", "sourceUrl": "https://www.nintendolife.com/guides/fortnite-lobby-hack-codes-admin-panel" },
-    { "code": "DestinyAwaits", "reward": "2 Llama Supply Drops", "category": "Gizmos", "useType": "one-time", "verifiedDate": "September 19, 2026", "sourceUrl": "https://www.nintendolife.com/guides/fortnite-lobby-hack-codes-admin-panel" },
-    { "code": "SAYH12WR1X3L", "reward": "Wrixel's Hero Portrait Spray", "category": "Spray", "useType": "one-time", "verifiedDate": "September 17, 2026", "sourceUrl": "https://fortnite.gg/lobby-hacks" },
-    { "code": "BeamMeUp", "reward": "2 Extraction Accelerators", "category": "Gizmos", "useType": "one-time", "verifiedDate": "September 14, 2026", "sourceUrl": "https://beebom.com/fortnite-lobby-hack-codes/" },
-    { "code": "DustInTheWind", "reward": "5,000 Sprite Dust", "category": "Sprite Dust", "useType": "one-time", "verifiedDate": "September 7, 2026", "sourceUrl": "https://www.theclick.gg/dustinthewind-fortnite-code/" },
-    { "code": "WhereIsTheDustyTree", "reward": "5,000 Sprite Dust", "category": "Sprite Dust", "useType": "one-time", "verifiedDate": "September 5, 2026", "sourceUrl": "https://www.vice.com/en/article/fortnite-cheat-codes-lobby-hacks/" },
-    { "code": "BRB", "reward": "Briefly transform into a toilet in the lobby", "category": "Lobby Effect", "useType": "reusable", "verifiedDate": "September 5, 2026", "sourceUrl": "https://www.gamesradar.com/games/fortnite/fortnite-lobby-hack-codes/" },
-    { "code": "InsertCoinToContinue", "reward": "Briefly transform all party members into arcade-machine props in the lobby", "category": "Lobby Effect", "useType": "reusable", "verifiedDate": "September 5, 2026", "sourceUrl": "https://www.gamesradar.com/games/fortnite/fortnite-lobby-hack-codes/" },
-    { "code": "INVALIDCHEAT", "reward": "2 Cheat Code Locators", "category": "Gizmos", "useType": "one-time", "verifiedDate": "September 3, 2026", "sourceUrl": "https://fortnite.gg/lobby-hacks" },
-    { "code": "ChatWhereDoYouFindTheKey", "reward": "2 Extraction Accelerators", "category": "Gizmos", "useType": "one-time", "verifiedDate": "September 3, 2026", "sourceUrl": "https://fortnite.gg/lobby-hacks" },
-    { "code": "YourThoughtsAreMine", "reward": "Void Master Geno style and 5,000 Sprite Dust", "category": "Cosmetic + Sprite Dust", "useType": "one-time", "requirement": "Complete the hidden Geno quest before redeeming.", "verifiedDate": "September 3, 2026", "sourceUrl": "https://fortnite.gg/lobby-hacks" },
-    { "code": "H0p0nVC", "reward": "2,000 Sprite Dust", "category": "Sprite Dust", "useType": "one-time", "verifiedDate": "August 27, 2026", "sourceUrl": "https://progameguides.com/fortnite/fortnite-admin-panel-codes/" },
-    { "code": "OverrideXP", "reward": "40,000 XP", "category": "XP", "useType": "one-time", "verifiedDate": "August 27, 2026", "sourceUrl": "https://www.pcgamesn.com/fortnite/lobby-hack-codes" },
-    { "code": "Magilume", "reward": "2,000 Sprite Dust", "category": "Sprite Dust", "useType": "one-time", "verifiedDate": "August 27, 2026", "sourceUrl": "https://progameguides.com/fortnite/fortnite-admin-panel-codes/" },
-    { "code": "Perlimpinpin", "reward": "2,000 Sprite Dust", "category": "Sprite Dust", "useType": "one-time", "verifiedDate": "August 27, 2026", "sourceUrl": "https://progameguides.com/fortnite/fortnite-admin-panel-codes/" },
-    { "code": "Chispambo", "reward": "2,000 Sprite Dust", "category": "Sprite Dust", "useType": "one-time", "verifiedDate": "August 27, 2026", "sourceUrl": "https://progameguides.com/fortnite/fortnite-admin-panel-codes/" },
-    { "code": "Abgestaubt", "reward": "2,000 Sprite Dust", "category": "Sprite Dust", "useType": "one-time", "verifiedDate": "August 27, 2026", "sourceUrl": "https://progameguides.com/fortnite/fortnite-admin-panel-codes/" },
-    { "code": "O2OVERRIDE", "reward": "5 Portable Extractors and 1 Llama Supply Drop", "category": "Gizmos", "useType": "one-time", "verifiedDate": "August 27, 2026", "sourceUrl": "https://www.pcgamesn.com/fortnite/lobby-hack-codes" },
-    { "code": "PerfectOrder", "reward": "4 Spicy Tacos", "category": "Gizmos", "useType": "one-time", "verifiedDate": "August 27, 2026", "sourceUrl": "https://www.pcgamesn.com/fortnite/lobby-hack-codes" },
-    { "code": "TakeYourHeart", "reward": "2 Extraction Accelerators", "category": "Gizmos", "useType": "one-time", "verifiedDate": "August 27, 2026", "sourceUrl": "https://www.pcgamesn.com/fortnite/lobby-hack-codes" },
-    { "code": "SurviveTheNight", "reward": "2 Cheat Code Locators", "category": "Gizmos", "useType": "one-time", "verifiedDate": "August 27, 2026", "sourceUrl": "https://www.pcgamesn.com/fortnite/lobby-hack-codes" },
-    { "code": "FindItChat", "reward": "2 Cheat Code Locators", "category": "Gizmos", "useType": "one-time", "verifiedDate": "August 27, 2026", "sourceUrl": "https://www.pcgamesn.com/fortnite/lobby-hack-codes" },
-    { "code": "REACHYOURIMPOSSIBLE", "reward": "Block Party Loading Screen", "category": "Loading Screen", "useType": "one-time", "verifiedDate": "August 27, 2026", "sourceUrl": "https://progameguides.com/fortnite/fortnite-admin-panel-codes/" },
-    { "code": "BeMoreAlien", "reward": "Override Ready Loading Screen", "category": "Loading Screen", "useType": "one-time", "verifiedDate": "August 27, 2026", "sourceUrl": "https://progameguides.com/fortnite/fortnite-admin-panel-codes/" },
-    { "code": "LetsBlockAndRoll", "reward": "Temporarily transform into a Tetris block in the lobby", "category": "Lobby Effect", "useType": "reusable", "verifiedDate": "August 27, 2026", "sourceUrl": "https://allthings.how/fortnite-admin-panel-codes/" },
-    { "code": "DontBlockMe", "reward": "Temporarily change the Tetris block lobby transformation", "category": "Lobby Effect", "useType": "reusable", "verifiedDate": "August 27, 2026", "sourceUrl": "https://allthings.how/fortnite-admin-panel-codes/" }
-  ],
-  "families": [
-    { "name": "Adventure", "rarity": "Rare", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat", "Quack"] },
-    { "name": "Birthday", "rarity": "Rare", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
-    { "name": "Blinky", "rarity": "Legendary", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
-    { "name": "Bush", "rarity": "Rare", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat", "Quack"] },
-    { "name": "Crash Bandicoot", "rarity": "Legendary", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
-    { "name": "Crown", "rarity": "Mythic", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
-    { "name": "Dumpster Dive", "rarity": "Epic", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
-    { "name": "Jackrabbit", "rarity": "Legendary", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
-    { "name": "Jonesy", "rarity": "Rare", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat", "Quack"] },
-    { "name": "Killswitch", "rarity": "Epic", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
-    { "name": "Klombo", "rarity": "Mythic", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat", "Quack"] },
-    { "name": "Mega Man", "rarity": "Rare", "variants": ["Base"] },
-    { "name": "Morgana", "rarity": "Epic", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
-    { "name": "Onigiri", "rarity": "Rare", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
-    { "name": "Overshield", "rarity": "Rare", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
-    { "name": "Pond", "rarity": "Epic", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
-    { "name": "Shadow", "rarity": "Epic", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
-    { "name": "Sonic", "rarity": "Epic", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
-    { "name": "Spooky Dash", "rarity": "Mythic", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat", "Quack"] },
-    { "name": "Storm Scout", "rarity": "Rare", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
-    { "name": "Tails", "rarity": "Epic", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
-    { "name": "The Deer", "rarity": "Legendary", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
-    { "name": "Vampire", "rarity": "Legendary", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
-    { "name": "X-Ray", "rarity": "Legendary", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
-    { "name": "8-Bit", "rarity": "Rare", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
-    { "name": "Honey", "rarity": "Epic", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] },
-    { "name": "One Wish Willow", "rarity": "Mythic", "variants": ["Base", "Bounty Hunter", "Cheat Master", "Gold", "Loot Hacker", "Trick or Treat"] }
-  ]
+  "sourceUrl": "https://fortnite.gg/sprites",
+  "officialSourceUrl": "https://communities.epicgames.com/thread/set-sail-for-fortnite-treasure-hunters-the-greatest-adventure-of-all-time/Pmud"
 }

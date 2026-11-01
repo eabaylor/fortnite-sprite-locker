@@ -1,8 +1,148 @@
 window.SPRITE_CATALOGS = {
   "schemaVersion": 1,
-  "defaultSeasonId": "chapter-7-season-4",
-  "assetVersion": "20261028-1",
+  "defaultSeasonId": "chapter-7-mini-season",
+  "assetVersion": "20261101-1",
   "seasons": [
+    {
+      "schemaVersion": 1,
+      "seasonId": "chapter-7-mini-season",
+      "chapter": "Chapter 7",
+      "season": "Mini Season",
+      "seasonTheme": "Treasure Hunters",
+      "imageBase": "seasons/chapter-7-mini-season/sprites",
+      "storageKey": "sprite-locker-progress-chapter-7-mini-season",
+      "legacyStorageKeys": [],
+      "updatedDate": "November 1, 2026",
+      "patch": "v43.00",
+      "assetVersion": "20261101-1",
+      "familyOrder": [
+        "Halfpeel'd",
+        "Re-Pete",
+        "Barry O'Fish",
+        "Chester",
+        "Exmarks",
+        "Wayfinder",
+        "Kelper",
+        "Sweet Dreams",
+        "Lil' Squibbly",
+        "Lil' Flacko",
+        "Plundarrgh",
+        "Transponder Snail"
+      ],
+      "variantOrder": [
+        "Base",
+        "Fortune"
+      ],
+      "whatsNew": {
+        "title": "Set sail for Treasure Hunters",
+        "intro": "A fresh season checklist for the Sprites released on November 1.",
+        "items": [
+          "Track 22 released Sprite entries across 12 Treasure Hunters families, including Fortune variants.",
+          "Override is archived in the season selector; its saved checklist, rewards, and friend snapshots are preserved.",
+          "Treasure Hunters starts with separate progress. Unreleased Cursed variants and Lil' Uzi Vert Jr. are not included."
+        ]
+      },
+      "unlockCodes": [],
+      "otherAdminCodes": [],
+      "families": [
+        {
+          "name": "Halfpeel'd",
+          "rarity": "Rare",
+          "variants": [
+            "Base",
+            "Fortune"
+          ]
+        },
+        {
+          "name": "Re-Pete",
+          "rarity": "Rare",
+          "variants": [
+            "Base",
+            "Fortune"
+          ]
+        },
+        {
+          "name": "Barry O'Fish",
+          "rarity": "Rare",
+          "variants": [
+            "Base",
+            "Fortune"
+          ]
+        },
+        {
+          "name": "Chester",
+          "rarity": "Epic",
+          "variants": [
+            "Base",
+            "Fortune"
+          ]
+        },
+        {
+          "name": "Exmarks",
+          "rarity": "Epic",
+          "variants": [
+            "Base",
+            "Fortune"
+          ]
+        },
+        {
+          "name": "Wayfinder",
+          "rarity": "Epic",
+          "variants": [
+            "Base",
+            "Fortune"
+          ]
+        },
+        {
+          "name": "Kelper",
+          "rarity": "Epic",
+          "variants": [
+            "Base",
+            "Fortune"
+          ]
+        },
+        {
+          "name": "Sweet Dreams",
+          "rarity": "Mythic",
+          "variants": [
+            "Base"
+          ]
+        },
+        {
+          "name": "Lil' Squibbly",
+          "rarity": "Epic",
+          "variants": [
+            "Base",
+            "Fortune"
+          ]
+        },
+        {
+          "name": "Lil' Flacko",
+          "rarity": "Legendary",
+          "variants": [
+            "Base",
+            "Fortune"
+          ]
+        },
+        {
+          "name": "Plundarrgh",
+          "rarity": "Mythic",
+          "variants": [
+            "Base",
+            "Fortune"
+          ]
+        },
+        {
+          "name": "Transponder Snail",
+          "rarity": "Legendary",
+          "variants": [
+            "Base"
+          ]
+        }
+      ],
+      "sourceUrl": "https://fortnite.gg/sprites",
+      "officialSourceUrl": "https://communities.epicgames.com/thread/set-sail-for-fortnite-treasure-hunters-the-greatest-adventure-of-all-time/Pmud"
+    },
     {
       "schemaVersion": 1,
       "seasonId": "chapter-7-season-4",

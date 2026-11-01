@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 import currentCatalog from "@/data/catalog.json";
 import previousCatalog from "@/archive/chapter-7-season-3.json";
+import overrideCatalog from "@/archive/chapter-7-season-4.json";
 import LockerTools from "./LockerTools";
 
 type SpriteFamily = { name: string; rarity: string; variants: string[] };
@@ -48,7 +49,7 @@ type Progress = Record<string, SpriteState>;
 type Filter = "all" | "missing" | "not-mastered" | "acquired" | "acquired-unmastered" | "mastered";
 type ViewMode = "compact" | "classic" | "list";
 
-const CATALOGS = [currentCatalog, previousCatalog] as SeasonCatalog[];
+const CATALOGS = [currentCatalog, overrideCatalog, previousCatalog] as SeasonCatalog[];
 const DEFAULT_SEASON_ID = currentCatalog.seasonId;
 const RELEASE_VERSION = currentCatalog.assetVersion;
 const WHATS_NEW = currentCatalog.whatsNew;
@@ -673,7 +674,7 @@ export default function Home() {
           <section ref={codeGuideDialog} className="code-guide-card" role="dialog" aria-modal="true" aria-labelledby="code-guide-title">
             <header className="code-guide-header">
               <div>
-                <span>Chapter 7 · Season 4</span>
+                <span>{activeSeason.chapter} · {activeSeason.season}</span>
                 <h2 id="code-guide-title">Rewards</h2>
                 <p>In the Battle Royale lobby, open <strong>…/Admin Panel</strong>, enter a code, and submit it. Reward codes work once per account; temporary lobby transformations are reusable.</p>
               </div>

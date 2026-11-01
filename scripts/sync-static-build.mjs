@@ -5,11 +5,12 @@ import './social-preview.mjs';
 const root = new URL("../", import.meta.url);
 const current = JSON.parse(await readFile(new URL("data/catalog.json", root), "utf8"));
 const previous = JSON.parse(await readFile(new URL("archive/chapter-7-season-3.json", root), "utf8"));
+const override = JSON.parse(await readFile(new URL("archive/chapter-7-season-4.json", root), "utf8"));
 const bundle = {
   schemaVersion: 1,
   defaultSeasonId: current.seasonId,
   assetVersion: current.assetVersion,
-  seasons: [current, previous],
+  seasons: [current, override, previous],
 };
 const total = current.families.reduce((sum, family) => sum + family.variants.length, 0);
 
@@ -50,6 +51,8 @@ await writeFile(new URL("docs/styles.css", root), staticCss);
 const indexUrl = new URL("docs/index.html", root);
 let index = await readFile(indexUrl, "utf8");
 index = index
+  .replace(/(<strong id="season-name">)[^<]+/, `$1${current.season}`)
+  .replace(/(<span class="season-theme" id="season-theme">)[^<]+/, `$1${current.seasonTheme}`)
   .replace(/all \d+ currently available Fortnite Sprite variants/g, `all ${total} currently available Fortnite Sprite variants`)
   .replace(/Track all \d+ available Sprite variants/g, `Track all ${total} available Sprite variants`)
   .replace(/<span class="total-count">\d+<\/span>/g, `<span class="total-count">${total}</span>`)

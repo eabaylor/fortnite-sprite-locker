@@ -40,6 +40,7 @@ const mime = {
 function browserHarness() {
   return `<script>
 window.addEventListener("load", async () => {
+  localStorage.setItem('sprite-locker-progress-chapter-7-season-4', JSON.stringify({ 'Adventure::Base': { acquired: true, mastered: true } }));
   for (let i = 0; i < 100 && !document.querySelector('.locker-sharing'); i++) await new Promise(resolve => setTimeout(resolve, 20));
   const defaultList = !document.querySelector('#locker-tools-host').hidden && document.querySelector('#sprite-list').hidden;
   const listOnly = !document.querySelector('.view-switch') && !document.querySelector('#compact-view, #classic-view');
@@ -54,7 +55,7 @@ window.addEventListener("load", async () => {
   const defaultStatusAll = status.value === "all";
   const rows = [...document.querySelectorAll('.locker-list-row')];
   const familyNames = [...new Set(rows.map(row => row.querySelector('.locker-status-toggle').dataset.name))];
-  const sixVariantFamily = window.SPRITE_CATALOGS.seasons[0].families.find(f => f.variants.length === 6).name;
+  const sixVariantFamily = window.SPRITE_CATALOGS.seasons[0].families.find(f => f.variants.length === 2).name;
   const firstVariants = rows.map(row => row.querySelector('.locker-status-toggle')).filter(b => b.dataset.name === sixVariantFamily).map(b => b.dataset.variant);
   const firstButton = rows[0].querySelector('.locker-status-toggle');
   const {name, variant} = firstButton.dataset;
@@ -234,6 +235,12 @@ window.addEventListener("load", async () => {
   const whatsNewRect = document.querySelector('.whats-new-card').getBoundingClientRect();
   result.whatsNewMobile = whatsNewRect.left >= 0 && whatsNewRect.right <= document.documentElement.clientWidth;
   document.querySelector('#whats-new-close').click();
+  const seasonPicker = document.querySelector('#season-select');
+  const currentProgressBefore = localStorage.getItem(window.SPRITE_CATALOGS.seasons[0].storageKey);
+  seasonPicker.value = 'chapter-7-season-4'; seasonPicker.dispatchEvent(new Event('change'));
+  for (let i = 0; i < 100 && document.querySelectorAll('.locker-list-row').length !== 162; i++) await new Promise(resolve => setTimeout(resolve, 20));
+  result.archivedSeasonCount = document.querySelectorAll('.locker-list-row').length;
+  result.archivedProgressVisible = [...document.querySelectorAll('.locker-status-toggle')].some(button => button.dataset.name === 'Adventure' && button.dataset.variant === 'Base' && button.textContent.trim() === 'Mastered');
   document.querySelector('#admin-codes-trigger').click();
   result.rewardsDefaultOther = document.querySelector('[data-code-view="other"]').getAttribute('aria-selected') === 'true' && document.querySelector('#admin-codes-trigger').textContent.startsWith('Rewards');
   document.querySelector('[data-code-view="sprites"]').click();
@@ -254,6 +261,10 @@ window.addEventListener("load", async () => {
   const codeRect = document.querySelector('.code-guide-card').getBoundingClientRect();
   result.codesMobile = codeRect.left >= 0 && codeRect.right <= document.documentElement.clientWidth && document.documentElement.scrollWidth === document.documentElement.clientWidth;
   document.querySelector('#code-guide-close').click();
+  seasonPicker.value = window.SPRITE_CATALOGS.defaultSeasonId; seasonPicker.dispatchEvent(new Event('change'));
+  for (let i = 0; i < 100 && document.querySelectorAll('.locker-list-row').length !== 22; i++) await new Promise(resolve => setTimeout(resolve, 20));
+  result.seasonProgressPreserved = localStorage.getItem(window.SPRITE_CATALOGS.seasons[0].storageKey) === currentProgressBefore;
+  result.newSeasonRewardsHidden = document.querySelector('#admin-codes-trigger').hidden;
   status.value = 'not-mastered'; status.dispatchEvent(new Event('change'));
   const savedSeason = window.SPRITE_CATALOGS.seasons[0];
   const savedProgress = JSON.parse(localStorage.getItem(savedSeason.storageKey) || '{}');
@@ -399,9 +410,9 @@ test("live static tracker works at 320px in a real browser", async (context) => 
     assert.equal(audit.listNoOverflow, true);
     assert.equal(audit.whatsNewReopens, true);
     assert.equal(audit.whatsNewMobile, true);
-    assert.equal(audit.spriteCodesRendered, catalog.unlockCodes.length);
-    assert.equal(audit.otherCodesRendered, catalog.otherAdminCodes.length);
-    assert.equal(audit.adminCodeTotal, catalog.unlockCodes.length + catalog.otherAdminCodes.length);
+    assert.equal(audit.spriteCodesRendered, 7);
+    assert.equal(audit.otherCodesRendered, 49);
+    assert.equal(audit.adminCodeTotal, 56);
     assert.equal(audit.musicCodesReusable, true);
     assert.equal(audit.usedCodeLast, true);
     assert.equal(audit.suppliesOneTime, true);
@@ -409,8 +420,11 @@ test("live static tracker works at 320px in a real browser", async (context) => 
     assert.equal(audit.codesMobile, true);
     assert.equal(audit.notMasteredResync, true);
     assert.deepEqual(audit.familyNames, catalog.familyOrder);
-    assert.equal(audit.familyNames.indexOf('Dumpster Dive'), audit.familyNames.indexOf('Birthday') - 1);
-    assert.deepEqual(audit.firstVariants, ["Base", "Gold", "Cheat Master", "Loot Hacker", "Bounty Hunter", "Trick or Treat"]);
+    assert.equal(audit.archivedSeasonCount, 162);
+    assert.equal(audit.archivedProgressVisible, true);
+    assert.equal(audit.seasonProgressPreserved, true);
+    assert.equal(audit.newSeasonRewardsHidden, true);
+    assert.deepEqual(audit.firstVariants, ["Base", "Fortune"]);
   } finally {
     await new Promise((resolve) => server.close(resolve));
     await rm(profile, { recursive: true, force: true });
