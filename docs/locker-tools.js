@@ -1,6 +1,6 @@
-import catalogs from './locker-catalogs.js?v=20261102-3';
-import { SHARE_ORIGIN, sharedLockerId, publishSharedSnapshot, searchPlayers, directoryNickname } from './locker-sharing.js?v=20261102-3';
-import { createLockerSync, PROFILE_KEY } from './locker-state.js?v=20261102-3';
+import catalogs from './locker-catalogs.js?v=20261102-4';
+import { SHARE_ORIGIN, sharedLockerId, publishSharedSnapshot, searchPlayers, directoryNickname, isSuppressedPlayer } from './locker-sharing.js?v=20261102-4';
+import { createLockerSync, PROFILE_KEY } from './locker-state.js?v=20261102-4';
 export function requirePlayerName() {
   try {
     const profile = JSON.parse(localStorage.getItem(PROFILE_KEY) || 'null');
@@ -217,7 +217,7 @@ export function createLockerTools(host) {
       // Always load the whole roster. Search only changes the settings list, never the comparison.
       const result = await searchPlayers(seasonId);
       if (sequence !== directorySequence || options.season.seasonId !== seasonId) return;
-      players = result.players.filter(p => typeof p.name === 'string' && /^[A-Za-z0-9_-]{16}$/.test(p.id || '') && p.season === seasonId);
+      players = result.players.filter(p => !isSuppressedPlayer(p) && typeof p.name === 'string' && /^[A-Za-z0-9_-]{16}$/.test(p.id || '') && p.season === seasonId);
       $('.locker-players-status').textContent = players.length ? `${players.length} listed player${players.length === 1 ? '' : 's'}.${result.more ? ' More players are available; this list currently supports 50.' : ''}` : 'No one has joined this season yet. Ask the others to open the tracker and save their Player Name once.';
       await sync.discover(options.season, players);
       renderDirectory();

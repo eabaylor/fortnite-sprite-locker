@@ -1,4 +1,4 @@
-import { publishSharedSnapshot, readSharedLocker, controlLiveLocker, updateLiveLocker, setPlayerListing, directoryNickname } from './locker-sharing.js?v=20261102-3';
+import { publishSharedSnapshot, readSharedLocker, controlLiveLocker, updateLiveLocker, setPlayerListing, directoryNickname, isSuppressedPlayer } from './locker-sharing.js?v=20261102-4';
 export const FRIENDS_KEY = 'sprite-locker-friends-v1';
 export const LIVE_KEY = 'sprite-locker-live-shares-v1';
 export const PROFILE_KEY = 'sprite-locker-player-profile-v1';
@@ -75,7 +75,7 @@ export function createLockerSync(catalogs, codec) {
     if (disposed || refreshBusy || (!force && (document.hidden || Date.now() - lastRefresh < 60000))) return;
     refreshBusy = true; lastRefresh = Date.now();
     try {
-      const targets = friends.filter(f => f.shareId && (force || f.liveLink));
+      const targets = friends.filter(f => !isSuppressedPlayer(f) && f.shareId && (force || f.liveLink));
       for (const old of targets) {
         try {
           const result = await readSharedLocker(old.shareId);
@@ -97,7 +97,7 @@ export function createLockerSync(catalogs, codec) {
   const timer = setInterval(wake, 5000);
   queueMicrotask(wake);
   return {
-    get friends() { return friends; },
+    get friends() { return friends.filter(f => !isSuppressedPlayer(f)); },
     get profile() { return profile(); },
     isHidden(name) { return hidden().includes(playerKey(name)); },
     hide(name, value = true) {
@@ -116,7 +116,7 @@ export function createLockerSync(catalogs, codec) {
       if (!profile()) return;
       const ownId = owners()[season.seasonId]?.id;
       for (const player of players) {
-        if (player.id === ownId) continue;
+        if (player.id === ownId || isSuppressedPlayer(player)) continue;
         try { await this.add('', player.id, true); }
         catch { /* Keep saved snapshots and try again on the next directory refresh. */ }
       }
@@ -129,6 +129,7 @@ export function createLockerSync(catalogs, codec) {
       const snapshot = codec.decodeSnapshot(result ? result.token : input);
       if (!catalogs.some(c => c.seasonId === snapshot.season)) throw new Error('This season is not available in the tracker yet.');
       const friend = { ...snapshot, ...result, name: result?.nickname || snapshot.name, shareId: shareId || null, checkedAt: Date.now(), updatedAt: result?.updatedAt || Date.parse(snapshot.date) / 1000, error: '' };
+      if (isSuppressedPlayer(friend)) throw new Error('This test locker is hidden from player comparisons. Your own locker is unchanged.');
       const index = friends.findIndex(f => f.season === friend.season && ((shareId && f.shareId === shareId) || f.name.toLowerCase() === friend.name.toLowerCase()));
       if (!automatic && !profile() && index < 0 && friends.filter(f => f.season === friend.season).length >= 5) throw new Error('You can compare with up to five friends in each season. Remove a friend before adding another.');
       if (index < 0 && friends.length >= 300) throw new Error('Your saved player archive is full. Remove an older saved locker first.');

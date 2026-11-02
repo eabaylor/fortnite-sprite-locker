@@ -118,5 +118,8 @@ test('searchable player list is opt-in, private-key managed, season scoped, uniq
     assert.equal((await listing(a, false)).status, 200);
     assert.deepEqual((await list()).map(p => p.name), ['Laura']);
     assert.equal((await handleLockerRequest(req(`/api/lockers/${a.id}`), db, now)).status, 200, 'Unlisting does not revoke previously shared read access');
+    assert.equal((await listing(a, true, 'Toby CHAT GPT Tester')).status, 200);
+    assert.deepEqual((await list()).map(p => p.name), ['Laura'], 'Tester is suppressed from the directory without deleting their locker');
+    assert.equal((await handleLockerRequest(req(`/api/lockers/${a.id}`), db, now)).status, 200);
   } finally { db.sql.close(); }
 });

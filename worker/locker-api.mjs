@@ -1,5 +1,5 @@
 import { decodeSnapshot, encodeSnapshot } from '../public/locker-tools.js';
-import { directoryNickname } from '../public/locker-sharing.js';
+import { directoryNickname, isSuppressedPlayer } from '../public/locker-sharing.js';
 
 export const SHARE_ORIGIN = 'https://sprite-locker-checklist.eabaylor.chatgpt.site';
 export const TRACKER_URL = 'https://eabaylor.github.io/fortnite-sprite-locker/';
@@ -37,7 +37,8 @@ export async function handleLockerRequest(request, db, now = Math.floor(Date.now
       const season = url.searchParams.get('season') || ''; const query = (url.searchParams.get('q') || '').normalize('NFKC').trim().toLowerCase();
       if (!/^[A-Za-z0-9-]{1,80}$/.test(season) || query.length > 40) return json({ error: 'Select a valid season and a shorter nickname search.' }, 400);
       const result = await db.prepare('SELECT p.share_id AS id, p.name, p.season, s.live_enabled AS live FROM locker_players p JOIN locker_shares s ON s.id = p.share_id WHERE p.season = ? AND s.expires_at > ? AND instr(p.name_key, ?) > 0 ORDER BY p.name_key LIMIT 51').bind(season, now, query).all();
-      return json({ players: result.results.slice(0, 50), more: result.results.length > 50 });
+      const players = result.results.filter(p => !isSuppressedPlayer(p));
+      return json({ players: players.slice(0, 50), more: result.results.length > 50 });
     }
     if (request.method === 'GET' && ID.test(id)) {
       const row = await db.prepare('SELECT payload, expires_at, live_enabled, revision, updated_at, created_at, live_season, (SELECT name FROM locker_players WHERE share_id = locker_shares.id) AS nickname FROM locker_shares WHERE id = ? AND expires_at > ?').bind(id, now).first();

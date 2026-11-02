@@ -9,7 +9,7 @@
   "legacyStorageKeys": [],
   "updatedDate": "November 2, 2026",
   "patch": "v43.00",
-  "assetVersion": "20261102-3",
+  "assetVersion": "20261102-4",
   "familyOrder": [
     "Halfpeel'd",
     "Re-Pete",
@@ -31,12 +31,11 @@
     "Cursed"
   ],
   "whatsNew": {
-    "title": "More room for your Sprite list",
-    "intro": "Player setup tucks away once you’ve joined.",
+    "title": "Player list cleanup",
+    "intro": "The test account no longer appears in other players’ comparisons.",
     "items": [
-      "After saving your Player Name, its section moves into the collapsed Players & sharing settings.",
-      "Open settings anytime to view or change your saved name.",
-      "First-time players still see the required name prompt above the list; saved progress and sharing are unchanged."
+      "Hidden Toby CHAT GPT Tester and the older Toby Tester account from player lists and saved comparisons.",
+      "Tester locker data and everyone’s saved Sprite progress are preserved."
     ]
   },
   "unlockCodes": [],

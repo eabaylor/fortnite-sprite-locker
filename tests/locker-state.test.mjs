@@ -7,6 +7,28 @@ import * as codec from '../public/locker-tools.js';
 const season = JSON.parse(await readFile(new URL('../data/catalog.json', import.meta.url), 'utf8'));
 const previous = JSON.parse(await readFile(new URL('../archive/chapter-7-season-3.json', import.meta.url), 'utf8'));
 
+test('cached tester comparisons stay hidden without deleting saved data or owner access', async () => {
+  const originals = Object.fromEntries(['window', 'document', 'localStorage', 'fetch'].map(k => [k, globalThis[k]]));
+  const saved = new Map();
+  const token = codec.encodeSnapshot(codec.makeSnapshot(season, {}, 'Toby CHAT GPT Tester'));
+  saved.set(FRIENDS_KEY, JSON.stringify([{ token, shareId: 'nk_eJM74lyrRyLH_', live: true, liveLink: true }]));
+  saved.set(LIVE_KEY, JSON.stringify({ [season.seasonId]: { id: 'nk_eJM74lyrRyLH_', name: 'Toby CHAT GPT Tester' } }));
+  globalThis.window = new EventTarget(); globalThis.document = Object.assign(new EventTarget(), { hidden: false });
+  globalThis.localStorage = { getItem: key => saved.get(key) ?? null, setItem: (key, value) => saved.set(key, value) };
+  globalThis.fetch = async () => { throw new Error('Suppressed comparisons should not need a network request'); };
+  let sync;
+  try {
+    // Another player has only the cached comparison, not the tester's owner key.
+    const owner = saved.get(LIVE_KEY); saved.delete(LIVE_KEY);
+    sync = createLockerSync([season], codec);
+    assert.equal(sync.friends.length, 0);
+    assert.equal(JSON.parse(saved.get(FRIENDS_KEY)).length, 1, 'Stored snapshot remains intact');
+    await assert.rejects(() => sync.add(token), /test locker is hidden/);
+    sync.dispose(); saved.set(LIVE_KEY, owner); sync = createLockerSync([season], codec);
+    assert.equal(sync.owner(season.seasonId).name, 'Toby CHAT GPT Tester', 'Tester retains own locker access');
+  } finally { sync?.dispose(); for (const [key, value] of Object.entries(originals)) { if (value === undefined) delete globalThis[key]; else globalThis[key] = value; } }
+});
+
 test('opt-in only, same live ID updates, pause persists, friends survive refresh by season and offline', async () => {
   const originals = Object.fromEntries(['window', 'document', 'localStorage', 'fetch'].map(k => [k, globalThis[k]]));
   const saved = new Map(); let record, uploads = 0, offline = false, nextId = 0;

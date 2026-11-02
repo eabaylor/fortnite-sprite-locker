@@ -1,9 +1,18 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { readFile } from 'node:fs/promises';
+import { isSuppressedPlayer } from '../public/locker-sharing.js';
 import { makeSnapshot, encodeSnapshot, decodeSnapshot, matchesComparison, matchesGroupComparison, addFriendSnapshot, friendCollectionCounts, nextLockerAction, requirePlayerName } from "../public/locker-tools.js";
 
 const season = { seasonId: "test-season", families: [{ name: "Honey", variants: ["Base", "Gold"] }, { name: "One Wish Willow", variants: ["Base"] }] };
+
+test('only the specified tester identities are suppressed, even after a rename', () => {
+  assert.equal(isSuppressedPlayer({ name: '  Toby CHAT GPT Tester  ' }), true);
+  assert.equal(isSuppressedPlayer({ name: 'Toby Tester account' }), true);
+  assert.equal(isSuppressedPlayer({ shareId: 'nk_eJM74lyrRyLH_', name: 'Renamed test locker' }), true);
+  assert.equal(isSuppressedPlayer({ id: 'EsGZ4L67AFZ3BrT-', name: 'Another name' }), true);
+  for (const name of ['MamaPjama', 'Toby', 'Tester', 'Eric']) assert.equal(isSuppressedPlayer({ name }), false);
+});
 
 test('Sprite edits require a saved valid Player Name, including while offline', () => {
   const oldWindow = globalThis.window, oldStorage = globalThis.localStorage;

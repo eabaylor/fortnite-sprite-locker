@@ -1,5 +1,12 @@
 export const SHARE_ORIGIN = 'https://sprite-locker-checklist.eabaylor.chatgpt.site';
 const idPattern = /^[A-Za-z0-9_-]{16}$/;
+// Display suppression only: keep test lockers, writer keys, and progress intact.
+const suppressedPlayerIds = new Set(['nk_eJM74lyrRyLH_', 'EsGZ4L67AFZ3BrT-']);
+const suppressedPlayerNames = new Set(['toby chat gpt tester', 'toby tester account']);
+export function isSuppressedPlayer(player) {
+  const name = String(player?.name || '').normalize('NFKC').trim().replace(/\s+/g, ' ').toLowerCase();
+  return suppressedPlayerIds.has(player?.shareId || player?.id) || suppressedPlayerNames.has(name);
+}
 
 export function directoryNickname(value) {
   const name = typeof value === 'string' ? value.normalize('NFKC').trim().replace(/\s+/g, ' ') : '';

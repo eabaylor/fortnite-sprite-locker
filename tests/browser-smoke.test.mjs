@@ -299,7 +299,7 @@ window.addEventListener("load", async () => {
     const tools = await import('./locker-tools.js');
     const season = window.SPRITE_CATALOGS.seasons[0];
     const liveId = 'LiveID0123456789';
-    const roster = ['Eric', 'Carl', 'Sharon', 'MamaPjama', 'Tester', 'Extra player'].map((name, i) => ({ id: 'Roster' + String(i).padStart(10, '0'), name, season: season.seasonId, live: 1 }));
+    const roster = ['Eric', 'Carl', 'Sharon', 'MamaPjama', 'Tester', 'Extra player'].map((name, i) => ({ id: 'Roster' + String(i).padStart(10, '0'), name, season: season.seasonId, live: 1 })).concat({ id: 'nk_eJM74lyrRyLH_', name: 'Toby CHAT GPT Tester', season: season.seasonId, live: 1 });
     window.fetch = async (input, init = {}) => {
       const url = String(input);
       if (url.includes('/players?')) return Response.json({ players: roster, more: false });
@@ -317,6 +317,7 @@ window.addEventListener("load", async () => {
     for (let i = 0; i < 150 && ![...document.querySelectorAll('.locker-column-name')].some(el => el.textContent === 'Extra player'); i++) await new Promise(resolve => setTimeout(resolve, 20));
     result.simplePlayerJoined = JSON.parse(localStorage.getItem('sprite-locker-player-profile-v1')).name === 'My locker' && document.querySelector('.locker-player-setup').classList.contains('is-joined');
     result.everyoneAutomatic = ['Eric', 'Carl', 'Sharon', 'MamaPjama', 'Tester', 'Extra player'].every(name => [...document.querySelectorAll('.locker-column-name')].some(el => el.textContent === name));
+    result.testerSuppressed = !document.querySelector('.locker-player-list').textContent.includes('Toby CHAT GPT Tester') && ![...document.querySelectorAll('.locker-column-name')].some(el => el.textContent === 'Toby CHAT GPT Tester');
     document.querySelector('button[aria-label="Hide: Sharon"]').click();
     result.playerHidden = ![...document.querySelectorAll('.locker-column-name')].some(el => el.textContent === 'Sharon') && JSON.parse(localStorage.getItem('sprite-locker-hidden-players-v1')).includes('sharon');
     document.querySelector('.locker-players-refresh').click();
@@ -491,7 +492,7 @@ test("live static tracker works at 320px in a real browser", async (context) => 
     assert.equal(audit.allNumbersHidden, true);
     assert.equal(audit.missingKelperAdded, true);
     assert.equal(audit.playerSetupError, undefined);
-    for (const check of ['simplePlayerJoined', 'everyoneAutomatic', 'playerHidden', 'playerShownAgain', 'joinKeepsProgress', 'joinNoOverflow', 'namePanelCollapsed', 'namePanelReopens', 'joinUnlocksEditing']) assert.equal(audit[check], true, check);
+    for (const check of ['simplePlayerJoined', 'everyoneAutomatic', 'testerSuppressed', 'playerHidden', 'playerShownAgain', 'joinKeepsProgress', 'joinNoOverflow', 'namePanelCollapsed', 'namePanelReopens', 'joinUnlocksEditing']) assert.equal(audit[check], true, check);
   } finally {
     await new Promise((resolve) => server.close(resolve));
     await rm(profile, { recursive: true, force: true });
