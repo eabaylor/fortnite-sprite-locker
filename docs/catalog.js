@@ -1,7 +1,7 @@
 window.SPRITE_CATALOGS = {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-mini-season",
-  "assetVersion": "20261101-3",
+  "assetVersion": "20261101-4",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -14,7 +14,7 @@ window.SPRITE_CATALOGS = {
       "legacyStorageKeys": [],
       "updatedDate": "November 1, 2026",
       "patch": "v43.00",
-      "assetVersion": "20261101-3",
+      "assetVersion": "20261101-4",
       "familyOrder": [
         "Halfpeel'd",
         "Re-Pete",
@@ -36,12 +36,11 @@ window.SPRITE_CATALOGS = {
         "Cursed"
       ],
       "whatsNew": {
-        "title": "33 entries, with verified in-game numbers",
-        "intro": "Cursed Kelper fills the missing checklist entry.",
+        "title": "Sprite names without numbers",
+        "intro": "The entire list now uses plain Sprite names.",
         "items": [
-          "Added Cursed Kelper and its artwork, bringing the list to 33 Sprite entries.",
-          "The ten catalog numbers confirmed from your PlayStation list are now shown beside their Sprites; unverified numbers are left blank.",
-          "Base, Fortune, Cursed order and all existing saved progress are preserved."
+          "Removed the catalog number labels from every Sprite for a consistent list.",
+          "All 33 entries, Base → Fortune → Cursed order, and your saved progress remain unchanged."
         ]
       },
       "unlockCodes": [],

@@ -55,7 +55,7 @@ window.addEventListener("load", async () => {
   const defaultStatusAll = status.value === "all";
   const rows = [...document.querySelectorAll('.locker-list-row')];
   const numberedRow = rows.find(row => row.querySelector('.locker-status-toggle').dataset.name === 'Re-Pete' && row.querySelector('.locker-status-toggle').dataset.variant === 'Cursed');
-  const verifiedNumbersVisible = numberedRow?.querySelector('strong').textContent === '#7 · Re-Pete' && rows.filter(row => row.dataset.gameNumber).length === 10;
+  const allNumbersHidden = numberedRow?.querySelector('strong').textContent === 'Re-Pete' && rows.every(row => !row.dataset.gameNumber && !/^#\d/.test(row.querySelector('strong').textContent));
   const missingKelperAdded = rows.some(row => row.querySelector('.locker-status-toggle').dataset.name === 'Kelper' && row.querySelector('.locker-status-toggle').dataset.variant === 'Cursed');
   const familyNames = [...new Set(rows.map(row => row.querySelector('.locker-status-toggle').dataset.name))];
   const sixVariantFamily = window.SPRITE_CATALOGS.seasons[0].families.find(f => f.variants.length === 3).name;
@@ -92,7 +92,7 @@ window.addEventListener("load", async () => {
     menuInsideViewport: menuRect.left >= 0 && menuRect.right <= document.documentElement.clientWidth,
     familyNames,
     firstVariants,
-    verifiedNumbersVisible,
+    allNumbersHidden,
     missingKelperAdded,
   };
   menu.open = false;
@@ -430,7 +430,7 @@ test("live static tracker works at 320px in a real browser", async (context) => 
     assert.equal(audit.seasonProgressPreserved, true);
     assert.equal(audit.newSeasonRewardsHidden, true);
     assert.deepEqual(audit.firstVariants, ["Base", "Fortune", "Cursed"]);
-    assert.equal(audit.verifiedNumbersVisible, true);
+    assert.equal(audit.allNumbersHidden, true);
     assert.equal(audit.missingKelperAdded, true);
   } finally {
     await new Promise((resolve) => server.close(resolve));
