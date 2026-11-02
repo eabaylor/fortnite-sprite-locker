@@ -1,6 +1,6 @@
-import catalogs from './locker-catalogs.js?v=20261101-4';
-import { SHARE_ORIGIN, sharedLockerId, publishSharedSnapshot, searchPlayers } from './locker-sharing.js?v=20261101-4';
-import { createLockerSync } from './locker-state.js?v=20261101-4';
+import catalogs from './locker-catalogs.js?v=20261102-1';
+import { SHARE_ORIGIN, sharedLockerId, publishSharedSnapshot, searchPlayers } from './locker-sharing.js?v=20261102-1';
+import { createLockerSync } from './locker-state.js?v=20261102-1';
 let backgroundSync;
 export function startLockerBackground(catalogs) {
   if (!backgroundSync) backgroundSync = createLockerSync(catalogs, { makeSnapshot, encodeSnapshot, decodeSnapshot });
@@ -119,29 +119,40 @@ export function createLockerTools(host) {
   let importPending = location.hash.startsWith("#locker=") ? location.hash : /^[A-Za-z0-9_-]{16}$/.test(initialId || '') ? `${SHARE_ORIGIN}/s/${initialId}` : null;
   let sharing = false;
   let players = [], directorySeason = null, directorySequence = 0, searchTimer, lastDirectoryLoad = 0;
+  let joining = false, preparedSeason = null, joinRetryAt = 0;
   host.className = "locker-tools";
   host.innerHTML = `
+    <section class="locker-player-setup" aria-label="Your player name">
+      <form class="locker-player-form">
+        <label>Player Name<input class="locker-nickname" maxlength="40" placeholder="Enter your player name" autocomplete="nickname" required aria-describedby="locker-player-disclosure"></label>
+        <button type="submit" class="locker-player-join">Save & join</button>
+      </form>
+      <p class="locker-help" id="locker-player-disclosure">Save once for every season. Joining shares your name and locker with everyone using this public tracker and keeps it updated while you use this browser. Use a nickname, not private information. Your existing progress stays safe.</p>
+      <p class="locker-player-status" role="status" aria-live="polite"></p>
+    </section>
     <details class="locker-sharing">
-      <summary>Share & compare lockers</summary>
-      <p class="locker-help">Compare your locker with up to five friends. Tap your own status to cycle Missing → Acquired → Mastered → Missing; friends’ statuses are read-only. Creating a short link uploads a snapshot and your nickname, viewable by anyone with the link for 90 days. Reimporting the same nickname updates that friend’s column.</p>
+      <summary>Players & sharing settings</summary>
+      <p class="locker-help">After you join, listed players appear automatically—no links or adding friends. Hide anyone below to remove them from your view only. Hidden players stay hidden across seasons; you can show them again anytime.</p>
       <p class="locker-help">Opening from Messenger? Use the same browser where you normally track your locker, so your saved progress is available. A different browser may show an empty local locker.</p>
-      <div class="locker-share-actions"><label>Your nickname (required)<input class="locker-nickname" maxlength="40" placeholder="Player name" autocomplete="off" required></label><button type="button" class="locker-share">Create short link</button><button type="button" class="locker-portable">Portable link (no upload)</button></div>
+      <details class="locker-advanced"><summary>Advanced sharing & existing links</summary>
+      <div class="locker-share-actions"><button type="button" class="locker-share">Create snapshot link</button><button type="button" class="locker-portable">Portable link (no upload)</button></div>
       <div class="locker-share-result" hidden><label>Your share link<input class="locker-share-url" readonly aria-label="Your locker share link"></label><button type="button" class="locker-copy">Copy link</button><p>Send this link to your friend. Their saved progress stays separate.</p></div>
-      <fieldset class="locker-live"><legend>Live sharing — optional</legend>
+      <fieldset class="locker-live"><legend>Advanced season controls</legend>
         <label class="locker-live-optin"><input type="checkbox" class="locker-live-enabled">Keep my shared locker updated for this season</label>
-        <p class="locker-help">Off by default. Enabling uploads this season’s nickname and checklist automatically while you use this browser. Anyone with your live link can read it. Pause anytime to stop uploads; the last shared state remains visible. A new season requires a separate opt-in. Links expire after 90 days without a sync.</p>
+        <p class="locker-help">Save & join manages this automatically for each season. Pause here to stop updates for the selected season; the last shared state stays visible. Links expire after 90 days without a sync.</p>
         <p class="locker-live-status" role="status" aria-live="polite"></p>
         <div class="locker-live-link-row" hidden><label>Your live locker link<input class="locker-live-url" readonly></label><button type="button" class="locker-live-copy">Copy live link</button><button type="button" class="locker-live-sync">Sync now</button></div>
         <label class="locker-live-optin"><input type="checkbox" class="locker-listing-enabled">Show me in the searchable player list for this season</label>
-        <p class="locker-help">Optional and off by default. Anyone using this public tracker can find your listed nickname and read that shared locker. Enable live sharing first. Nicknames must be unique in each season. Removing yourself prevents new searches; friends who already added you keep read-only access.</p>
+        <p class="locker-help">Save & join lists you automatically. Uncheck to leave this season’s player list. People with saved lockers or links can still read your last shared state. Names must be unique within each season.</p>
         <p class="locker-listing-status" role="status"></p><button type="button" class="locker-listing-rename" hidden>Update listed nickname</button>
       </fieldset>
-      <section class="locker-player-directory" aria-label="Searchable player list"><h3>Find your friends</h3><p class="locker-help">Choose a listed player to compare—no link needed. Players must opt in above to appear here. Up to five friends can be added per season.</p>
+      <details class="locker-link-backup"><summary>Use a share link instead (optional)</summary><form class="locker-import"><label>Friend’s locker link<textarea class="locker-import-url" rows="2" maxlength="40000" placeholder="Paste an existing share link" required></textarea></label><button type="submit">Add friend</button></form></details>
+      </details>
+      <section class="locker-player-directory" aria-label="Searchable player list"><h3>Players</h3><p class="locker-help">Everyone who joins appears in your comparison. Use Hide / Show to choose who you see. This does not change anyone’s locker.</p>
         <p class="locker-directory-season"></p>
         <div class="locker-directory-search"><label>Search nicknames<input class="locker-player-search" type="search" maxlength="40" placeholder="Find a nickname…" autocomplete="off"></label><button type="button" class="locker-players-refresh">Refresh list</button></div>
         <p class="locker-players-status" role="status" aria-live="polite"></p><div class="locker-player-list" role="list"></div>
       </section>
-      <details class="locker-link-backup"><summary>Use a share link instead (optional)</summary><form class="locker-import"><label>Friend’s locker link<textarea class="locker-import-url" rows="2" maxlength="40000" placeholder="Paste an existing share link" required></textarea></label><button type="submit">Add friend</button></form></details>
       <p class="locker-message" role="status" aria-live="polite"></p>
     <div class="locker-comparison" hidden><p class="locker-help">Friends are remembered in this browser, including last saved lockers from previous seasons. Live friends refresh about once a minute while this page is visible; snapshot links stay fixed.</p><button type="button" class="locker-refresh">Refresh friends</button><div class="locker-friends"></div>
       <label>Compare against<select class="locker-compare-target" aria-label="Choose comparison friend"></select></label>
@@ -161,7 +172,11 @@ export function createLockerTools(host) {
   function renderDirectory() {
     const list = $('.locker-player-list'); list.replaceChildren();
     const query = $('.locker-player-search').value.normalize('NFKC').trim().toLowerCase();
-    for (const player of players.filter(p => p.name.normalize('NFKC').toLowerCase().includes(query))) {
+    const roster = [...players];
+    if (sync?.profile) for (const friend of friends.filter(f => f.season === options.season.seasonId && sync.isHidden(f.name))) {
+      if (!roster.some(p => p.name.toLowerCase() === friend.name.toLowerCase())) roster.push({ id: friend.shareId || `saved-${friends.indexOf(friend)}`, name: friend.name, live: friend.live });
+    }
+    for (const player of roster.filter(p => p.name.normalize('NFKC').toLowerCase().includes(query))) {
       const row = document.createElement('div'); row.className = 'locker-directory-player'; row.setAttribute('role', 'listitem');
       const name = document.createElement('strong'); name.textContent = player.name;
       const mode = document.createElement('small'); mode.textContent = player.live ? 'Live locker' : 'Paused / last shared locker';
@@ -169,8 +184,9 @@ export function createLockerTools(host) {
       const button = document.createElement('button'); button.type = 'button'; button.dataset.playerId = player.id;
       const own = sync?.owner(options.season.seasonId)?.id === player.id;
       const added = friends.some(f => f.shareId === player.id && f.season === options.season.seasonId);
-      const full = friends.filter(f => f.season === options.season.seasonId && f.shareId !== sync?.owner(options.season.seasonId)?.id).length >= 5;
-      button.disabled = own || added || full; button.textContent = own ? 'You' : added ? 'Added' : full ? '5 friends added' : 'Add to comparison'; button.setAttribute('aria-label', `${button.textContent}: ${player.name}`);
+      const joined = !!sync?.profile;
+      button.disabled = own || (!joined && added); button.textContent = own ? 'You' : joined ? (sync.isHidden(player.name) ? 'Show' : 'Hide') : added ? 'Added' : 'Add to comparison'; button.setAttribute('aria-label', `${button.textContent}: ${player.name}`);
+      if (joined && !own) button.setAttribute('aria-pressed', String(!sync.isHidden(player.name)));
       row.append(info, button); list.append(row);
     }
   }
@@ -180,10 +196,12 @@ export function createLockerTools(host) {
     lastDirectoryLoad = Date.now();
     $('.locker-players-status').textContent = 'Loading players…';
     try {
-      const result = await searchPlayers(seasonId, $('.locker-player-search').value);
+      // Always load the whole roster. Search only changes the settings list, never the comparison.
+      const result = await searchPlayers(seasonId);
       if (sequence !== directorySequence || options.season.seasonId !== seasonId) return;
       players = result.players.filter(p => typeof p.name === 'string' && /^[A-Za-z0-9_-]{16}$/.test(p.id || '') && p.season === seasonId);
-      $('.locker-players-status').textContent = players.length ? `${players.length} player${players.length === 1 ? '' : 's'} found${result.more ? ' · Refine your search to see more.' : '.'}` : 'No listed players match. Missing a friend? They must enable live sharing and Show me in the searchable player list in their usual browser, for the same season selected here. Then press Refresh list.';
+      $('.locker-players-status').textContent = players.length ? `${players.length} listed player${players.length === 1 ? '' : 's'}.${result.more ? ' More players are available; this list currently supports 50.' : ''}` : 'No one has joined this season yet. Ask the others to open the tracker and save their Player Name once.';
+      await sync.discover(options.season, players);
       renderDirectory();
     } catch (error) { if (sequence === directorySequence) $('.locker-players-status').textContent = `Player list unavailable. ${error.message} Your saved friends remain available below.`; }
   }
@@ -204,6 +222,28 @@ export function createLockerTools(host) {
       render();
     } catch (error) { message(error.message); }
   };
+  async function preparePlayer(manual = false) {
+    if (!sync || joining || (!manual && (preparedSeason === options.season.seasonId || Date.now() < joinRetryAt))) return;
+    const name = manual ? $('.locker-nickname').value : sync.profile?.name;
+    if (!name) return;
+    const season = options.season;
+    joining = true; $('.locker-player-join').disabled = true;
+    $('.locker-player-status').textContent = 'Saving your shared locker…';
+    try {
+      const owner = sync.owner(season.seasonId);
+      if (manual || !owner || owner.expiresAt <= Date.now() / 1000 || (owner.enabled && owner.listed && owner.name !== name)) await sync.join(season, name);
+      preparedSeason = season.seasonId;
+      $('.locker-player-status').textContent = owner?.enabled === false && !manual ? 'Sharing is paused for this season. Your Player Name is remembered.' : `Joined as ${sync.profile.name}. Your locker updates automatically; listed players appear below.`;
+      await loadDirectory();
+    } catch (error) {
+      joinRetryAt = Date.now() + 60000;
+      $('.locker-player-status').textContent = `${error.message} Your local progress is safe. Press Save & join to retry.`;
+    } finally { joining = false; $('.locker-player-join').disabled = false; render(); }
+  }
+  $('.locker-player-form').addEventListener('submit', event => {
+    event.preventDefault();
+    if ($('.locker-nickname').reportValidity()) void preparePlayer(true);
+  });
   const createShare = async online => {
     if (sharing) return;
     const nickname = $('.locker-nickname');
@@ -268,6 +308,11 @@ export function createLockerTools(host) {
   $('.locker-players-refresh').addEventListener('click', loadDirectory);
   $('.locker-player-list').addEventListener('click', async event => {
     const button = event.target.closest('button[data-player-id]'); if (!button || button.disabled) return;
+    if (sync.profile) {
+      const player = players.find(p => p.id === button.dataset.playerId) || friends.find(f => f.shareId === button.dataset.playerId || `saved-${friends.indexOf(f)}` === button.dataset.playerId);
+      if (player) { sync.hide(player.name, !sync.isHidden(player.name)); render(); }
+      return;
+    }
     button.disabled = true; await importFriend(`${SHARE_ORIGIN}/s/${button.dataset.playerId}`); renderDirectory();
   });
   $('.locker-list').addEventListener('click', event => {
@@ -291,11 +336,13 @@ export function createLockerTools(host) {
   $(".locker-friends").addEventListener("click", (event) => {
     const button = event.target.closest('button[data-friend-index]');
     if (!button) return;
-    sync.remove(friends[Number(button.dataset.friendIndex)]); target = '*';
+    const friend = friends[Number(button.dataset.friendIndex)];
+    if (sync.profile) sync.hide(friend.name); else sync.remove(friend);
+    target = '*';
     const cleanUrl = new URL(location.href); cleanUrl.searchParams.delete('s'); cleanUrl.searchParams.delete('shareExpired');
     if (cleanUrl.hash.startsWith('#locker=')) cleanUrl.hash = '';
     history.replaceState(null, '', cleanUrl.pathname + cleanUrl.search + cleanUrl.hash);
-    message("Friend removed. Your checklist is unchanged."); render();
+    message(sync.profile ? 'Player hidden in your view. Use Show in Players to bring them back.' : 'Friend removed. Your checklist is unchanged.'); render();
   });
   $(".locker-compare-filter").addEventListener("change", (event) => { mode = event.target.value; render(); });
   $('.locker-compare-target').addEventListener('change', event => { target = event.target.value; render(); });
@@ -311,8 +358,10 @@ export function createLockerTools(host) {
     $('.locker-listing-rename').hidden = !owner?.listed;
     $('.locker-listing-status').textContent = owner?.listed ? `Listed as ${owner.listingName || owner.name} for ${options.season.chapter} ${options.season.season}.` : 'Not listed — other players cannot find you by nickname.';
     $('.locker-live-status').textContent = !owner ? 'Off — no automatic uploads.' : owner.pendingPause ? 'Uploads stopped locally. Waiting for a connection to pause the online link.' : owner.error ? `Last saved state kept. ${owner.error}` : `${owner.enabled ? 'Live sharing on' : 'Paused'} · ${owner.name} · ${owner.updatedAt ? 'Last synced ' + new Date(owner.updatedAt * 1000).toLocaleString() : 'Waiting to sync'}`;
-    const activeFriends = friends.filter(f => f.season === options.season.seasonId && (!f.shareId || f.shareId !== owner?.id));
-    $('.locker-party-count').textContent = `${activeFriends.length + 1}/6 players · You first on the left + ${activeFriends.length}/5 friends. ${activeFriends.length === 5 ? 'All friend slots are filled; remove one to add a different player.' : 'Add friends from the player list above.'}`;
+    const activeFriends = friends.filter(f => f.season === options.season.seasonId && (!f.shareId || f.shareId !== owner?.id) && !sync.isHidden(f.name));
+    $('.locker-player-join').textContent = sync.profile ? 'Save name' : 'Save & join';
+    $('.locker-player-setup').classList.toggle('is-joined', !!sync.profile);
+    $('.locker-party-count').textContent = sync.profile ? `${activeFriends.length + 1} players shown · You first on the left. Hide or show players in settings.` : `${activeFriends.length + 1}/6 players · You first on the left + ${activeFriends.length}/5 friends. Save your Player Name to show listed players automatically.`;
     $('.locker-directory-season').textContent = `${options.season.chapter} ${options.season.season} · ${options.season.seasonTheme || ''}`;
     const comparing = activeFriends.length > 0;
     $(".locker-comparison").hidden = friends.length === 0;
@@ -320,6 +369,7 @@ export function createLockerTools(host) {
     $('.locker-scroll-hint').hidden = !comparing;
     $('.locker-friends').replaceChildren();
     friends.forEach((friend, index) => {
+      if (sync.isHidden(friend.name)) return;
       const card = document.createElement('div'); card.className = 'locker-friend-summary';
       const description = document.createElement('div');
       const name = document.createElement('strong'); name.textContent = friend.name;
@@ -328,7 +378,7 @@ export function createLockerTools(host) {
       const counts = friendCollectionCounts(friend, catalog);
       const date = document.createElement('p'); date.className = 'locker-friend-date';
       date.textContent = `${friend.live ? 'Live' : friend.liveLink ? 'Paused — last saved snapshot' : 'Snapshot'} · Updated ${new Date((friend.updatedAt || Date.parse(friend.date) / 1000) * 1000).toLocaleString()} · ${options.catalogs.find(s => s.seasonId === friend.season)?.chapter} ${options.catalogs.find(s => s.seasonId === friend.season)?.season}${friend.season !== options.season.seasonId ? ' · Archived season' : ''}${friend.error ? ' · ' + friend.error : ''}`;
-      const remove = document.createElement('button'); remove.type = 'button'; remove.dataset.friendIndex = String(index); remove.textContent = 'Remove'; remove.setAttribute('aria-label', `Remove ${friend.name}`);
+      const remove = document.createElement('button'); remove.type = 'button'; remove.dataset.friendIndex = String(index); remove.textContent = sync.profile ? 'Hide' : 'Remove'; remove.setAttribute('aria-label', `${sync.profile ? 'Hide' : 'Remove'} ${friend.name}`);
       description.append(heading, date);
       if (counts.unknown) { const note = document.createElement('p'); note.className = 'locker-friend-date'; note.textContent = `${counts.unknown} variant${counts.unknown === 1 ? '' : 's'} not in this snapshot; those statuses are unknown.`; description.append(note); }
       card.append(description, remove); $('.locker-friends').append(card);
@@ -351,7 +401,8 @@ export function createLockerTools(host) {
     const ownEntries = new Map(options.season.families.flatMap(f => f.variants.map(v => {
       const key = `${f.name}::${v}`; const state = options.progress[key] || {}; return [key, state.mastered ? 2 : state.acquired ? 1 : 0];
     })));
-    const players = [{ name: $('.locker-nickname').value.trim() ? `${$('.locker-nickname').value.trim()} (You)` : 'You', entries: ownEntries }, ...activeFriends];
+    const myName = sync.profile?.name || $('.locker-nickname').value.trim();
+    const players = [{ name: myName ? `${myName} (You)` : 'You', entries: ownEntries }, ...activeFriends];
     for (const [index, player] of players.entries()) {
       const heading = document.createElement('span'); heading.className = `locker-player-heading${index === 0 ? ' locker-current-player' : ''}`; heading.title = player.name;
       const name = document.createElement('strong'); name.className = 'locker-column-name'; name.textContent = player.name; heading.append(name);
@@ -405,7 +456,7 @@ export function createLockerTools(host) {
   const controlsObserver = new ResizeObserver(sizeList);
   if (controls) controlsObserver.observe(controls);
   sizeList();
-  const directoryTimer = setInterval(() => { if (options && !document.hidden && host.getClientRects().length) void loadDirectory(); }, 60000);
+  const directoryTimer = setInterval(() => { if (options && !document.hidden && host.getClientRects().length) { void preparePlayer(); void loadDirectory(); } }, 60000);
   return { update(next) {
     const seasonChanged = options && options.season.seasonId !== next.season.seasonId;
     options = next;
@@ -413,13 +464,14 @@ export function createLockerTools(host) {
       sync = startLockerBackground(next.catalogs);
       friends = sync.friends;
       unsubscribe = sync.subscribe(() => { friends = sync.friends; render(); });
-      const owner = sync.owner(next.season.seasonId);
-      if (owner?.name) $('.locker-nickname').value = owner.name;
+      const owner = sync.owner(next.season.seasonId) || next.catalogs.map(c => sync.owner(c.seasonId)).find(o => o?.name);
+      if (sync.profile?.name || owner?.name) $('.locker-nickname').value = sync.profile?.name || owner.name;
     }
-    if (seasonChanged) { $(".locker-share-result").hidden = true; target = '*'; const owner = sync.owner(next.season.seasonId); if (owner?.name) $('.locker-nickname').value = owner.name; }
+    if (seasonChanged) { $(".locker-share-result").hidden = true; target = '*'; const owner = sync.owner(next.season.seasonId); if (sync.profile?.name || owner?.name) $('.locker-nickname').value = sync.profile?.name || owner.name; }
     if (directorySeason !== next.season.seasonId) { directorySeason = next.season.seasonId; players = []; $('.locker-player-search').value = ''; void loadDirectory(); }
     else if (Date.now() - lastDirectoryLoad > 60000 && !document.hidden && host.getClientRects().length) void loadDirectory();
     if (importPending) { const input = importPending; importPending = null; importFriend(input); }
     render();
+    void preparePlayer();
   }, dispose() { unsubscribe?.(); clearTimeout(searchTimer); clearInterval(directoryTimer); controlsObserver.disconnect(); directorySequence++; } };
 }

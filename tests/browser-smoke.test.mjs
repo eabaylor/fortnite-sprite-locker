@@ -279,6 +279,39 @@ window.addEventListener("load", async () => {
   savedProgress[name + '::' + variant] = { acquired: true, mastered: false };
   localStorage.setItem(savedSeason.storageKey, JSON.stringify(savedProgress)); window.dispatchEvent(new Event('focus'));
   result.notMasteredResync = masteredExcluded && ownButton()?.textContent.trim() === 'Acquired';
+  try {
+    status.value = 'all'; status.dispatchEvent(new Event('change'));
+    const tools = await import('./locker-tools.js');
+    const season = window.SPRITE_CATALOGS.seasons[0];
+    const liveId = 'LiveID0123456789';
+    const roster = ['Eric', 'Carl', 'Sharon', 'MamaPjama', 'Tester', 'Extra player'].map((name, i) => ({ id: 'Roster' + String(i).padStart(10, '0'), name, season: season.seasonId, live: 1 }));
+    window.fetch = async (input, init = {}) => {
+      const url = String(input);
+      if (url.includes('/players?')) return Response.json({ players: roster, more: false });
+      if (url.endsWith('/listing')) return Response.json({ listed: true, nickname: JSON.parse(init.body).name });
+      if (url.endsWith('/resume')) return Response.json({ revision: 3 });
+      if (url.endsWith('/ticket')) return Response.json({ ticket: 'ticket' });
+      if (init.method === 'POST') return Response.json({ id: liveId, writeKey: 'a'.repeat(43), revision: 0, expiresAt: 2000000000 });
+      if (init.method === 'PUT') return Response.json({ revision: 4, updatedAt: Date.now() / 1000 });
+      const player = roster.find(p => url.endsWith('/' + p.id));
+      return Response.json({ token: tools.encodeSnapshot(tools.makeSnapshot(season, {}, player?.name || 'My locker')), nickname: player?.name, live: true, liveLink: true });
+    };
+    const progressBefore = localStorage.getItem(season.storageKey);
+    document.querySelector('.locker-nickname').value = 'My locker';
+    document.querySelector('.locker-player-form').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+    for (let i = 0; i < 150 && ![...document.querySelectorAll('.locker-column-name')].some(el => el.textContent === 'Extra player'); i++) await new Promise(resolve => setTimeout(resolve, 20));
+    result.simplePlayerJoined = JSON.parse(localStorage.getItem('sprite-locker-player-profile-v1')).name === 'My locker' && document.querySelector('.locker-player-setup').classList.contains('is-joined');
+    result.everyoneAutomatic = ['Eric', 'Carl', 'Sharon', 'MamaPjama', 'Tester', 'Extra player'].every(name => [...document.querySelectorAll('.locker-column-name')].some(el => el.textContent === name));
+    document.querySelector('button[aria-label="Hide: Sharon"]').click();
+    result.playerHidden = ![...document.querySelectorAll('.locker-column-name')].some(el => el.textContent === 'Sharon') && JSON.parse(localStorage.getItem('sprite-locker-hidden-players-v1')).includes('sharon');
+    document.querySelector('.locker-players-refresh').click();
+    for (let i = 0; i < 100 && !document.querySelector('button[aria-label="Show: Sharon"]'); i++) await new Promise(resolve => setTimeout(resolve, 20));
+    document.querySelector('button[aria-label="Show: Sharon"]').click();
+    result.playerShownAgain = [...document.querySelectorAll('.locker-column-name')].some(el => el.textContent === 'Sharon');
+    result.joinKeepsProgress = localStorage.getItem(season.storageKey) === progressBefore;
+    result.joinNoOverflow = document.documentElement.scrollWidth === document.documentElement.clientWidth;
+    result.namePromptVisible = !document.querySelector('.locker-player-form').closest('details');
+  } catch (error) { result.playerSetupError = error.stack || error.message; }
   const output = document.createElement("pre");
   output.id = "browser-audit";
   output.textContent = JSON.stringify(result);
@@ -432,6 +465,8 @@ test("live static tracker works at 320px in a real browser", async (context) => 
     assert.deepEqual(audit.firstVariants, ["Base", "Fortune", "Cursed"]);
     assert.equal(audit.allNumbersHidden, true);
     assert.equal(audit.missingKelperAdded, true);
+    assert.equal(audit.playerSetupError, undefined);
+    for (const check of ['simplePlayerJoined', 'everyoneAutomatic', 'playerHidden', 'playerShownAgain', 'joinKeepsProgress', 'joinNoOverflow', 'namePromptVisible']) assert.equal(audit[check], true, check);
   } finally {
     await new Promise((resolve) => server.close(resolve));
     await rm(profile, { recursive: true, force: true });

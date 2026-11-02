@@ -1,6 +1,8 @@
-import { publishSharedSnapshot, readSharedLocker, controlLiveLocker, updateLiveLocker, setPlayerListing, directoryNickname } from './locker-sharing.js?v=20261101-4';
+import { publishSharedSnapshot, readSharedLocker, controlLiveLocker, updateLiveLocker, setPlayerListing, directoryNickname } from './locker-sharing.js?v=20261102-1';
 export const FRIENDS_KEY = 'sprite-locker-friends-v1';
 export const LIVE_KEY = 'sprite-locker-live-shares-v1';
+export const PROFILE_KEY = 'sprite-locker-player-profile-v1';
+export const HIDDEN_KEY = 'sprite-locker-hidden-players-v1';
 
 /** Only this module can manage writer credentials. Public links contain only the read ID. */
 export function createLockerSync(catalogs, codec) {
@@ -9,16 +11,20 @@ export function createLockerSync(catalogs, codec) {
   let lastRefresh = 0, retryAt = 0;
   const parse = key => { try { return JSON.parse(localStorage.getItem(key) || '{}'); } catch { return {}; } };
   const owners = () => { const value = parse(LIVE_KEY); return value && typeof value === 'object' && !Array.isArray(value) ? value : {}; };
+  const profile = () => { const p = parse(PROFILE_KEY); return p?.joined === true && typeof p.name === 'string' ? p : null; };
+  // Old portable links allowed emoji and other characters; hide preferences must still work for them.
+  const playerKey = name => String(name).normalize('NFKC').trim().replace(/\s+/g, ' ').toLowerCase();
+  const hidden = () => { const value = parse(HIDDEN_KEY); return Array.isArray(value) ? value : []; };
   const emit = () => subscribers.forEach(fn => fn());
   const canonicalToken = snapshot => codec.encodeSnapshot({ v: 1, season: snapshot.season, name: snapshot.name, date: snapshot.date, families: snapshot.families, states: snapshot.states });
   const persistFriends = () => localStorage.setItem(FRIENDS_KEY, JSON.stringify(friends.map(f => ({ token: canonicalToken(f), shareId: f.shareId, live: f.live, liveLink: f.liveLink, updatedAt: f.updatedAt, checkedAt: f.checkedAt, error: f.error, expiresAt: f.expiresAt }))));
   function loadFriends() {
     const saved = parse(FRIENDS_KEY); const restored = [];
-    for (const item of Array.isArray(saved) ? saved.slice(0, 40) : []) {
+    for (const item of Array.isArray(saved) ? saved.slice(0, 300) : []) {
       try {
         const snapshot = codec.decodeSnapshot(item.token);
         if (item.shareId && owners()[snapshot.season]?.id === item.shareId) continue;
-        if (!catalogs.some(c => c.seasonId === snapshot.season) || restored.filter(f => f.season === snapshot.season).length >= 5) continue;
+        if (!catalogs.some(c => c.seasonId === snapshot.season)) continue;
         restored.push({ ...snapshot, shareId: /^[A-Za-z0-9_-]{16}$/.test(item.shareId || '') ? item.shareId : null, live: item.live === true, liveLink: item.liveLink === true, updatedAt: Number(item.updatedAt) || Date.parse(snapshot.date) / 1000, checkedAt: Number(item.checkedAt) || 0, error: typeof item.error === 'string' ? item.error.slice(0, 200) : '', expiresAt: Number(item.expiresAt) || 0 });
       } catch { /* Keep other valid friends if one stored entry is damaged. */ }
     }
@@ -83,7 +89,7 @@ export function createLockerSync(catalogs, codec) {
     } finally { refreshBusy = false; }
   }
   loadFriends();
-  const storage = event => { if (event.key === FRIENDS_KEY) { loadFriends(); emit(); } if (event.key === LIVE_KEY) emit(); void syncOwn().catch(() => {}); };
+  const storage = event => { if (event.key === FRIENDS_KEY) { loadFriends(); emit(); } if ([LIVE_KEY, PROFILE_KEY, HIDDEN_KEY].includes(event.key)) emit(); void syncOwn().catch(() => {}); };
   const wake = () => { void syncOwn().catch(() => {}); void refreshFriends().catch(() => {}); };
   window.addEventListener('storage', storage);
   document.addEventListener('visibilitychange', wake);
@@ -92,17 +98,40 @@ export function createLockerSync(catalogs, codec) {
   queueMicrotask(wake);
   return {
     get friends() { return friends; },
+    get profile() { return profile(); },
+    isHidden(name) { return hidden().includes(playerKey(name)); },
+    hide(name, value = true) {
+      const key = playerKey(name); const keys = new Set(hidden());
+      if (value) keys.add(key); else keys.delete(key);
+      localStorage.setItem(HIDDEN_KEY, JSON.stringify([...keys])); emit();
+    },
+    async join(season, name) {
+      const nickname = directoryNickname(name).name;
+      await this.enable(season, nickname);
+      await this.listing(season.seasonId, true, nickname);
+      localStorage.setItem(PROFILE_KEY, JSON.stringify({ name: nickname, joined: true }));
+      await syncOwn(); emit(); return profile();
+    },
+    async discover(season, players) {
+      if (!profile()) return;
+      const ownId = owners()[season.seasonId]?.id;
+      for (const player of players) {
+        if (player.id === ownId) continue;
+        try { await this.add('', player.id, true); }
+        catch { /* Keep saved snapshots and try again on the next directory refresh. */ }
+      }
+    },
     owner(seasonId) { return owners()[seasonId]; },
     subscribe(fn) { subscribers.add(fn); return () => subscribers.delete(fn); },
-    async add(input, shareId) {
+    async add(input, shareId, automatic = false) {
       if (shareId && Object.values(owners()).some(o => o?.id === shareId)) throw new Error('That is your own locker. You are already shown in the first player column; all five friend slots remain available.');
       const result = shareId ? await readSharedLocker(shareId) : null;
       const snapshot = codec.decodeSnapshot(result ? result.token : input);
       if (!catalogs.some(c => c.seasonId === snapshot.season)) throw new Error('This season is not available in the tracker yet.');
       const friend = { ...snapshot, ...result, name: result?.nickname || snapshot.name, shareId: shareId || null, checkedAt: Date.now(), updatedAt: result?.updatedAt || Date.parse(snapshot.date) / 1000, error: '' };
       const index = friends.findIndex(f => f.season === friend.season && ((shareId && f.shareId === shareId) || f.name.toLowerCase() === friend.name.toLowerCase()));
-      if (index < 0 && friends.filter(f => f.season === friend.season).length >= 5) throw new Error('You can compare with up to five friends in each season. Remove a friend before adding another.');
-      if (index < 0 && friends.length >= 40) throw new Error('Your friend archive is full. Remove an older saved locker first.');
+      if (!automatic && !profile() && index < 0 && friends.filter(f => f.season === friend.season).length >= 5) throw new Error('You can compare with up to five friends in each season. Remove a friend before adding another.');
+      if (index < 0 && friends.length >= 300) throw new Error('Your saved player archive is full. Remove an older saved locker first.');
       const next = [...friends]; if (index >= 0) next[index] = friend; else next.push(friend);
       const previous = friends; friends = next;
       try { persistFriends(); } catch { friends = previous; throw new Error('Your browser could not save this friend. Free some storage and try again.'); }

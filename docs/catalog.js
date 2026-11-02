@@ -1,7 +1,7 @@
 window.SPRITE_CATALOGS = {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-mini-season",
-  "assetVersion": "20261101-4",
+  "assetVersion": "20261102-1",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -12,9 +12,9 @@ window.SPRITE_CATALOGS = {
       "imageBase": "seasons/chapter-7-mini-season/sprites",
       "storageKey": "sprite-locker-progress-chapter-7-mini-season",
       "legacyStorageKeys": [],
-      "updatedDate": "November 1, 2026",
+      "updatedDate": "November 2, 2026",
       "patch": "v43.00",
-      "assetVersion": "20261101-4",
+      "assetVersion": "20261102-1",
       "familyOrder": [
         "Halfpeel'd",
         "Re-Pete",
@@ -36,11 +36,13 @@ window.SPRITE_CATALOGS = {
         "Cursed"
       ],
       "whatsNew": {
-        "title": "Sprite names without numbers",
-        "intro": "The entire list now uses plain Sprite names.",
+        "title": "One name. Everyone’s lockers.",
+        "intro": "Join once to make comparing lockers simple.",
         "items": [
-          "Removed the catalog number labels from every Sprite for a consistent list.",
-          "All 33 entries, Base → Fortune → Cursed order, and your saved progress remain unchanged."
+          "Save your Player Name once to share your locker automatically across seasons in this browser.",
+          "Everyone who joins appears in the comparison—no separate links or adding friends.",
+          "Hide or show players in settings; your choices carry across seasons and affect only your view.",
+          "All 33 Sprite entries and your existing progress remain unchanged."
         ]
       },
       "unlockCodes": [],

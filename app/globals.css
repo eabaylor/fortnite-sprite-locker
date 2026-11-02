@@ -371,6 +371,13 @@ footer p { margin: 0; text-align: right; }
 .locker-directory-player strong, .locker-directory-player small { display: block; overflow-wrap: anywhere; }
 .locker-directory-player small { color: var(--muted); font-size: 11px; margin-top: 3px; }
 .locker-directory-player button { flex: none; }
+.locker-player-setup { padding: 12px; margin-bottom: 12px; border: 1px solid #9abfcf; border-radius: 10px; background: #e7f2fa; }
+.locker-player-form { display: flex; align-items: end; flex-wrap: wrap; gap: 10px; }
+.locker-player-form label { flex: 1 1 180px; min-width: 0; font-weight: 700; }
+.locker-player-form input { display: block; width: 100%; box-sizing: border-box; margin-top: 5px; min-height: 44px; font-size: 16px; }
+.locker-player-status { font-size: 12px; margin: 8px 0 0; overflow-wrap: anywhere; }
+.locker-player-setup.is-joined { background: #eef1e9; border-color: #b1c4b8; }
+.locker-advanced { margin: 12px 0; }
 .locker-link-backup { margin: 14px 0; }
 .locker-link-backup summary { font-size: 13px; }
 .locker-live-status { font-size: 12px; color: var(--green-dark); overflow-wrap: anywhere; }
