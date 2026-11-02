@@ -378,6 +378,7 @@ footer p { margin: 0; text-align: right; }
 .locker-player-status { font-size: 12px; margin: 8px 0 0; overflow-wrap: anywhere; }
 .locker-player-setup.is-joined { background: #eef1e9; border-color: #b1c4b8; }
 .locker-advanced { margin: 12px 0; }
+.locker-status-toggle.needs-player-name { opacity: .55; cursor: pointer; }
 .locker-link-backup { margin: 14px 0; }
 .locker-link-backup summary { font-size: 13px; }
 .locker-live-status { font-size: 12px; color: var(--green-dark); overflow-wrap: anywhere; }

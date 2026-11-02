@@ -9,6 +9,7 @@ let filter = "all";
 const viewMode = "list";
 let lockerTools = null;
 let lockerToolsLoading = false;
+let requirePlayerName = () => false;
 const selectedSprites = new Set();
 const selectedVariants = new Set();
 let query = "";
@@ -163,7 +164,8 @@ function render() {
       if (!lockerToolsLoading) {
         lockerToolsLoading = true;
         toolsHost.textContent = "Loading locker tools…";
-        import(`./locker-tools.js?v=${RELEASE_VERSION}`).then(({ createLockerTools }) => {
+        import(`./locker-tools.js?v=${RELEASE_VERSION}`).then(({ createLockerTools, requirePlayerName: playerGuard }) => {
+          requirePlayerName = playerGuard;
           lockerTools = createLockerTools(toolsHost);
           render();
         }).catch(() => { lockerToolsLoading = false; toolsHost.textContent = "Locker tools could not load. Select List again to retry."; });
@@ -184,6 +186,7 @@ function render() {
     lockerTools.update({ season, catalogs: CATALOGS, families, progress,
       imageFor: (name, variant) => `${season.imageBase}/${slugFor(name)}-${variantSlugFor(variant)}-256.webp`,
       onToggle: (name, variant, field) => {
+        if (!requirePlayerName()) return;
         const key = keyFor(name, variant);
         const next = { ...stateFor(name, variant) };
         next[field] = !next[field];
@@ -533,13 +536,13 @@ function openCodeGuide(code = null, view = code ? "sprites" : "other") {
   queueMicrotask(() => codeGuideClose.focus());
 }
 
-function closeCodeGuide() {
+function closeCodeGuide(restoreFocus = true) {
   codeGuideBackdrop.hidden = true;
   focusedCode = null;
   document.body.classList.remove("modal-open");
   const returnTarget = codeGuideReturnFocus;
   codeGuideReturnFocus = null;
-  queueMicrotask(() => returnTarget?.focus());
+  if (restoreFocus) queueMicrotask(() => returnTarget?.focus());
 }
 
 async function copyCodeText(value) {
@@ -581,6 +584,7 @@ codeGuideList.addEventListener("click", async (event) => {
   }
   const redeem = event.target.closest("[data-redeem-code]");
   if (redeem) {
+    if (!requirePlayerName()) { closeCodeGuide(false); return; }
     const unlock = unlockCodes().find((item) => item.code === redeem.dataset.redeemCode);
     if (!unlock) return;
     for (const reward of unlock.rewards) {
@@ -657,6 +661,7 @@ document.querySelector("#clear-filters").addEventListener("click", () => {
 
 document.querySelector("#reset").addEventListener("click", () => {
   document.querySelector("#data-menu").removeAttribute("open");
+  if (!requirePlayerName()) return;
   if (!confirm(`Clear every ${season.season} checkmark?`)) return;
   progress = {};
   save();
@@ -676,15 +681,18 @@ document.querySelector("#backup").addEventListener("click", () => {
 
 const restoreInput = document.querySelector("#restore-input");
 document.querySelector("#restore").addEventListener("click", () => {
-  restoreInput.click();
   document.querySelector("#data-menu").removeAttribute("open");
+  if (!requirePlayerName()) return;
+  restoreInput.click();
 });
 restoreInput.addEventListener("change", async () => {
   const file = restoreInput.files?.[0];
   if (!file) return;
+  if (!requirePlayerName()) { restoreInput.value = ''; return; }
   try {
     const backup = JSON.parse(await file.text());
     if (backup.seasonId !== season.seasonId) throw new Error(`Select ${backup.seasonId || "the matching season"} before restoring this backup.`);
+    if (!requirePlayerName()) return;
     progress = sanitizeProgress(backup.progress);
     save();
     render();
@@ -704,6 +712,7 @@ document.addEventListener("pointerdown", (event) => {
 document.querySelector("#sprite-list").addEventListener("change", (event) => {
   const input = event.target.closest("input[type=checkbox]");
   if (!input) return;
+  if (!requirePlayerName()) { render(); return; }
   const { name, variant, field } = input.dataset;
   const key = keyFor(name, variant);
   const next = { ...stateFor(name, variant), [field]: input.checked };
@@ -718,6 +727,7 @@ document.querySelector("#sprite-list").addEventListener("change", (event) => {
 document.querySelector("#sprite-list").addEventListener("click", (event) => {
   const button = event.target.closest(".compact-sprite-toggle");
   if (!button) return;
+  if (!requirePlayerName()) return;
   const { name, variant } = button.dataset;
   const key = keyFor(name, variant);
   const old = stateFor(name, variant);

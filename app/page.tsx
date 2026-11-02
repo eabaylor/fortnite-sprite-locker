@@ -6,6 +6,7 @@ import currentCatalog from "@/data/catalog.json";
 import previousCatalog from "@/archive/chapter-7-season-3.json";
 import overrideCatalog from "@/archive/chapter-7-season-4.json";
 import LockerTools from "./LockerTools";
+import { requirePlayerName } from "../public/locker-tools.js";
 
 type SpriteFamily = { name: string; rarity: string; variants: string[] };
 type UnlockReward = { name: string; variant: string };
@@ -436,6 +437,7 @@ export default function Home() {
   }
 
   function redeemCode(unlock: UnlockCode) {
+    if (!requirePlayerName()) { setCodeGuideOpen(false); return; }
     setProgress((current) => {
       const updated = { ...current };
       for (const reward of unlock.rewards) {
@@ -452,6 +454,7 @@ export default function Home() {
   }
 
   function toggle(name: string, variant: string, field: "acquired" | "mastered") {
+    if (!requirePlayerName()) return;
     const key = keyFor(name, variant);
     setProgress((current) => {
       const old = current[key] ?? { acquired: false, mastered: false };
@@ -466,6 +469,7 @@ export default function Home() {
   }
 
   function cycleStatus(name: string, variant: string) {
+    if (!requirePlayerName()) return;
     const key = keyFor(name, variant);
     setProgress((current) => {
       const old = current[key] ?? { acquired: false, mastered: false };
@@ -489,10 +493,12 @@ export default function Home() {
 
   async function restoreProgress(file?: File) {
     if (!file) return;
+    if (!requirePlayerName()) { if (restoreInput.current) restoreInput.current.value = ""; return; }
     try {
       const backup = JSON.parse(await file.text()) as { seasonId?: string; progress?: unknown };
       if (backup.seasonId !== activeSeason.seasonId) throw new Error(`Select ${backup.seasonId ?? "the matching season"} before restoring this backup.`);
       const restored = sanitizeProgress(backup.progress, activeSeason);
+      if (!requirePlayerName()) return;
       setProgress(restored);
       alert(`Restored ${Object.keys(restored).length} saved Sprite entries.`);
     } catch (error) {
@@ -540,9 +546,9 @@ export default function Home() {
                 <summary aria-label="Open checklist options" title="Checklist options"><span aria-hidden="true">⋮</span></summary>
                 <div className="data-menu-panel" aria-label="Checklist data">
                   <button type="button" onClick={(event) => { backupProgress(); event.currentTarget.closest("details")?.removeAttribute("open"); }}>Backup</button>
-                  <button type="button" onClick={(event) => { restoreInput.current?.click(); event.currentTarget.closest("details")?.removeAttribute("open"); }}>Restore</button>
+                  <button type="button" onClick={(event) => { event.currentTarget.closest("details")?.removeAttribute("open"); if (!requirePlayerName()) return; restoreInput.current?.click(); }}>Restore</button>
                   <input ref={restoreInput} className="visually-hidden" type="file" accept="application/json,.json" onChange={(event) => restoreProgress(event.target.files?.[0])} aria-label="Restore checklist backup" />
-                  <button className="reset" onClick={(event) => { event.currentTarget.closest("details")?.removeAttribute("open"); if (confirm(`Clear every ${activeSeason.season} checkmark?`)) setProgress({}); }}>Reset</button>
+                  <button className="reset" onClick={(event) => { event.currentTarget.closest("details")?.removeAttribute("open"); if (!requirePlayerName()) return; if (confirm(`Clear every ${activeSeason.season} checkmark?`)) setProgress({}); }}>Reset</button>
                 </div>
               </details>
             </div>

@@ -1,9 +1,29 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { readFile } from 'node:fs/promises';
-import { makeSnapshot, encodeSnapshot, decodeSnapshot, matchesComparison, matchesGroupComparison, addFriendSnapshot, friendCollectionCounts, nextLockerAction } from "../public/locker-tools.js";
+import { makeSnapshot, encodeSnapshot, decodeSnapshot, matchesComparison, matchesGroupComparison, addFriendSnapshot, friendCollectionCounts, nextLockerAction, requirePlayerName } from "../public/locker-tools.js";
 
 const season = { seasonId: "test-season", families: [{ name: "Honey", variants: ["Base", "Gold"] }, { name: "One Wish Willow", variants: ["Base"] }] };
+
+test('Sprite edits require a saved valid Player Name, including while offline', () => {
+  const oldWindow = globalThis.window, oldStorage = globalThis.localStorage;
+  let stored = null, prompts = 0;
+  globalThis.window = new EventTarget(); window.addEventListener('sprite-locker-player-required', () => prompts++);
+  globalThis.localStorage = { getItem: () => stored };
+  try {
+    for (const value of [null, 'broken JSON', '{}', '{"name":"  "}', '{"name":"x"}']) {
+      stored = value; assert.equal(requirePlayerName(), false);
+    }
+    assert.equal(prompts, 5);
+    stored = JSON.stringify({ name: 'Eric', joined: true });
+    assert.equal(requirePlayerName(), true); assert.equal(prompts, 5);
+    globalThis.localStorage.getItem = () => { throw new Error('Storage unavailable'); };
+    assert.equal(requirePlayerName(), false);
+  } finally {
+    if (oldWindow === undefined) delete globalThis.window; else globalThis.window = oldWindow;
+    if (oldStorage === undefined) delete globalThis.localStorage; else globalThis.localStorage = oldStorage;
+  }
+});
 
 test('own comparison status cycles without breaking mastery implies acquired', () => {
   let state = { acquired: false, mastered: false };

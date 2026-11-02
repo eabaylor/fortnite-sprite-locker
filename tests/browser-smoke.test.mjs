@@ -63,6 +63,19 @@ window.addEventListener("load", async () => {
   const firstButton = rows[0].querySelector('.locker-status-toggle');
   const {name, variant} = firstButton.dataset;
   const ownButton = () => document.querySelector('.locker-status-toggle[data-name="' + CSS.escape(name) + '"][data-variant="' + CSS.escape(variant) + '"]');
+  const beforeName = localStorage.getItem(window.SPRITE_CATALOGS.seasons[0].storageKey);
+  ownButton().click();
+  const unnamedBlocked = localStorage.getItem(window.SPRITE_CATALOGS.seasons[0].storageKey) === beforeName && document.querySelector('.locker-player-status').textContent.includes('Save & join') && document.activeElement === document.querySelector('.locker-nickname');
+  document.querySelector('.locker-nickname').value = 'Unsaved name';
+  ownButton().click();
+  const unsavedNameBlocked = localStorage.getItem(window.SPRITE_CATALOGS.seasons[0].storageKey) === beforeName;
+  document.querySelector('.locker-nickname').value = '';
+  let resetConfirmed = false; const originalConfirm = window.confirm;
+  window.confirm = () => { resetConfirmed = true; return true; };
+  document.querySelector('#reset').click(); window.confirm = originalConfirm;
+  const unnamedResetBlocked = !resetConfirmed && localStorage.getItem(window.SPRITE_CATALOGS.seasons[0].storageKey) === beforeName;
+  // A saved name fixture exercises offline editing independently of online sharing tests below.
+  localStorage.setItem('sprite-locker-player-profile-v1', JSON.stringify({name: 'Browser test player'}));
   ownButton().click(); ownButton().click();
   const savedInitial = JSON.parse(localStorage.getItem(window.SPRITE_CATALOGS.seasons[0].storageKey));
   const menu = document.querySelector("#data-menu");
@@ -71,6 +84,7 @@ window.addEventListener("load", async () => {
   window.scrollTo(0, 600);
   const stickyTopAfterScroll = Math.round(document.querySelector(".sticky-controls").getBoundingClientRect().top);
   const result = {
+    unnamedBlocked, unsavedNameBlocked, unnamedResetBlocked,
     viewportWidth: document.documentElement.clientWidth,
     scrollWidth: document.documentElement.scrollWidth,
     h1Count: document.querySelectorAll("h1").length,
@@ -311,6 +325,10 @@ window.addEventListener("load", async () => {
     result.joinKeepsProgress = localStorage.getItem(season.storageKey) === progressBefore;
     result.joinNoOverflow = document.documentElement.scrollWidth === document.documentElement.clientWidth;
     result.namePromptVisible = !document.querySelector('.locker-player-form').closest('details');
+    const joinedButton = document.querySelector('.locker-status-toggle');
+    const beforeJoinedTap = joinedButton.textContent;
+    joinedButton.click();
+    result.joinUnlocksEditing = document.querySelector('.locker-status-toggle').textContent !== beforeJoinedTap && document.querySelector('.locker-status-toggle').getAttribute('aria-disabled') === 'false';
   } catch (error) { result.playerSetupError = error.stack || error.message; }
   const output = document.createElement("pre");
   output.id = "browser-audit";
@@ -393,6 +411,9 @@ test("live static tracker works at 320px in a real browser", async (context) => 
     assert.equal(audit.h1Count, 1);
     assert.equal(audit.hasSkipLink, true);
     assert.equal(audit.updateNoticeHidden, true);
+    assert.equal(audit.unnamedBlocked, true);
+    assert.equal(audit.unsavedNameBlocked, true);
+    assert.equal(audit.unnamedResetBlocked, true);
     assert.equal(audit.defaultStatusAll, true);
     assert.equal(audit.defaultList, true);
     assert.equal(audit.sharingCollapsed, true);
@@ -466,7 +487,7 @@ test("live static tracker works at 320px in a real browser", async (context) => 
     assert.equal(audit.allNumbersHidden, true);
     assert.equal(audit.missingKelperAdded, true);
     assert.equal(audit.playerSetupError, undefined);
-    for (const check of ['simplePlayerJoined', 'everyoneAutomatic', 'playerHidden', 'playerShownAgain', 'joinKeepsProgress', 'joinNoOverflow', 'namePromptVisible']) assert.equal(audit[check], true, check);
+    for (const check of ['simplePlayerJoined', 'everyoneAutomatic', 'playerHidden', 'playerShownAgain', 'joinKeepsProgress', 'joinNoOverflow', 'namePromptVisible', 'joinUnlocksEditing']) assert.equal(audit[check], true, check);
   } finally {
     await new Promise((resolve) => server.close(resolve));
     await rm(profile, { recursive: true, force: true });

@@ -1,7 +1,7 @@
 window.SPRITE_CATALOGS = {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-mini-season",
-  "assetVersion": "20261102-1",
+  "assetVersion": "20261102-2",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -14,7 +14,7 @@ window.SPRITE_CATALOGS = {
       "legacyStorageKeys": [],
       "updatedDate": "November 2, 2026",
       "patch": "v43.00",
-      "assetVersion": "20261102-1",
+      "assetVersion": "20261102-2",
       "familyOrder": [
         "Halfpeel'd",
         "Re-Pete",
@@ -36,13 +36,13 @@ window.SPRITE_CATALOGS = {
         "Cursed"
       ],
       "whatsNew": {
-        "title": "One name. Everyone’s lockers.",
-        "intro": "Join once to make comparing lockers simple.",
+        "title": "Player Name comes first",
+        "intro": "Save your name before updating your locker.",
         "items": [
-          "Save your Player Name once to share your locker automatically across seasons in this browser.",
-          "Everyone who joins appears in the comparison—no separate links or adding friends.",
-          "Hide or show players in settings; your choices carry across seasons and affect only your view.",
-          "All 33 Sprite entries and your existing progress remain unchanged."
+          "Sprite progress stays read-only until you save a valid Player Name with Save & join.",
+          "Tapping a locked status takes you to the Player Name prompt without changing your progress.",
+          "Restore, reset, and Sprite reward actions also require your saved Player Name.",
+          "Your saved name continues across seasons; existing progress is preserved."
         ]
       },
       "unlockCodes": [],

@@ -1,6 +1,16 @@
-import catalogs from './locker-catalogs.js?v=20261102-1';
-import { SHARE_ORIGIN, sharedLockerId, publishSharedSnapshot, searchPlayers } from './locker-sharing.js?v=20261102-1';
-import { createLockerSync } from './locker-state.js?v=20261102-1';
+import catalogs from './locker-catalogs.js?v=20261102-2';
+import { SHARE_ORIGIN, sharedLockerId, publishSharedSnapshot, searchPlayers, directoryNickname } from './locker-sharing.js?v=20261102-2';
+import { createLockerSync, PROFILE_KEY } from './locker-state.js?v=20261102-2';
+export function requirePlayerName() {
+  try {
+    const profile = JSON.parse(localStorage.getItem(PROFILE_KEY) || 'null');
+    directoryNickname(profile?.name);
+    return true;
+  } catch {
+    window.dispatchEvent(new Event('sprite-locker-player-required'));
+    return false;
+  }
+}
 let backgroundSync;
 export function startLockerBackground(catalogs) {
   if (!backgroundSync) backgroundSync = createLockerSync(catalogs, { makeSnapshot, encodeSnapshot, decodeSnapshot });
@@ -127,7 +137,7 @@ export function createLockerTools(host) {
         <label>Player Name<input class="locker-nickname" maxlength="40" placeholder="Enter your player name" autocomplete="nickname" required aria-describedby="locker-player-disclosure"></label>
         <button type="submit" class="locker-player-join">Save & join</button>
       </form>
-      <p class="locker-help" id="locker-player-disclosure">Save once for every season. Joining shares your name and locker with everyone using this public tracker and keeps it updated while you use this browser. Use a nickname, not private information. Your existing progress stays safe.</p>
+      <p class="locker-help" id="locker-player-disclosure">Save your Player Name before changing Sprite progress. Save once for every season. Joining shares your name and locker with everyone using this public tracker and keeps it updated while you use this browser. Use a nickname, not private information. Your existing progress stays safe.</p>
       <p class="locker-player-status" role="status" aria-live="polite"></p>
     </section>
     <details class="locker-sharing">
@@ -169,6 +179,12 @@ export function createLockerTools(host) {
     </div></div>`;
   const $ = (selector) => host.querySelector(selector);
   const message = (text) => { $(".locker-message").textContent = text; };
+  const promptForPlayer = () => {
+    $('.locker-player-status').textContent = 'Enter your Player Name and press Save & join before updating Sprites.';
+    $('.locker-player-setup').scrollIntoView({ block: 'center', behavior: 'smooth' });
+    $('.locker-nickname').focus({ preventScroll: true });
+  };
+  window.addEventListener('sprite-locker-player-required', promptForPlayer);
   function renderDirectory() {
     const list = $('.locker-player-list'); list.replaceChildren();
     const query = $('.locker-player-search').value.normalize('NFKC').trim().toLowerCase();
@@ -317,6 +333,7 @@ export function createLockerTools(host) {
   });
   $('.locker-list').addEventListener('click', event => {
     const button = event.target.closest('button.locker-status-toggle'); if (!button) return;
+    if (!requirePlayerName()) return;
     const state = options.progress[`${button.dataset.name}::${button.dataset.variant}`] || {};
     const status = state.mastered ? 2 : state.acquired ? 1 : 0;
     options.onToggle(button.dataset.name, button.dataset.variant, nextLockerAction(status));
@@ -439,6 +456,11 @@ export function createLockerTools(host) {
         const badge = document.createElement(index === 0 ? 'button' : 'span'); badge.className = `locker-friend-status ${index === 0 ? 'locker-my-status locker-status-toggle' : ''} state-${status ?? 'unknown'}`; badge.textContent = statusName(status);
         badge.setAttribute('aria-label', `${index === 0 ? 'You' : activeFriends[index - 1].name}: ${family.name} ${variant}, ${statusName(status)}${index === 0 ? `. Tap to change to ${statusName((status + 1) % 3)}` : ''}`);
         if (index === 0) {
+          // Keep the control focusable so a tap explains how to unlock editing.
+          let named = false;
+          try { directoryNickname(JSON.parse(localStorage.getItem(PROFILE_KEY) || 'null')?.name); named = true; } catch {}
+          badge.setAttribute('aria-disabled', String(!named));
+          if (!named) badge.classList.add('needs-player-name');
           badge.type = 'button'; badge.dataset.name = family.name; badge.dataset.variant = variant; badge.title = `Tap to change to ${statusName((status + 1) % 3)}`;
           if (focusKey === key) { restoredFocus = true; queueMicrotask(() => badge.focus({ preventScroll: true })); }
         }
@@ -473,5 +495,5 @@ export function createLockerTools(host) {
     if (importPending) { const input = importPending; importPending = null; importFriend(input); }
     render();
     void preparePlayer();
-  }, dispose() { unsubscribe?.(); clearTimeout(searchTimer); clearInterval(directoryTimer); controlsObserver.disconnect(); directorySequence++; } };
+  }, dispose() { unsubscribe?.(); window.removeEventListener('sprite-locker-player-required', promptForPlayer); clearTimeout(searchTimer); clearInterval(directoryTimer); controlsObserver.disconnect(); directorySequence++; } };
 }

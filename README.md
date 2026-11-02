@@ -92,6 +92,10 @@ actions tied to the current ChatGPT user. Leave public content anonymous.
 The List view prompts for a Player Name. **Save & join** clearly discloses that the
 name and current locker become readable by anyone using this public tracker. It
 enables live sharing and directory listing in one step; no friend links are needed.
+Before a valid Player Name is saved, Sprite progress is read-only. Status taps,
+Sprite-code rewards, restore, and reset all use the same saved-name guard; typing
+an unsaved name does not unlock editing. The prompt remains accessible, existing
+progress is not erased, and a previously saved name works offline across seasons.
 The browser remembers the name and this sharing choice in
 `sprite-locker-player-profile-v1`. Visiting another season creates its separate
 shared locker automatically, without rotating or clearing its existing progress key.
