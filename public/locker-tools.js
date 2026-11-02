@@ -1,6 +1,6 @@
-import catalogs from './locker-catalogs.js?v=20261102-2';
-import { SHARE_ORIGIN, sharedLockerId, publishSharedSnapshot, searchPlayers, directoryNickname } from './locker-sharing.js?v=20261102-2';
-import { createLockerSync, PROFILE_KEY } from './locker-state.js?v=20261102-2';
+import catalogs from './locker-catalogs.js?v=20261102-3';
+import { SHARE_ORIGIN, sharedLockerId, publishSharedSnapshot, searchPlayers, directoryNickname } from './locker-sharing.js?v=20261102-3';
+import { createLockerSync, PROFILE_KEY } from './locker-state.js?v=20261102-3';
 export function requirePlayerName() {
   try {
     const profile = JSON.parse(localStorage.getItem(PROFILE_KEY) || 'null');
@@ -181,6 +181,8 @@ export function createLockerTools(host) {
   const message = (text) => { $(".locker-message").textContent = text; };
   const promptForPlayer = () => {
     $('.locker-player-status').textContent = 'Enter your Player Name and press Save & join before updating Sprites.';
+    const details = $('.locker-player-setup').closest('details');
+    if (details) details.open = true;
     $('.locker-player-setup').scrollIntoView({ block: 'center', behavior: 'smooth' });
     $('.locker-nickname').focus({ preventScroll: true });
   };
@@ -377,7 +379,17 @@ export function createLockerTools(host) {
     $('.locker-live-status').textContent = !owner ? 'Off — no automatic uploads.' : owner.pendingPause ? 'Uploads stopped locally. Waiting for a connection to pause the online link.' : owner.error ? `Last saved state kept. ${owner.error}` : `${owner.enabled ? 'Live sharing on' : 'Paused'} · ${owner.name} · ${owner.updatedAt ? 'Last synced ' + new Date(owner.updatedAt * 1000).toLocaleString() : 'Waiting to sync'}`;
     const activeFriends = friends.filter(f => f.season === options.season.seasonId && (!f.shareId || f.shareId !== owner?.id) && !sync.isHidden(f.name));
     $('.locker-player-join').textContent = sync.profile ? 'Save name' : 'Save & join';
-    $('.locker-player-setup').classList.toggle('is-joined', !!sync.profile);
+    const setup = $('.locker-player-setup');
+    const settings = $('.locker-sharing');
+    setup.classList.toggle('is-joined', !!sync.profile);
+    if (sync.profile && setup.parentElement !== settings) {
+      const moveFocus = setup.contains(document.activeElement);
+      settings.querySelector('summary').after(setup);
+      settings.open = false;
+      if (moveFocus) settings.querySelector('summary').focus({ preventScroll: true });
+    } else if (!sync.profile && setup.parentElement === settings) {
+      host.insertBefore(setup, settings);
+    }
     $('.locker-party-count').textContent = sync.profile ? `${activeFriends.length + 1} players shown · You first on the left. Hide or show players in settings.` : `${activeFriends.length + 1}/6 players · You first on the left + ${activeFriends.length}/5 friends. Save your Player Name to show listed players automatically.`;
     $('.locker-directory-season').textContent = `${options.season.chapter} ${options.season.season} · ${options.season.seasonTheme || ''}`;
     const comparing = activeFriends.length > 0;

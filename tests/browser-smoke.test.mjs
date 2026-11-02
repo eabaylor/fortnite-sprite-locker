@@ -45,6 +45,7 @@ window.addEventListener("load", async () => {
   const defaultList = !document.querySelector('#locker-tools-host').hidden && document.querySelector('#sprite-list').hidden;
   const listOnly = !document.querySelector('.view-switch') && !document.querySelector('#compact-view, #classic-view');
   const sharingCollapsed = !document.querySelector('.locker-sharing').open;
+  const firstTimeNameVisible = !document.querySelector('.locker-player-form').closest('details');
   const friendControlsGrouped = ['.locker-comparison', '.locker-count', '.locker-party-count', '.locker-edit-hint', '.locker-scroll-hint'].every(selector => document.querySelector(selector).closest('details.locker-sharing'));
   const showOutsideCollapsed = !document.querySelector('.locker-compare-filter').closest('details') && !document.querySelector('.locker-compare-filter').disabled;
   const initialShow = document.querySelector('.locker-compare-filter');
@@ -84,7 +85,7 @@ window.addEventListener("load", async () => {
   window.scrollTo(0, 600);
   const stickyTopAfterScroll = Math.round(document.querySelector(".sticky-controls").getBoundingClientRect().top);
   const result = {
-    unnamedBlocked, unsavedNameBlocked, unnamedResetBlocked,
+    unnamedBlocked, unsavedNameBlocked, unnamedResetBlocked, firstTimeNameVisible,
     viewportWidth: document.documentElement.clientWidth,
     scrollWidth: document.documentElement.scrollWidth,
     h1Count: document.querySelectorAll("h1").length,
@@ -324,7 +325,9 @@ window.addEventListener("load", async () => {
     result.playerShownAgain = [...document.querySelectorAll('.locker-column-name')].some(el => el.textContent === 'Sharon');
     result.joinKeepsProgress = localStorage.getItem(season.storageKey) === progressBefore;
     result.joinNoOverflow = document.documentElement.scrollWidth === document.documentElement.clientWidth;
-    result.namePromptVisible = !document.querySelector('.locker-player-form').closest('details');
+    result.namePanelCollapsed = document.querySelector('.locker-player-form').closest('details') === document.querySelector('.locker-sharing') && !document.querySelector('.locker-sharing').open;
+    document.querySelector('.locker-sharing').open = true;
+    result.namePanelReopens = document.querySelector('.locker-nickname').getBoundingClientRect().height > 0;
     const joinedButton = document.querySelector('.locker-status-toggle');
     const beforeJoinedTap = joinedButton.textContent;
     joinedButton.click();
@@ -414,6 +417,7 @@ test("live static tracker works at 320px in a real browser", async (context) => 
     assert.equal(audit.unnamedBlocked, true);
     assert.equal(audit.unsavedNameBlocked, true);
     assert.equal(audit.unnamedResetBlocked, true);
+    assert.equal(audit.firstTimeNameVisible, true);
     assert.equal(audit.defaultStatusAll, true);
     assert.equal(audit.defaultList, true);
     assert.equal(audit.sharingCollapsed, true);
@@ -487,7 +491,7 @@ test("live static tracker works at 320px in a real browser", async (context) => 
     assert.equal(audit.allNumbersHidden, true);
     assert.equal(audit.missingKelperAdded, true);
     assert.equal(audit.playerSetupError, undefined);
-    for (const check of ['simplePlayerJoined', 'everyoneAutomatic', 'playerHidden', 'playerShownAgain', 'joinKeepsProgress', 'joinNoOverflow', 'namePromptVisible', 'joinUnlocksEditing']) assert.equal(audit[check], true, check);
+    for (const check of ['simplePlayerJoined', 'everyoneAutomatic', 'playerHidden', 'playerShownAgain', 'joinKeepsProgress', 'joinNoOverflow', 'namePanelCollapsed', 'namePanelReopens', 'joinUnlocksEditing']) assert.equal(audit[check], true, check);
   } finally {
     await new Promise((resolve) => server.close(resolve));
     await rm(profile, { recursive: true, force: true });

@@ -1,7 +1,7 @@
 window.SPRITE_CATALOGS = {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-mini-season",
-  "assetVersion": "20261102-2",
+  "assetVersion": "20261102-3",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -14,7 +14,7 @@ window.SPRITE_CATALOGS = {
       "legacyStorageKeys": [],
       "updatedDate": "November 2, 2026",
       "patch": "v43.00",
-      "assetVersion": "20261102-2",
+      "assetVersion": "20261102-3",
       "familyOrder": [
         "Halfpeel'd",
         "Re-Pete",
@@ -36,13 +36,12 @@ window.SPRITE_CATALOGS = {
         "Cursed"
       ],
       "whatsNew": {
-        "title": "Player Name comes first",
-        "intro": "Save your name before updating your locker.",
+        "title": "More room for your Sprite list",
+        "intro": "Player setup tucks away once you’ve joined.",
         "items": [
-          "Sprite progress stays read-only until you save a valid Player Name with Save & join.",
-          "Tapping a locked status takes you to the Player Name prompt without changing your progress.",
-          "Restore, reset, and Sprite reward actions also require your saved Player Name.",
-          "Your saved name continues across seasons; existing progress is preserved."
+          "After saving your Player Name, its section moves into the collapsed Players & sharing settings.",
+          "Open settings anytime to view or change your saved name.",
+          "First-time players still see the required name prompt above the list; saved progress and sharing are unchanged."
         ]
       },
       "unlockCodes": [],
