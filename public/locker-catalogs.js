@@ -736,5 +736,108 @@ export default {
         ]
       ]
     ]
+  },
+  "74e983bf4906e9b4": {
+    "season": "chapter-7-mini-season",
+    "families": [
+      [
+        "Halfpeel'd",
+        [
+          "Base",
+          "Fortune",
+          "Cursed"
+        ]
+      ],
+      [
+        "Re-Pete",
+        [
+          "Base",
+          "Fortune",
+          "Cursed"
+        ]
+      ],
+      [
+        "Barry O'Fish",
+        [
+          "Base",
+          "Fortune",
+          "Cursed"
+        ]
+      ],
+      [
+        "Chester",
+        [
+          "Base",
+          "Fortune",
+          "Cursed"
+        ]
+      ],
+      [
+        "Exmarks",
+        [
+          "Base",
+          "Fortune",
+          "Cursed"
+        ]
+      ],
+      [
+        "Wayfinder",
+        [
+          "Base",
+          "Fortune",
+          "Cursed"
+        ]
+      ],
+      [
+        "Kelper",
+        [
+          "Base",
+          "Fortune",
+          "Cursed"
+        ]
+      ],
+      [
+        "Sweet Dreams",
+        [
+          "Base"
+        ]
+      ],
+      [
+        "Lil' Squibbly",
+        [
+          "Base",
+          "Fortune",
+          "Cursed"
+        ]
+      ],
+      [
+        "Lil' Flacko",
+        [
+          "Base",
+          "Fortune",
+          "Cursed"
+        ]
+      ],
+      [
+        "Lil' Uzi Vert Jr.",
+        [
+          "Cursed"
+        ]
+      ],
+      [
+        "Plundarrgh",
+        [
+          "Base",
+          "Fortune",
+          "Cursed"
+        ]
+      ],
+      [
+        "Transponder Snail",
+        [
+          "Base"
+        ]
+      ]
+    ]
   }
 };

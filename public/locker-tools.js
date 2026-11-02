@@ -1,6 +1,6 @@
-import catalogs from './locker-catalogs.js?v=20261101-2';
-import { SHARE_ORIGIN, sharedLockerId, publishSharedSnapshot, searchPlayers } from './locker-sharing.js?v=20261101-2';
-import { createLockerSync } from './locker-state.js?v=20261101-2';
+import catalogs from './locker-catalogs.js?v=20261101-3';
+import { SHARE_ORIGIN, sharedLockerId, publishSharedSnapshot, searchPlayers } from './locker-sharing.js?v=20261101-3';
+import { createLockerSync } from './locker-state.js?v=20261101-3';
 let backgroundSync;
 export function startLockerBackground(catalogs) {
   if (!backgroundSync) backgroundSync = createLockerSync(catalogs, { makeSnapshot, encodeSnapshot, decodeSnapshot });
@@ -381,7 +381,10 @@ export function createLockerTools(host) {
       row.className = "locker-list-row"; row.setAttribute("role", "listitem");
       const identity = document.createElement("div"); identity.className = "locker-sprite-name";
       const image = document.createElement("img"); image.src = options.imageFor(family.name, variant); image.alt = ""; image.loading = "lazy"; image.width = 42; image.height = 42;
-      const text = document.createElement("span"); const strong = document.createElement("strong"); strong.textContent = family.name;
+      const text = document.createElement("span"); const strong = document.createElement("strong");
+      const gameNumber = options.season.gameNumbers?.[key];
+      strong.textContent = `${Number.isSafeInteger(gameNumber) ? `#${gameNumber} · ` : ''}${family.name}`;
+      if (Number.isSafeInteger(gameNumber)) { row.dataset.gameNumber = String(gameNumber); strong.title = `In-game catalog number ${gameNumber}`; }
       const small = document.createElement("small"); small.textContent = variant; text.append(strong, small); identity.append(image, text); row.append(identity);
       for (const [index, status] of [mine, ...statuses].entries()) {
         const badge = document.createElement(index === 0 ? 'button' : 'span'); badge.className = `locker-friend-status ${index === 0 ? 'locker-my-status locker-status-toggle' : ''} state-${status ?? 'unknown'}`; badge.textContent = statusName(status);

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-mini-season",
-  "assetVersion": "20261101-2",
+  "assetVersion": "20261101-3",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -14,7 +14,7 @@
       "legacyStorageKeys": [],
       "updatedDate": "November 1, 2026",
       "patch": "v43.00",
-      "assetVersion": "20261101-2",
+      "assetVersion": "20261101-3",
       "familyOrder": [
         "Halfpeel'd",
         "Re-Pete",
@@ -36,12 +36,12 @@
         "Cursed"
       ],
       "whatsNew": {
-        "title": "Cursed variants added",
-        "intro": "The tracker now includes the 10 Cursed entries you identified in game.",
+        "title": "33 entries, with verified in-game numbers",
+        "intro": "Cursed Kelper fills the missing checklist entry.",
         "items": [
-          "Added Cursed Halfpeel'd, Re-Pete, Barry O'Fish, Wayfinder, Chester, Exmarks, Lil' Squibbly, Lil' Flacko, Lil' Uzi Vert Jr., and Plundarrgh.",
-          "Variants now appear as Base, Fortune, then Cursed, without catalog numbers in names.",
-          "Your existing progress is preserved. These additions bring the checklist to 32 entries; one entry in the game's reported 33 total remains unidentified."
+          "Added Cursed Kelper and its artwork, bringing the list to 33 Sprite entries.",
+          "The ten catalog numbers confirmed from your PlayStation list are now shown beside their Sprites; unverified numbers are left blank.",
+          "Base, Fortune, Cursed order and all existing saved progress are preserved."
         ]
       },
       "unlockCodes": [],
@@ -106,7 +106,8 @@
           "rarity": "Epic",
           "variants": [
             "Base",
-            "Fortune"
+            "Fortune",
+            "Cursed"
           ]
         },
         {
@@ -175,7 +176,19 @@
           "Lil' Uzi Vert Jr.": 43,
           "Plundarrgh": 51
         },
-        "note": "Displayed in the in-game catalog; availability may be time-gated. These user-requested entries override third-party unreleased flags. Numbers are reference metadata only and are not displayed."
+        "note": "The 33-entry checklist includes in-game collection entries; availability may be time-gated. gameNumbers contains only the ten user-confirmed numbers. No additional numbers are inferred from spacing, website order, or image filenames."
+      },
+      "gameNumbers": {
+        "Halfpeel'd::Cursed": 3,
+        "Re-Pete::Cursed": 7,
+        "Barry O'Fish::Cursed": 11,
+        "Wayfinder::Cursed": 15,
+        "Chester::Cursed": 19,
+        "Exmarks::Cursed": 27,
+        "Lil' Squibbly::Cursed": 31,
+        "Lil' Flacko::Cursed": 39,
+        "Lil' Uzi Vert Jr.::Cursed": 43,
+        "Plundarrgh::Cursed": 51
       }
     },
     {
