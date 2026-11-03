@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-mini-season",
-  "assetVersion": "20261102-4",
+  "assetVersion": "20261102-5",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -14,7 +14,7 @@
       "legacyStorageKeys": [],
       "updatedDate": "November 2, 2026",
       "patch": "v43.00",
-      "assetVersion": "20261102-4",
+      "assetVersion": "20261102-5",
       "familyOrder": [
         "Halfpeel'd",
         "Re-Pete",
@@ -36,11 +36,11 @@
         "Cursed"
       ],
       "whatsNew": {
-        "title": "Player list cleanup",
-        "intro": "The test account no longer appears in other players’ comparisons.",
+        "title": "Choose your locker view",
+        "intro": "Compare Lockers still opens first.",
         "items": [
-          "Hidden Toby CHAT GPT Tester and the older Toby Tester account from player lists and saved comparisons.",
-          "Tester locker data and everyone’s saved Sprite progress are preserved."
+          "Individual Locker and Compact are available again.",
+          "All views use the same saved Sprite progress."
         ]
       },
       "unlockCodes": [],

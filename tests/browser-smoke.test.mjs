@@ -43,7 +43,14 @@ window.addEventListener("load", async () => {
   localStorage.setItem('sprite-locker-progress-chapter-7-season-4', JSON.stringify({ 'Adventure::Base': { acquired: true, mastered: true } }));
   for (let i = 0; i < 100 && !document.querySelector('.locker-sharing'); i++) await new Promise(resolve => setTimeout(resolve, 20));
   const defaultList = !document.querySelector('#locker-tools-host').hidden && document.querySelector('#sprite-list').hidden;
-  const listOnly = !document.querySelector('.view-switch') && !document.querySelector('#compact-view, #classic-view');
+  const viewButton = mode => document.querySelector('[data-locker-view="' + mode + '"]');
+  const compareDefault = viewButton('list').getAttribute('aria-pressed') === 'true';
+  viewButton('classic').click();
+  const classicRestored = !document.querySelector('#sprite-list').hidden && !!document.querySelector('.classic-sprite-card') && document.querySelector('#locker-tools-host').hidden;
+  viewButton('compact').click();
+  const compactRestored = !document.querySelector('#sprite-list').hidden && !!document.querySelector('.compact-sprite-toggle');
+  viewButton('list').click();
+  const viewSwitchWorks = compareDefault && classicRestored && compactRestored && document.querySelector('#sprite-list').hidden && !document.querySelector('#locker-tools-host').hidden;
   const sharingCollapsed = !document.querySelector('.locker-sharing').open;
   const firstTimeNameVisible = !document.querySelector('.locker-player-form').closest('details');
   const friendControlsGrouped = ['.locker-comparison', '.locker-count', '.locker-party-count', '.locker-edit-hint', '.locker-scroll-hint'].every(selector => document.querySelector(selector).closest('details.locker-sharing'));
@@ -97,7 +104,7 @@ window.addEventListener("load", async () => {
     friendControlsGrouped,
     showOutsideCollapsed,
     missingWithoutFriends,
-    listOnly,
+    viewSwitchWorks,
     stickyControls: getComputedStyle(document.querySelector(".sticky-controls")).position === "sticky",
     stickyTopAfterScroll,
     masteredImpliesAcquired: savedInitial[name + '::' + variant].mastered && savedInitial[name + '::' + variant].acquired,
@@ -426,7 +433,7 @@ test("live static tracker works at 320px in a real browser", async (context) => 
     assert.equal(audit.showOutsideCollapsed, true);
     assert.equal(audit.missingWithoutFriends, true);
     assert.equal(audit.missingRegardlessOfFriend, true);
-    assert.equal(audit.listOnly, true);
+    assert.equal(audit.viewSwitchWorks, true);
     assert.equal(audit.rewardsDefaultOther, true);
     assert.equal(audit.stickyControls, true);
     assert.equal(audit.stickyTopAfterScroll, 0);

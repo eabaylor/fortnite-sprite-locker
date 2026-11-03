@@ -130,7 +130,8 @@ test("server renders the real tracker with current season and all cards", async 
   assert.match(html, /Open checklist options/);
   assert.match(html, /What’s New/);
   assert.doesNotMatch(html, /class="admin-codes-trigger"/);
-  assert.doesNotMatch(html, /class="view-switch"/);
+  assert.match(html, /class="view-switch"/);
+  assert.match(html, /aria-pressed="true"[^>]*>Compare Lockers/);
   assert.doesNotMatch(html, /Sprite Codes/);
   assert.doesNotMatch(html, /Other Codes/);
   assert.doesNotMatch(html, /class="whats-new-trigger"/);

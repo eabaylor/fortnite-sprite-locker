@@ -6,7 +6,7 @@ const FOCUSABLE_SELECTOR = 'a[href], button:not([disabled]), input:not([disabled
 let season = CATALOGS.find((item) => item.seasonId === BUNDLE.defaultSeasonId)
   || CATALOGS[0];
 let filter = "all";
-const viewMode = "list";
+let viewMode = "list";
 let lockerTools = null;
 let lockerToolsLoading = false;
 let requirePlayerName = () => false;
@@ -738,8 +738,14 @@ document.querySelector("#sprite-list").addEventListener("click", (event) => {
   render();
 });
 
-document.querySelector("#compare-lockers-trigger").addEventListener("click", () => {
-  document.querySelector("#clear-filters").click();
+const viewButtons = document.querySelectorAll("[data-locker-view]");
+for (const button of viewButtons) button.addEventListener("click", () => {
+  viewMode = button.dataset.lockerView;
+  for (const option of viewButtons) {
+    const selected = option === button;
+    option.classList.toggle("active", selected);
+    option.setAttribute("aria-pressed", String(selected));
+  }
   render();
 });
 

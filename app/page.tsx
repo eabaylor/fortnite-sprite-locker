@@ -188,7 +188,7 @@ export default function Home() {
   const [selectedSprites, setSelectedSprites] = useState<string[]>([]);
   const [selectedVariants, setSelectedVariants] = useState<string[]>([]);
   const [query, setQuery] = useState("");
-  const [viewMode] = useState<ViewMode>("list");
+  const [viewMode, setViewMode] = useState<ViewMode>("list");
   const [ready, setReady] = useState(false);
   const [whatsNewOpen, setWhatsNewOpen] = useState(false);
   const [codeGuideOpen, setCodeGuideOpen] = useState(false);
@@ -571,7 +571,11 @@ export default function Home() {
             <MultiSelectFilter label="Sprites" items={sprites.map((sprite) => sprite.name)} selected={selectedSprites} onToggle={toggleSpriteFilter} onClear={() => setSelectedSprites([])} className="sprite-filter" />
             <MultiSelectFilter label="Variants" items={variants} selected={selectedVariants} onToggle={toggleVariantFilter} onClear={() => setSelectedVariants([])} className="variant-filter" />
             <button className="clear-filters" onClick={clearFilters}>Clear filters</button>
-            <button className="compare-lockers-trigger" type="button" onClick={clearFilters}>Compare Lockers</button>
+            <div className="view-switch" role="group" aria-label="Locker view">
+              {([["list", "Compare Lockers"], ["classic", "Individual Locker"], ["compact", "Compact"]] as const).map(([mode, label]) => (
+                <button key={mode} type="button" aria-pressed={viewMode === mode} className={viewMode === mode ? "active" : ""} onClick={() => setViewMode(mode)}>{label}</button>
+              ))}
+            </div>
             {!!(unlockCodes.length || otherAdminCodes.length) && (
               <button className="admin-codes-trigger" type="button" onClick={() => openCodeGuide()}>
                 Rewards <span>{unlockCodes.length + otherAdminCodes.length}</span>
