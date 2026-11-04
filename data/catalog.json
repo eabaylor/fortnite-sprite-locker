@@ -7,17 +7,17 @@
   "imageBase": "seasons/chapter-7-mini-season/sprites",
   "storageKey": "sprite-locker-progress-chapter-7-mini-season",
   "legacyStorageKeys": [],
-  "updatedDate": "November 2, 2026",
+  "updatedDate": "November 4, 2026",
   "patch": "v43.00",
-  "assetVersion": "20261102-5",
+  "assetVersion": "20261104-1",
   "familyOrder": [
     "Halfpeel'd",
     "Re-Pete",
     "Barry O'Fish",
-    "Chester",
-    "Exmarks",
     "Wayfinder",
+    "Chester",
     "Kelper",
+    "Exmarks",
     "Sweet Dreams",
     "Lil' Squibbly",
     "Lil' Flacko",
@@ -31,11 +31,12 @@
     "Cursed"
   ],
   "whatsNew": {
-    "title": "Choose your locker view",
-    "intro": "Compare Lockers still opens first.",
+    "title": "Sprite order updated",
+    "intro": "The tracker follows the verified parts of the in-game collection order.",
     "items": [
-      "Individual Locker and Compact are available again.",
-      "All views use the same saved Sprite progress."
+      "Wayfinder now comes before Chester, and Kelper comes before Exmarks.",
+      "Sweet Dreams stays in its previous position pending verification.",
+      "All 33 entries and saved progress are unchanged."
     ]
   },
   "unlockCodes": [],

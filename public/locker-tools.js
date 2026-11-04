@@ -1,6 +1,6 @@
-import catalogs from './locker-catalogs.js?v=20261102-5';
-import { SHARE_ORIGIN, sharedLockerId, publishSharedSnapshot, searchPlayers, directoryNickname, isSuppressedPlayer } from './locker-sharing.js?v=20261102-5';
-import { createLockerSync, PROFILE_KEY } from './locker-state.js?v=20261102-5';
+import catalogs from './locker-catalogs.js?v=20261104-1';
+import { SHARE_ORIGIN, sharedLockerId, publishSharedSnapshot, searchPlayers, directoryNickname, isSuppressedPlayer } from './locker-sharing.js?v=20261104-1';
+import { createLockerSync, PROFILE_KEY } from './locker-state.js?v=20261104-1';
 export function requirePlayerName() {
   try {
     const profile = JSON.parse(localStorage.getItem(PROFILE_KEY) || 'null');
