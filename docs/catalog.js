@@ -1,7 +1,7 @@
 window.SPRITE_CATALOGS = {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-mini-season",
-  "assetVersion": "20261105-1",
+  "assetVersion": "20261105-2",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -14,7 +14,7 @@ window.SPRITE_CATALOGS = {
       "legacyStorageKeys": [],
       "updatedDate": "November 5, 2026",
       "patch": "v43.00",
-      "assetVersion": "20261105-1",
+      "assetVersion": "20261105-2",
       "familyOrder": [
         "Halfpeel'd",
         "Re-Pete",
@@ -23,9 +23,9 @@ window.SPRITE_CATALOGS = {
         "Chester",
         "Kelper",
         "Exmarks",
-        "Sweet Dreams",
         "Lil' Squibbly",
         "Lil' Flacko",
+        "Lil' Uzi Vert Jr.",
         "Plundarrgh",
         "Transponder Snail"
       ],
@@ -34,12 +34,11 @@ window.SPRITE_CATALOGS = {
         "Fortune"
       ],
       "whatsNew": {
-        "title": "Released Sprites only",
-        "intro": "The checklist now excludes unavailable entries.",
+        "title": "23 Sprites available",
+        "intro": "The checklist now matches the reported in-game roster.",
         "items": [
-          "Removed all 11 Cursed entries, including Cursed Lil’ Uzi Vert Jr., from the visible checklist.",
-          "22 released entries are currently verified; your reported in-game total of 23 is still being reconciled.",
-          "Previously saved checkmarks for hidden entries are retained in this browser."
+          "Added Lil’ Uzi Vert Jr. and Fortune Lil’ Uzi Vert Jr.",
+          "Sweet Dreams is hidden until it becomes available. Any saved checkmarks are kept."
         ]
       },
       "unlockCodes": [],
@@ -102,13 +101,6 @@ window.SPRITE_CATALOGS = {
           ]
         },
         {
-          "name": "Sweet Dreams",
-          "rarity": "Mythic",
-          "variants": [
-            "Base"
-          ]
-        },
-        {
           "name": "Lil' Squibbly",
           "rarity": "Epic",
           "variants": [
@@ -118,6 +110,14 @@ window.SPRITE_CATALOGS = {
         },
         {
           "name": "Lil' Flacko",
+          "rarity": "Legendary",
+          "variants": [
+            "Base",
+            "Fortune"
+          ]
+        },
+        {
+          "name": "Lil' Uzi Vert Jr.",
           "rarity": "Legendary",
           "variants": [
             "Base",
@@ -172,6 +172,13 @@ window.SPRITE_CATALOGS = {
         "Plundarrgh::Cursed": 51
       },
       "unavailableFamilies": [
+        {
+          "name": "Sweet Dreams",
+          "rarity": "Mythic",
+          "variants": [
+            "Base"
+          ]
+        },
         {
           "name": "Halfpeel'd",
           "rarity": "Rare",
@@ -252,13 +259,13 @@ window.SPRITE_CATALOGS = {
       ],
       "releaseVerification": {
         "date": "2026-11-05",
-        "verifiedEntries": 22,
+        "verifiedEntries": 23,
         "reportedInGameTotal": 23,
         "sources": [
-          "https://fortnite.gg/sprites",
-          "https://www.elementaisfortnite.com.br/en"
+          "User-supplied in-game availability correction, November 5, 2026",
+          "https://www.bouncingball.mobi/spritetracker/data.js?v=20261102b"
         ],
-        "note": "The alternative 23-entry community roster includes unreleased Lil Uzi Base/Fortune and omits Sweet Dreams; do not substitute it without verification."
+        "note": "In-game report confirms Base and Fortune Lil' Uzi Vert Jr. are available and Sweet Dreams is not. Cursed variants remain excluded."
       }
     },
     {
