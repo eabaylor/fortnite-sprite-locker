@@ -65,7 +65,8 @@ const unlockCodes = () => season.unlockCodes || [];
 const otherAdminCodes = () => season.otherAdminCodes || [];
 const unlockFor = (name, variant) => unlockCodes().find((item) => item.rewards.some((reward) => reward.name === name && reward.variant === variant));
 const total = () => sprites().reduce((sum, family) => sum + family.variants.length, 0);
-const activeKeys = () => new Set(sprites().flatMap((family) => family.variants.map((variant) => keyFor(family.name, variant))));
+// Known unavailable entries stay saved but never appear in cards or totals.
+const activeKeys = () => new Set([...sprites(), ...(season.unavailableFamilies || [])].flatMap((family) => family.variants.map((variant) => keyFor(family.name, variant))));
 
 function sanitizeProgress(value) {
   if (!value || typeof value !== "object" || Array.isArray(value)) return {};

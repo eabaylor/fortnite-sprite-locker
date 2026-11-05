@@ -39,6 +39,7 @@ const mime = {
 
 function browserHarness() {
   return `<script>
+localStorage.setItem('sprite-locker-progress-chapter-7-mini-season', JSON.stringify({"Halfpeel'd::Cursed":{acquired:true,mastered:true}}));
 window.addEventListener("load", async () => {
   localStorage.setItem('sprite-locker-progress-chapter-7-season-4', JSON.stringify({ 'Adventure::Base': { acquired: true, mastered: true } }));
   for (let i = 0; i < 100 && !document.querySelector('.locker-sharing'); i++) await new Promise(resolve => setTimeout(resolve, 20));
@@ -62,11 +63,11 @@ window.addEventListener("load", async () => {
   const status = document.querySelector("#status-filter");
   const defaultStatusAll = status.value === "all";
   const rows = [...document.querySelectorAll('.locker-list-row')];
-  const numberedRow = rows.find(row => row.querySelector('.locker-status-toggle').dataset.name === 'Re-Pete' && row.querySelector('.locker-status-toggle').dataset.variant === 'Cursed');
+  const numberedRow = rows.find(row => row.querySelector('.locker-status-toggle').dataset.name === 'Re-Pete' && row.querySelector('.locker-status-toggle').dataset.variant === 'Base');
   const allNumbersHidden = numberedRow?.querySelector('strong').textContent === 'Re-Pete' && rows.every(row => !row.dataset.gameNumber && !/^#\d/.test(row.querySelector('strong').textContent));
-  const missingKelperAdded = rows.some(row => row.querySelector('.locker-status-toggle').dataset.name === 'Kelper' && row.querySelector('.locker-status-toggle').dataset.variant === 'Cursed');
+  const unreleasedExcluded = rows.every(row => row.querySelector('.locker-status-toggle').dataset.variant !== 'Cursed' && row.querySelector('.locker-status-toggle').dataset.name !== "Lil' Uzi Vert Jr.");
   const familyNames = [...new Set(rows.map(row => row.querySelector('.locker-status-toggle').dataset.name))];
-  const sixVariantFamily = window.SPRITE_CATALOGS.seasons[0].families.find(f => f.variants.length === 3).name;
+  const sixVariantFamily = window.SPRITE_CATALOGS.seasons[0].families.find(f => f.variants.length === 2).name;
   const firstVariants = rows.map(row => row.querySelector('.locker-status-toggle')).filter(b => b.dataset.name === sixVariantFamily).map(b => b.dataset.variant);
   const firstButton = rows[0].querySelector('.locker-status-toggle');
   const {name, variant} = firstButton.dataset;
@@ -115,7 +116,8 @@ window.addEventListener("load", async () => {
     familyNames,
     firstVariants,
     allNumbersHidden,
-    missingKelperAdded,
+    unreleasedExcluded,
+    hiddenProgressPreserved: JSON.parse(localStorage.getItem(window.SPRITE_CATALOGS.seasons[0].storageKey))["Halfpeel'd::Cursed"].mastered,
   };
   menu.open = false;
   try {
@@ -289,7 +291,7 @@ window.addEventListener("load", async () => {
   result.codesMobile = codeRect.left >= 0 && codeRect.right <= document.documentElement.clientWidth && document.documentElement.scrollWidth === document.documentElement.clientWidth;
   document.querySelector('#code-guide-close').click();
   seasonPicker.value = window.SPRITE_CATALOGS.defaultSeasonId; seasonPicker.dispatchEvent(new Event('change'));
-  for (let i = 0; i < 100 && document.querySelectorAll('.locker-list-row').length !== 33; i++) await new Promise(resolve => setTimeout(resolve, 20));
+  for (let i = 0; i < 100 && document.querySelectorAll('.locker-list-row').length !== 22; i++) await new Promise(resolve => setTimeout(resolve, 20));
   result.seasonProgressPreserved = localStorage.getItem(window.SPRITE_CATALOGS.seasons[0].storageKey) === currentProgressBefore;
   result.newSeasonRewardsHidden = document.querySelector('#admin-codes-trigger').hidden;
   status.value = 'not-mastered'; status.dispatchEvent(new Event('change'));
@@ -495,9 +497,10 @@ test("live static tracker works at 320px in a real browser", async (context) => 
     assert.equal(audit.archivedProgressVisible, true);
     assert.equal(audit.seasonProgressPreserved, true);
     assert.equal(audit.newSeasonRewardsHidden, true);
-    assert.deepEqual(audit.firstVariants, ["Base", "Fortune", "Cursed"]);
+    assert.deepEqual(audit.firstVariants, ["Base", "Fortune"]);
     assert.equal(audit.allNumbersHidden, true);
-    assert.equal(audit.missingKelperAdded, true);
+    assert.equal(audit.unreleasedExcluded, true);
+    assert.equal(audit.hiddenProgressPreserved, true);
     assert.equal(audit.playerSetupError, undefined);
     for (const check of ['simplePlayerJoined', 'everyoneAutomatic', 'testerSuppressed', 'playerHidden', 'playerShownAgain', 'joinKeepsProgress', 'joinNoOverflow', 'namePanelCollapsed', 'namePanelReopens', 'joinUnlocksEditing']) assert.equal(audit[check], true, check);
   } finally {

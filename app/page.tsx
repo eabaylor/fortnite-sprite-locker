@@ -44,6 +44,7 @@ type SeasonCatalog = {
   unlockCodes?: UnlockCode[];
   otherAdminCodes?: OtherAdminCode[];
   families: SpriteFamily[];
+  unavailableFamilies?: SpriteFamily[];
 };
 type SpriteState = { acquired: boolean; mastered: boolean };
 type Progress = Record<string, SpriteState>;
@@ -87,7 +88,7 @@ const orderedFamilies = (season: SeasonCatalog) => season.families.map((family) 
   variants: [...family.variants].sort((left, right) => compareByOrder(season.variantOrder, left, right)),
 })).sort((left, right) => compareByOrder(season.familyOrder, left.name, right.name));
 const activeKeysFor = (season: SeasonCatalog) => new Set(
-  season.families.flatMap((sprite) => sprite.variants.map((variant) => keyFor(sprite.name, variant))),
+  [...season.families, ...(season.unavailableFamilies ?? [])].flatMap((sprite) => sprite.variants.map((variant) => keyFor(sprite.name, variant))),
 );
 
 function imageFor(season: SeasonCatalog, name: string, variant: string) {

@@ -36,15 +36,16 @@ async function render() {
 test("catalog has unique active entries and matching artwork", async () => {
   assert.equal(catalog.seasonId, "chapter-7-mini-season");
   assert.equal(catalog.storageKey, "sprite-locker-progress-chapter-7-mini-season");
-  assert.equal(entries.length, 33);
-  assert.equal(entries.filter(({variant}) => variant === 'Cursed').length, 11);
+  assert.equal(entries.length, 22);
+  assert.equal(entries.filter(({variant}) => variant === 'Cursed').length, 0);
+  assert.equal(catalog.unavailableFamilies.flatMap(f => f.variants).length, 11);
   assert.equal(catalog.gameNumbers["Re-Pete::Cursed"], 7);
   assert.equal(catalog.gameNumbers["Kelper::Cursed"], undefined, 'Unverified numbers must not be guessed');
   assert.equal(Object.keys(catalog.gameNumbers).length, 10);
-  assert.equal(catalog.families.find(({name}) => name === "Lil' Uzi Vert Jr.").variants.join(','), 'Cursed');
+  assert.equal(catalog.families.find(({name}) => name === "Lil' Uzi Vert Jr."), undefined);
   assert.ok(catalog.whatsNew.items.length >= 1 && catalog.whatsNew.items.length <= 4);
-  assert.deepEqual(catalog.familyOrder, ["Halfpeel'd","Re-Pete","Barry O'Fish","Wayfinder","Chester","Kelper","Exmarks","Sweet Dreams","Lil' Squibbly","Lil' Flacko","Lil' Uzi Vert Jr.","Plundarrgh","Transponder Snail"]);
-  assert.deepEqual(catalog.variantOrder, ["Base", "Fortune", "Cursed"]);
+  assert.deepEqual(catalog.familyOrder, ["Halfpeel'd","Re-Pete","Barry O'Fish","Wayfinder","Chester","Kelper","Exmarks","Sweet Dreams","Lil' Squibbly","Lil' Flacko","Plundarrgh","Transponder Snail"]);
+  assert.deepEqual(catalog.variantOrder, ["Base", "Fortune"]);
   assert.deepEqual(new Set(catalog.familyOrder), new Set(catalog.families.map(({ name }) => name)));
   assert.deepEqual(new Set(catalog.variantOrder), new Set(catalog.families.flatMap(({ variants }) => variants)));
 
@@ -135,7 +136,7 @@ test("server renders the real tracker with current season and all cards", async 
   assert.doesNotMatch(html, /Sprite Codes/);
   assert.doesNotMatch(html, /Other Codes/);
   assert.doesNotMatch(html, /class="whats-new-trigger"/);
-  assert.equal((html.match(/class="sprite-card /g) ?? []).length, 33);
+  assert.equal((html.match(/class="sprite-card /g) ?? []).length, 22);
   const familyNames = [...html.matchAll(/<h3>([^<]+)<\/h3>/g)].map((match) => match[1].replaceAll('&#x27;', "'"));
   assert.deepEqual(familyNames, catalog.familyOrder);
   assert.doesNotMatch(html, /Your site is taking shape|Building your site/);

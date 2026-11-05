@@ -2,9 +2,21 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { readFile } from 'node:fs/promises';
 import { isSuppressedPlayer } from '../public/locker-sharing.js';
+import snapshotCatalogs from '../public/locker-catalogs.js';
 import { makeSnapshot, encodeSnapshot, decodeSnapshot, matchesComparison, matchesGroupComparison, addFriendSnapshot, friendCollectionCounts, nextLockerAction, requirePlayerName } from "../public/locker-tools.js";
 
 const season = { seasonId: "test-season", families: [{ name: "Honey", variants: ["Base", "Gold"] }, { name: "One Wish Willow", variants: ["Base"] }] };
+
+test('older 33-entry shared lockers remain readable after the release-only correction', async () => {
+  const current = JSON.parse(await readFile(new URL('../data/catalog.json', import.meta.url), 'utf8'));
+  const old = Object.values(snapshotCatalogs).find(c => c.season === current.seasonId && c.families.reduce((n, f) => n + f[1].length, 0) === 33);
+  assert.ok(old, 'The old snapshot dictionary must remain immutable');
+  const historical = { seasonId: old.season, families: old.families.map(([name, variants]) => ({ name, variants })) };
+  const progress = { "Halfpeel'd::Cursed": { acquired: true, mastered: true }, "Halfpeel'd::Base": { acquired: true, mastered: false } };
+  const friend = decodeSnapshot(encodeSnapshot(makeSnapshot(historical, progress, 'Eric')));
+  assert.equal(friend.entries.get("Halfpeel'd::Cursed"), 2);
+  assert.deepEqual(friendCollectionCounts(friend, current), { acquired: 1, mastered: 0, total: 22, unknown: 0 });
+});
 
 test('only the specified tester identities are suppressed, even after a rename', () => {
   assert.equal(isSuppressedPlayer({ name: '  Toby CHAT GPT Tester  ' }), true);
