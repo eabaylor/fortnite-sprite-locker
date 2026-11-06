@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-mini-season",
-  "assetVersion": "20261105-3",
+  "assetVersion": "20261106-1",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -12,9 +12,9 @@
       "imageBase": "seasons/chapter-7-mini-season/sprites",
       "storageKey": "sprite-locker-progress-chapter-7-mini-season",
       "legacyStorageKeys": [],
-      "updatedDate": "November 5, 2026",
+      "updatedDate": "November 6, 2026",
       "patch": "v43.00",
-      "assetVersion": "20261105-3",
+      "assetVersion": "20261106-1",
       "familyOrder": [
         "Halfpeel'd",
         "Re-Pete",
@@ -23,6 +23,7 @@
         "Chester",
         "Kelper",
         "Exmarks",
+        "Sweet Dreams",
         "Lil' Squibbly",
         "Lil' Flacko",
         "Lil' Uzi Vert Jr.",
@@ -34,11 +35,11 @@
         "Fortune"
       ],
       "whatsNew": {
-        "title": "Locker sharing fixed",
-        "intro": "Save & join now works when the tracker catalog is newer than the sharing service.",
+        "title": "Sweet Dreams is back",
+        "intro": "Sweet Dreams has been documented in live Treasure Hunters matches.",
         "items": [
-          "New joins, short links, and live locker updates no longer require matching catalog versions.",
-          "Your 23-Sprite checklist and saved progress are unchanged."
+          "Restored the Mythic Sweet Dreams Sprite to the checklist with its original artwork.",
+          "The tracker now shows 24 entries. Any previously saved Sweet Dreams checkmark is restored automatically."
         ]
       },
       "unlockCodes": [],
@@ -98,6 +99,13 @@
           "variants": [
             "Base",
             "Fortune"
+          ]
+        },
+        {
+          "name": "Sweet Dreams",
+          "rarity": "Mythic",
+          "variants": [
+            "Base"
           ]
         },
         {
@@ -172,13 +180,6 @@
         "Plundarrgh::Cursed": 51
       },
       "unavailableFamilies": [
-        {
-          "name": "Sweet Dreams",
-          "rarity": "Mythic",
-          "variants": [
-            "Base"
-          ]
-        },
         {
           "name": "Halfpeel'd",
           "rarity": "Rare",
@@ -258,14 +259,14 @@
         }
       ],
       "releaseVerification": {
-        "date": "2026-11-05",
-        "verifiedEntries": 23,
-        "reportedInGameTotal": 23,
+        "date": "2026-11-06",
+        "trackerEntries": 24,
         "sources": [
           "User-supplied in-game availability correction, November 5, 2026",
-          "https://www.bouncingball.mobi/spritetracker/data.js?v=20261102b"
+          "https://www.destructoid.com/how-to-get-sweet-dreams-sprite-in-fortnite-treasure-hunters/",
+          "https://fortnite.gg/sprites"
         ],
-        "note": "In-game report confirms Base and Fortune Lil' Uzi Vert Jr. are available and Sweet Dreams is not. Cursed variants remain excluded."
+        "note": "Sweet Dreams is documented in live matches. Retained the previously reported in-game Lil' Uzi Vert Jr. entries; third-party availability reports for those two entries disagree. Cursed variants remain excluded."
       }
     },
     {

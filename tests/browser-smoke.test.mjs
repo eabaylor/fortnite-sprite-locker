@@ -58,7 +58,7 @@ window.addEventListener("load", async () => {
   const showOutsideCollapsed = !document.querySelector('.locker-compare-filter').closest('details') && !document.querySelector('.locker-compare-filter').disabled;
   const initialShow = document.querySelector('.locker-compare-filter');
   initialShow.value = 'im-missing'; initialShow.dispatchEvent(new Event('change'));
-  const missingWithoutFriends = document.querySelectorAll('.locker-list-row').length === window.SPRITE_CATALOGS.seasons[0].families.reduce((n, f) => n + f.variants.length, 0);
+  const missingWithoutFriends = document.querySelectorAll('.locker-list-row').length === window.SPRITE_CATALOGS.seasons[0].families.reduce((n, f) => n + f.variants.length, 0) - 1 && !document.querySelector('.locker-status-toggle[data-name="Sweet Dreams"]');
   initialShow.value = 'all'; initialShow.dispatchEvent(new Event('change'));
   const status = document.querySelector("#status-filter");
   const defaultStatusAll = status.value === "all";
@@ -66,7 +66,11 @@ window.addEventListener("load", async () => {
   const numberedRow = rows.find(row => row.querySelector('.locker-status-toggle').dataset.name === 'Re-Pete' && row.querySelector('.locker-status-toggle').dataset.variant === 'Base');
   const allNumbersHidden = numberedRow?.querySelector('strong').textContent === 'Re-Pete' && rows.every(row => !row.dataset.gameNumber && !/^#\d/.test(row.querySelector('strong').textContent));
   const statuses = rows.map(row => row.querySelector('.locker-status-toggle').dataset);
-  const unreleasedExcluded = statuses.every(({ variant, name }) => variant !== 'Cursed' && name !== "Sweet Dreams");
+  const unreleasedExcluded = statuses.every(({ variant }) => variant !== 'Cursed');
+  const sweetDreamsRestored = rows.some(row => {
+    const button = row.querySelector('.locker-status-toggle');
+    return button.dataset.name === 'Sweet Dreams' && button.dataset.variant === 'Base' && button.textContent.trim() === 'Mastered';
+  });
   const uziVariants = statuses.filter(({ name }) => name === "Lil' Uzi Vert Jr.").map(({ variant }) => variant);
   const familyNames = [...new Set(rows.map(row => row.querySelector('.locker-status-toggle').dataset.name))];
   const sixVariantFamily = window.SPRITE_CATALOGS.seasons[0].families.find(f => f.variants.length === 2).name;
@@ -119,6 +123,7 @@ window.addEventListener("load", async () => {
     firstVariants,
     allNumbersHidden,
     unreleasedExcluded,
+    sweetDreamsRestored,
     uziVariants,
     hiddenProgressPreserved: ["Halfpeel'd::Cursed", "Sweet Dreams::Base"].every(key => JSON.parse(localStorage.getItem(window.SPRITE_CATALOGS.seasons[0].storageKey))[key]?.mastered),
   };
@@ -152,12 +157,12 @@ window.addEventListener("load", async () => {
     const totalVariants = season.families.reduce((n, f) => n + f.variants.length, 0);
     result.friendCounts = initialFriendHeader.querySelector('.locker-column-count.acquired').textContent === 'Acquired 1/' + totalVariants && initialFriendHeader.querySelector('.locker-column-count.mastered').textContent === 'Mastered 0/' + totalVariants;
     const ownHeader = document.querySelector('.locker-player-heading');
-    result.ownHeaderCounts = ownHeader.querySelector('.locker-column-count.acquired').textContent === 'Acquired 1/' + totalVariants && ownHeader.querySelector('.locker-column-count.mastered').textContent === 'Mastered 1/' + totalVariants;
+    result.ownHeaderCounts = ownHeader.querySelector('.locker-column-count.acquired').textContent === 'Acquired 2/' + totalVariants && ownHeader.querySelector('.locker-column-count.mastered').textContent === 'Mastered 2/' + totalVariants;
     result.ownStatusesTappable = document.querySelectorAll('.locker-list-row button.locker-status-toggle').length === result.listCount;
     result.friendsReadOnly = [...document.querySelectorAll('.locker-friend-status:not(.locker-my-status)')].every(el => el.tagName !== 'BUTTON');
     const comparisonFilter = document.querySelector('.locker-compare-filter');
     comparisonFilter.value = 'im-missing'; comparisonFilter.dispatchEvent(new Event('change'));
-    result.missingRegardlessOfFriend = document.querySelectorAll('.locker-list-row').length === totalVariants - 1;
+    result.missingRegardlessOfFriend = document.querySelectorAll('.locker-list-row').length === totalVariants - 2;
     comparisonFilter.value = 'i-need';
     comparisonFilter.dispatchEvent(new Event('change'));
     result.iNeedCount = document.querySelectorAll('.locker-list-row').length;
@@ -186,7 +191,7 @@ window.addEventListener("load", async () => {
     targetFilter.value = '2'; targetFilter.dispatchEvent(new Event('change'));
     const chrisNeeds = document.querySelectorAll('.locker-list-row').length;
     targetFilter.value = '0'; targetFilter.dispatchEvent(new Event('change'));
-    result.specificFriendFilter = chrisNeeds === 2 && document.querySelectorAll('.locker-list-row').length === 1;
+    result.specificFriendFilter = chrisNeeds === 3 && document.querySelectorAll('.locker-list-row').length === 2;
     targetFilter.value = '*'; targetFilter.dispatchEvent(new Event('change'));
     const filter = document.querySelector('.locker-compare-filter'); filter.value = 'all'; filter.dispatchEvent(new Event('change'));
     result.sixPlayerStatuses = [...document.querySelectorAll('.locker-list-row')].every(row => row.querySelectorAll('.locker-friend-status').length === 6);
@@ -300,7 +305,7 @@ window.addEventListener("load", async () => {
   result.codesMobile = codeRect.left >= 0 && codeRect.right <= document.documentElement.clientWidth && document.documentElement.scrollWidth === document.documentElement.clientWidth;
   document.querySelector('#code-guide-close').click();
   seasonPicker.value = window.SPRITE_CATALOGS.defaultSeasonId; seasonPicker.dispatchEvent(new Event('change'));
-  for (let i = 0; i < 100 && document.querySelectorAll('.locker-list-row').length !== 23; i++) await new Promise(resolve => setTimeout(resolve, 20));
+  for (let i = 0; i < 100 && document.querySelectorAll('.locker-list-row').length !== 24; i++) await new Promise(resolve => setTimeout(resolve, 20));
   result.seasonProgressPreserved = localStorage.getItem(window.SPRITE_CATALOGS.seasons[0].storageKey) === currentProgressBefore;
   result.newSeasonRewardsHidden = document.querySelector('#admin-codes-trigger').hidden;
   status.value = 'not-mastered'; status.dispatchEvent(new Event('change'));
@@ -509,6 +514,7 @@ test("live static tracker works at 320px in a real browser", async (context) => 
     assert.deepEqual(audit.firstVariants, ["Base", "Fortune"]);
     assert.equal(audit.allNumbersHidden, true);
     assert.equal(audit.unreleasedExcluded, true);
+    assert.equal(audit.sweetDreamsRestored, true);
     assert.deepEqual(audit.uziVariants, ["Base", "Fortune"]);
     assert.equal(audit.hiddenProgressPreserved, true);
     assert.equal(audit.playerSetupError, undefined);
