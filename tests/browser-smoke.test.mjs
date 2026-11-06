@@ -215,6 +215,12 @@ window.addEventListener("load", async () => {
       if (url.endsWith('/listing')) { listingEnabled = JSON.parse(init.body).enabled; return Response.json({ listed: listingEnabled, ...(listingEnabled ? { nickname: 'My locker' } : {}) }); }
       if (url.endsWith('/ticket')) return Response.json({ ticket: shortId });
       if (url.endsWith('/pause')) { pausedOnline = true; return Response.json({ revision: 2 }); }
+      if (['POST', 'PUT'].includes(init?.method)) {
+        const { token } = JSON.parse(init.body);
+        const payload = JSON.parse(atob(token.replaceAll('-', '+').replaceAll('_', '/')));
+        // Model a deployed service that does not know the browser's new dictionary.
+        if (payload.v !== 1) return Response.json({ error: 'This locker snapshot is invalid.' }, { status: 400 });
+      }
       if (init?.method === 'PUT') { liveWrites++; return Response.json({ revision: 1, updatedAt: Date.now() / 1000 }); }
       if (init?.method === 'POST') return Response.json({ id: JSON.parse(init.body || '{}').live ? liveId : shortId, expiresAt: 2000000000, ...(JSON.parse(init.body || '{}').live ? { writeKey: 'a'.repeat(43), revision: 0, updatedAt: Date.now() / 1000 } : {}) });
       reads++;

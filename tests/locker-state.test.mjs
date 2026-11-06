@@ -98,7 +98,12 @@ test('one player name joins seasons, discovers everyone, and remembers hidden pl
     if (url.endsWith('/listing')) return Response.json({ listed: true, nickname: JSON.parse(init.body).name });
     if (url.endsWith('/resume')) return Response.json({ revision: 1 });
     const id = url.split('/').pop();
-    if (init.method === 'PUT') { uploads++; records.get(id).token = JSON.parse(init.body).token; return Response.json({ revision: 2 }); }
+    if (init.method === 'PUT') {
+      const { token } = JSON.parse(init.body);
+      assert.equal(JSON.parse(Buffer.from(token, 'base64url')).v, 1, 'An older service can read updates without the current dictionary');
+      uploads++; records.get(id).token = token;
+      return Response.json({ revision: 2 });
+    }
     return Response.json(records.get(id));
   };
   let sync;
@@ -109,6 +114,7 @@ test('one player name joins seasons, discovers everyone, and remembers hidden pl
     await sync.sync(); assert.equal(uploads, 0, 'No data uploaded before Save & join');
     await sync.join(season, '  Eric  ');
     assert.equal(sync.profile.name, 'Eric'); assert.ok(sync.owner(season.seasonId).listed);
+    assert.equal(JSON.parse(Buffer.from(records.get(sync.owner(season.seasonId).id).token, 'base64url')).v, 1);
     assert.equal(codec.decodeSnapshot(records.get(sync.owner(season.seasonId).id).token).entries.get('Chester::Fortune'), 2);
     const roster = [];
     for (let i = 0; i < 8; i++) {

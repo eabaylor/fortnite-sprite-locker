@@ -9,7 +9,7 @@
   "legacyStorageKeys": [],
   "updatedDate": "November 5, 2026",
   "patch": "v43.00",
-  "assetVersion": "20261105-2",
+  "assetVersion": "20261105-3",
   "familyOrder": [
     "Halfpeel'd",
     "Re-Pete",
@@ -29,11 +29,11 @@
     "Fortune"
   ],
   "whatsNew": {
-    "title": "23 Sprites available",
-    "intro": "The checklist now matches the reported in-game roster.",
+    "title": "Locker sharing fixed",
+    "intro": "Save & join now works when the tracker catalog is newer than the sharing service.",
     "items": [
-      "Added Lil’ Uzi Vert Jr. and Fortune Lil’ Uzi Vert Jr.",
-      "Sweet Dreams is hidden until it becomes available. Any saved checkmarks are kept."
+      "New joins, short links, and live locker updates no longer require matching catalog versions.",
+      "Your 23-Sprite checklist and saved progress are unchanged."
     ]
   },
   "unlockCodes": [],

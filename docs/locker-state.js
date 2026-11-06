@@ -1,4 +1,4 @@
-import { publishSharedSnapshot, readSharedLocker, controlLiveLocker, updateLiveLocker, setPlayerListing, directoryNickname, isSuppressedPlayer } from './locker-sharing.js?v=20261105-2';
+import { publishSharedSnapshot, readSharedLocker, controlLiveLocker, updateLiveLocker, setPlayerListing, directoryNickname, isSuppressedPlayer } from './locker-sharing.js?v=20261105-3';
 export const FRIENDS_KEY = 'sprite-locker-friends-v1';
 export const LIVE_KEY = 'sprite-locker-live-shares-v1';
 export const PROFILE_KEY = 'sprite-locker-player-profile-v1';
@@ -57,7 +57,7 @@ export function createLockerSync(catalogs, codec) {
           if (owner.signature === signature) continue;
           const latest = owners()[season.seasonId];
           if (!latest?.enabled || latest.pendingPause) continue;
-          const result = await updateLiveLocker(owner, codec.encodeSnapshot(snapshot));
+          const result = await updateLiveLocker(owner, codec.encodeSnapshot(snapshot, { compact: false }));
           const after = owners()[season.seasonId];
           if (after?.id === owner.id) saveOwner(season.seasonId, { ...after, ...result, signature, error: '' });
         } catch (error) {
@@ -148,7 +148,7 @@ export function createLockerSync(catalogs, codec) {
         saveOwner(season.seasonId, { ...previous, ...result, name: nickname.trim(), enabled: true, pendingPause: false, error: '', signature: '' });
       } else {
         const { snapshot, signature } = currentSnapshot(season, { name: nickname.trim() });
-        const result = await publishSharedSnapshot(codec.encodeSnapshot(snapshot), true);
+        const result = await publishSharedSnapshot(codec.encodeSnapshot(snapshot, { compact: false }), true);
         if (!/^[A-Za-z0-9_-]{43}$/.test(result.writeKey || '')) throw new Error('The service did not return a private sharing key.');
         try { saveOwner(season.seasonId, { ...result, name: nickname.trim(), signature, enabled: true, pendingPause: false, error: '' }); }
         catch { await controlLiveLocker(result, false); throw new Error('This browser cannot save the private key. Live sharing was stopped.'); }

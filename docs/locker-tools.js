@@ -1,6 +1,6 @@
-import catalogs from './locker-catalogs.js?v=20261105-2';
-import { SHARE_ORIGIN, sharedLockerId, publishSharedSnapshot, searchPlayers, directoryNickname, isSuppressedPlayer } from './locker-sharing.js?v=20261105-2';
-import { createLockerSync, PROFILE_KEY } from './locker-state.js?v=20261105-2';
+import catalogs from './locker-catalogs.js?v=20261105-3';
+import { SHARE_ORIGIN, sharedLockerId, publishSharedSnapshot, searchPlayers, directoryNickname, isSuppressedPlayer } from './locker-sharing.js?v=20261105-3';
+import { createLockerSync, PROFILE_KEY } from './locker-state.js?v=20261105-3';
 export function requirePlayerName() {
   try {
     const profile = JSON.parse(localStorage.getItem(PROFILE_KEY) || 'null');
@@ -27,8 +27,9 @@ export function makeSnapshot(season, progress, nickname = "") {
   return { v: 1, season: season.seasonId, name: nickname.trim().slice(0, 40), date: new Date().toISOString(), families, states };
 }
 
-export function encodeSnapshot(snapshot) {
-  const dictionary = Object.entries(catalogs).find(([, item]) => item.season === snapshot.season && JSON.stringify(item.families) === JSON.stringify(snapshot.families));
+export function encodeSnapshot(snapshot, { compact = true } = {}) {
+  // Uploads must be readable even when the sharing service has an older catalog.
+  const dictionary = compact && Object.entries(catalogs).find(([, item]) => item.season === snapshot.season && JSON.stringify(item.families) === JSON.stringify(snapshot.families));
   if (dictionary && snapshot.v === 1 && /^[012]+$/.test(snapshot.states)) {
     const bytes = [];
     for (let i = 0; i < snapshot.states.length; i += 5) {
@@ -268,7 +269,7 @@ export function createLockerTools(host) {
     nickname.setCustomValidity(nickname.value.trim() ? '' : 'Enter your nickname.');
     if (!nickname.reportValidity()) return;
     const snapshot = makeSnapshot(options.season, options.progress, nickname.value);
-    const token = encodeSnapshot(snapshot);
+    const token = encodeSnapshot(snapshot, { compact: !online });
     $('.locker-share-result').hidden = true;
     sharing = true;
     $('.locker-share').disabled = true;
