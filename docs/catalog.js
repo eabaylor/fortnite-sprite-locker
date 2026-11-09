@@ -1,7 +1,7 @@
 window.SPRITE_CATALOGS = {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-mini-season",
-  "assetVersion": "20261106-1",
+  "assetVersion": "20261108-1",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -12,9 +12,9 @@ window.SPRITE_CATALOGS = {
       "imageBase": "seasons/chapter-7-mini-season/sprites",
       "storageKey": "sprite-locker-progress-chapter-7-mini-season",
       "legacyStorageKeys": [],
-      "updatedDate": "November 6, 2026",
+      "updatedDate": "November 8, 2026",
       "patch": "v43.00",
-      "assetVersion": "20261106-1",
+      "assetVersion": "20261108-1",
       "familyOrder": [
         "Halfpeel'd",
         "Re-Pete",
@@ -32,14 +32,16 @@ window.SPRITE_CATALOGS = {
       ],
       "variantOrder": [
         "Base",
-        "Fortune"
+        "Fortune",
+        "Cursed"
       ],
       "whatsNew": {
-        "title": "Sweet Dreams is back",
-        "intro": "Sweet Dreams has been documented in live Treasure Hunters matches.",
+        "title": "Captain’s Day adds 12 Sprites",
+        "intro": "Lil’ Uzi Vert Jr. and the Cursed variants are live.",
         "items": [
-          "Restored the Mythic Sweet Dreams Sprite to the checklist with its original artwork.",
-          "The tracker now shows 24 entries. Any previously saved Sweet Dreams checkmark is restored automatically."
+          "Added Base, Fortune, and Cursed Lil’ Uzi Vert Jr.",
+          "Added nine other Cursed Treasure Hunters variants now appearing in the wild.",
+          "The current-season checklist now contains 34 released Sprites."
         ]
       },
       "unlockCodes": [],
@@ -50,7 +52,8 @@ window.SPRITE_CATALOGS = {
           "rarity": "Rare",
           "variants": [
             "Base",
-            "Fortune"
+            "Fortune",
+            "Cursed"
           ]
         },
         {
@@ -58,7 +61,8 @@ window.SPRITE_CATALOGS = {
           "rarity": "Rare",
           "variants": [
             "Base",
-            "Fortune"
+            "Fortune",
+            "Cursed"
           ]
         },
         {
@@ -66,7 +70,8 @@ window.SPRITE_CATALOGS = {
           "rarity": "Rare",
           "variants": [
             "Base",
-            "Fortune"
+            "Fortune",
+            "Cursed"
           ]
         },
         {
@@ -74,7 +79,8 @@ window.SPRITE_CATALOGS = {
           "rarity": "Epic",
           "variants": [
             "Base",
-            "Fortune"
+            "Fortune",
+            "Cursed"
           ]
         },
         {
@@ -82,7 +88,8 @@ window.SPRITE_CATALOGS = {
           "rarity": "Epic",
           "variants": [
             "Base",
-            "Fortune"
+            "Fortune",
+            "Cursed"
           ]
         },
         {
@@ -90,7 +97,8 @@ window.SPRITE_CATALOGS = {
           "rarity": "Epic",
           "variants": [
             "Base",
-            "Fortune"
+            "Fortune",
+            "Cursed"
           ]
         },
         {
@@ -113,7 +121,8 @@ window.SPRITE_CATALOGS = {
           "rarity": "Epic",
           "variants": [
             "Base",
-            "Fortune"
+            "Fortune",
+            "Cursed"
           ]
         },
         {
@@ -121,7 +130,8 @@ window.SPRITE_CATALOGS = {
           "rarity": "Legendary",
           "variants": [
             "Base",
-            "Fortune"
+            "Fortune",
+            "Cursed"
           ]
         },
         {
@@ -129,7 +139,8 @@ window.SPRITE_CATALOGS = {
           "rarity": "Legendary",
           "variants": [
             "Base",
-            "Fortune"
+            "Fortune",
+            "Cursed"
           ]
         },
         {
@@ -137,7 +148,8 @@ window.SPRITE_CATALOGS = {
           "rarity": "Mythic",
           "variants": [
             "Base",
-            "Fortune"
+            "Fortune",
+            "Cursed"
           ]
         },
         {
@@ -181,92 +193,22 @@ window.SPRITE_CATALOGS = {
       },
       "unavailableFamilies": [
         {
-          "name": "Halfpeel'd",
-          "rarity": "Rare",
-          "variants": [
-            "Cursed"
-          ]
-        },
-        {
-          "name": "Re-Pete",
-          "rarity": "Rare",
-          "variants": [
-            "Cursed"
-          ]
-        },
-        {
-          "name": "Barry O'Fish",
-          "rarity": "Rare",
-          "variants": [
-            "Cursed"
-          ]
-        },
-        {
-          "name": "Chester",
-          "rarity": "Epic",
-          "variants": [
-            "Cursed"
-          ]
-        },
-        {
-          "name": "Exmarks",
-          "rarity": "Epic",
-          "variants": [
-            "Cursed"
-          ]
-        },
-        {
-          "name": "Wayfinder",
-          "rarity": "Epic",
-          "variants": [
-            "Cursed"
-          ]
-        },
-        {
           "name": "Kelper",
           "rarity": "Epic",
-          "variants": [
-            "Cursed"
-          ]
-        },
-        {
-          "name": "Lil' Squibbly",
-          "rarity": "Epic",
-          "variants": [
-            "Cursed"
-          ]
-        },
-        {
-          "name": "Lil' Flacko",
-          "rarity": "Legendary",
-          "variants": [
-            "Cursed"
-          ]
-        },
-        {
-          "name": "Lil' Uzi Vert Jr.",
-          "rarity": "Special",
-          "variants": [
-            "Cursed"
-          ]
-        },
-        {
-          "name": "Plundarrgh",
-          "rarity": "Mythic",
           "variants": [
             "Cursed"
           ]
         }
       ],
       "releaseVerification": {
-        "date": "2026-11-06",
-        "trackerEntries": 24,
+        "date": "2026-11-08",
+        "trackerEntries": 34,
         "sources": [
-          "User-supplied in-game availability correction, November 5, 2026",
-          "https://www.destructoid.com/how-to-get-sweet-dreams-sprite-in-fortnite-treasure-hunters/",
+          "https://communities.epicgames.com/thread/captains-day-lil-uzi-vert-november-8/t3YN",
+          "https://www.fortnite.com/battle-pass?lang=en-US",
           "https://fortnite.gg/sprites"
         ],
-        "note": "Sweet Dreams is documented in live matches. Retained the previously reported in-game Lil' Uzi Vert Jr. entries; third-party availability reports for those two entries disagree. Cursed variants remain excluded."
+        "note": "Epic's live Captain's Day listing starts boosted Lil' Uzi Vert Jr. variant drops at 9 AM ET and confirms Cursed Sprites are appearing in the wild. Fortnite.GG currently shows 34 released entries and marks Cursed Kelper unreleased. The official Battle Pass page confirms Treasure Hunters is live."
       }
     },
     {

@@ -1021,5 +1021,214 @@ export default {
         ]
       ]
     ]
+  },
+  "5913603812042cd5": {
+    "season": "chapter-7-mini-season",
+    "families": [
+      [
+        "Halfpeel'd",
+        [
+          "Base",
+          "Fortune",
+          "Cursed"
+        ]
+      ],
+      [
+        "Re-Pete",
+        [
+          "Base",
+          "Fortune",
+          "Cursed"
+        ]
+      ],
+      [
+        "Barry O'Fish",
+        [
+          "Base",
+          "Fortune",
+          "Cursed"
+        ]
+      ],
+      [
+        "Chester",
+        [
+          "Base",
+          "Fortune",
+          "Cursed"
+        ]
+      ],
+      [
+        "Exmarks",
+        [
+          "Base",
+          "Fortune",
+          "Cursed"
+        ]
+      ],
+      [
+        "Wayfinder",
+        [
+          "Base",
+          "Fortune",
+          "Cursed"
+        ]
+      ],
+      [
+        "Kelper",
+        [
+          "Base",
+          "Fortune",
+          "Cursed"
+        ]
+      ],
+      [
+        "Sweet Dreams",
+        [
+          "Base"
+        ]
+      ],
+      [
+        "Lil' Squibbly",
+        [
+          "Base",
+          "Fortune",
+          "Cursed"
+        ]
+      ],
+      [
+        "Lil' Flacko",
+        [
+          "Base",
+          "Fortune",
+          "Cursed"
+        ]
+      ],
+      [
+        "Lil' Uzi Vert Jr.",
+        [
+          "Base",
+          "Fortune",
+          "Cursed"
+        ]
+      ],
+      [
+        "Plundarrgh",
+        [
+          "Base",
+          "Fortune",
+          "Cursed"
+        ]
+      ],
+      [
+        "Transponder Snail",
+        [
+          "Base"
+        ]
+      ]
+    ]
+  },
+  "dacd5a8e8b8c319e": {
+    "season": "chapter-7-mini-season",
+    "families": [
+      [
+        "Halfpeel'd",
+        [
+          "Base",
+          "Fortune",
+          "Cursed"
+        ]
+      ],
+      [
+        "Re-Pete",
+        [
+          "Base",
+          "Fortune",
+          "Cursed"
+        ]
+      ],
+      [
+        "Barry O'Fish",
+        [
+          "Base",
+          "Fortune",
+          "Cursed"
+        ]
+      ],
+      [
+        "Chester",
+        [
+          "Base",
+          "Fortune",
+          "Cursed"
+        ]
+      ],
+      [
+        "Exmarks",
+        [
+          "Base",
+          "Fortune",
+          "Cursed"
+        ]
+      ],
+      [
+        "Wayfinder",
+        [
+          "Base",
+          "Fortune",
+          "Cursed"
+        ]
+      ],
+      [
+        "Kelper",
+        [
+          "Base",
+          "Fortune"
+        ]
+      ],
+      [
+        "Sweet Dreams",
+        [
+          "Base"
+        ]
+      ],
+      [
+        "Lil' Squibbly",
+        [
+          "Base",
+          "Fortune",
+          "Cursed"
+        ]
+      ],
+      [
+        "Lil' Flacko",
+        [
+          "Base",
+          "Fortune",
+          "Cursed"
+        ]
+      ],
+      [
+        "Lil' Uzi Vert Jr.",
+        [
+          "Base",
+          "Fortune",
+          "Cursed"
+        ]
+      ],
+      [
+        "Plundarrgh",
+        [
+          "Base",
+          "Fortune",
+          "Cursed"
+        ]
+      ],
+      [
+        "Transponder Snail",
+        [
+          "Base"
+        ]
+      ]
+    ]
   }
 };
