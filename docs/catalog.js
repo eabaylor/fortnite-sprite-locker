@@ -36,11 +36,11 @@ window.SPRITE_CATALOGS = {
         "Cursed"
       ],
       "whatsNew": {
-        "title": "Captain’s Day adds 12 Sprites",
-        "intro": "Lil’ Uzi Vert Jr. and the Cursed variants are live.",
+        "title": "Cursed Sprites arrive",
+        "intro": "Ten Cursed variants are now on the Treasure Hunters checklist.",
         "items": [
-          "Added Base, Fortune, and Cursed Lil’ Uzi Vert Jr.",
-          "Added nine other Cursed Treasure Hunters variants now appearing in the wild.",
+          "Added Cursed Lil’ Uzi Vert Jr. and nine other released Cursed variants.",
+          "Cursed Kelper stays hidden until its release is verified.",
           "The current-season checklist now contains 34 released Sprites."
         ]
       },
