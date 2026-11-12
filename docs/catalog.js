@@ -1,7 +1,7 @@
 window.SPRITE_CATALOGS = {
   "schemaVersion": 1,
   "defaultSeasonId": "chapter-7-mini-season",
-  "assetVersion": "20261108-1",
+  "assetVersion": "20261112-1",
   "seasons": [
     {
       "schemaVersion": 1,
@@ -12,9 +12,9 @@ window.SPRITE_CATALOGS = {
       "imageBase": "seasons/chapter-7-mini-season/sprites",
       "storageKey": "sprite-locker-progress-chapter-7-mini-season",
       "legacyStorageKeys": [],
-      "updatedDate": "November 8, 2026",
-      "patch": "v43.00",
-      "assetVersion": "20261108-1",
+      "updatedDate": "November 12, 2026",
+      "patch": "v43.10",
+      "assetVersion": "20261112-1",
       "familyOrder": [
         "Halfpeel'd",
         "Re-Pete",
@@ -36,12 +36,12 @@ window.SPRITE_CATALOGS = {
         "Cursed"
       ],
       "whatsNew": {
-        "title": "Cursed Sprites arrive",
-        "intro": "Ten Cursed variants are now on the Treasure Hunters checklist.",
+        "title": "Cursed Kelper released",
+        "intro": "Epic’s v43.10 update releases the last missing Cursed variant.",
         "items": [
-          "Added Cursed Lil’ Uzi Vert Jr. and nine other released Cursed variants.",
-          "Cursed Kelper stays hidden until its release is verified.",
-          "The current-season checklist now contains 34 released Sprites."
+          "Added Cursed Kelper with its actual Sprite artwork.",
+          "The checklist now contains 35 entries. Existing progress and shared lockers are preserved.",
+          "Mini Miku, Squiplash, other future Sprites, and Gold variants remain excluded."
         ]
       },
       "unlockCodes": [],
@@ -106,7 +106,8 @@ window.SPRITE_CATALOGS = {
           "rarity": "Epic",
           "variants": [
             "Base",
-            "Fortune"
+            "Fortune",
+            "Cursed"
           ]
         },
         {
@@ -191,24 +192,17 @@ window.SPRITE_CATALOGS = {
         "Lil' Uzi Vert Jr.::Cursed": 43,
         "Plundarrgh::Cursed": 51
       },
-      "unavailableFamilies": [
-        {
-          "name": "Kelper",
-          "rarity": "Epic",
-          "variants": [
-            "Cursed"
-          ]
-        }
-      ],
+      "unavailableFamilies": [],
       "releaseVerification": {
-        "date": "2026-11-08",
-        "trackerEntries": 34,
+        "date": "2026-11-12",
+        "trackerEntries": 35,
         "sources": [
           "https://communities.epicgames.com/thread/captains-day-lil-uzi-vert-november-8/t3YN",
+          "https://www.reddit.com/r/FortniteBR/comments/1xu8af7/v4310_fortnite_treasure_hunters_update_notes/",
           "https://www.fortnite.com/battle-pass?lang=en-US",
           "https://fortnite.gg/sprites"
         ],
-        "note": "Epic's live Captain's Day listing starts boosted Lil' Uzi Vert Jr. variant drops at 9 AM ET and confirms Cursed Sprites are appearing in the wild. Fortnite.GG currently shows 34 released entries and marks Cursed Kelper unreleased. The official Battle Pass page confirms Treasure Hunters is live."
+        "note": "Epic BR Dev Team's live v43.10 update notes explicitly list Cursed Kelper under New Sprites Today, November 12. This authoritative release confirmation supersedes Fortnite.GG's older unreleased flag. November 15 Sprites and Gold variants are not added."
       }
     },
     {

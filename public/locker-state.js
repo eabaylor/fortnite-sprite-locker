@@ -1,4 +1,4 @@
-import { publishSharedSnapshot, readSharedLocker, controlLiveLocker, updateLiveLocker, setPlayerListing, directoryNickname, isSuppressedPlayer } from './locker-sharing.js?v=20261108-1';
+import { publishSharedSnapshot, readSharedLocker, controlLiveLocker, updateLiveLocker, setPlayerListing, directoryNickname, isSuppressedPlayer } from './locker-sharing.js?v=20261112-1';
 export const FRIENDS_KEY = 'sprite-locker-friends-v1';
 export const LIVE_KEY = 'sprite-locker-live-shares-v1';
 export const PROFILE_KEY = 'sprite-locker-player-profile-v1';

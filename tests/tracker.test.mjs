@@ -36,10 +36,10 @@ async function render() {
 test("catalog has unique active entries and matching artwork", async () => {
   assert.equal(catalog.seasonId, "chapter-7-mini-season");
   assert.equal(catalog.storageKey, "sprite-locker-progress-chapter-7-mini-season");
-  assert.equal(entries.length, 34);
-  assert.equal(entries.filter(({variant}) => variant === 'Cursed').length, 10);
-  assert.equal(catalog.unavailableFamilies.flatMap(f => f.variants).length, 1);
-  assert.deepEqual(catalog.unavailableFamilies.find(({name}) => name === "Kelper")?.variants, ["Cursed"]);
+  assert.equal(entries.length, 35);
+  assert.equal(entries.filter(({variant}) => variant === 'Cursed').length, 11);
+  assert.equal(catalog.unavailableFamilies.flatMap(f => f.variants).length, 0);
+  assert.deepEqual(catalog.families.find(({name}) => name === "Kelper")?.variants, ["Base", "Fortune", "Cursed"]);
   assert.equal(catalog.unavailableFamilies.some(({name}) => name === "Sweet Dreams"), false);
   assert.equal(catalog.gameNumbers["Re-Pete::Cursed"], 7);
   assert.equal(catalog.gameNumbers["Kelper::Cursed"], undefined, 'Unverified numbers must not be guessed');
@@ -139,7 +139,7 @@ test("server renders the real tracker with current season and all cards", async 
   assert.doesNotMatch(html, /Sprite Codes/);
   assert.doesNotMatch(html, /Other Codes/);
   assert.doesNotMatch(html, /class="whats-new-trigger"/);
-  assert.equal((html.match(/class="sprite-card /g) ?? []).length, 34);
+  assert.equal((html.match(/class="sprite-card /g) ?? []).length, 35);
   const familyNames = [...html.matchAll(/<h3>([^<]+)<\/h3>/g)].map((match) => match[1].replaceAll('&#x27;', "'"));
   assert.deepEqual(familyNames, catalog.familyOrder);
   assert.doesNotMatch(html, /Your site is taking shape|Building your site/);

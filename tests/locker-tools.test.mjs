@@ -15,7 +15,7 @@ test('older 33-entry shared lockers remain readable after the release-only corre
   const progress = { "Halfpeel'd::Cursed": { acquired: true, mastered: true }, "Halfpeel'd::Base": { acquired: true, mastered: false } };
   const friend = decodeSnapshot(encodeSnapshot(makeSnapshot(historical, progress, 'Eric')));
   assert.equal(friend.entries.get("Halfpeel'd::Cursed"), 2);
-  assert.deepEqual(friendCollectionCounts(friend, current), { acquired: 2, mastered: 1, total: 34, unknown: 2 });
+  assert.deepEqual(friendCollectionCounts(friend, current), { acquired: 2, mastered: 1, total: 35, unknown: 2 });
 });
 
 test('only the specified tester identities are suppressed, even after a rename', () => {

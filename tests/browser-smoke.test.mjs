@@ -66,7 +66,7 @@ window.addEventListener("load", async () => {
   const numberedRow = rows.find(row => row.querySelector('.locker-status-toggle').dataset.name === 'Re-Pete' && row.querySelector('.locker-status-toggle').dataset.variant === 'Base');
   const allNumbersHidden = numberedRow?.querySelector('strong').textContent === 'Re-Pete' && rows.every(row => !row.dataset.gameNumber && !/^#\d/.test(row.querySelector('strong').textContent));
   const statuses = rows.map(row => row.querySelector('.locker-status-toggle').dataset);
-  const releasedRosterShown = statuses.filter(({ variant }) => variant === 'Cursed').length === 10;
+  const releasedRosterShown = statuses.filter(({ variant }) => variant === 'Cursed').length === 11 && statuses.some(({name, variant}) => name === 'Kelper' && variant === 'Cursed') && statuses.every(({name, variant}) => !['Mini Miku', 'Squiplash', 'Zee', 'Sir Oscar the Second'].includes(name) && variant !== 'Gold');
   const sweetDreamsRestored = rows.some(row => {
     const button = row.querySelector('.locker-status-toggle');
     return button.dataset.name === 'Sweet Dreams' && button.dataset.variant === 'Base' && button.textContent.trim() === 'Mastered';
@@ -305,7 +305,7 @@ window.addEventListener("load", async () => {
   result.codesMobile = codeRect.left >= 0 && codeRect.right <= document.documentElement.clientWidth && document.documentElement.scrollWidth === document.documentElement.clientWidth;
   document.querySelector('#code-guide-close').click();
   seasonPicker.value = window.SPRITE_CATALOGS.defaultSeasonId; seasonPicker.dispatchEvent(new Event('change'));
-  for (let i = 0; i < 100 && document.querySelectorAll('.locker-list-row').length !== 34; i++) await new Promise(resolve => setTimeout(resolve, 20));
+  for (let i = 0; i < 100 && document.querySelectorAll('.locker-list-row').length !== 35; i++) await new Promise(resolve => setTimeout(resolve, 20));
   result.seasonProgressPreserved = localStorage.getItem(window.SPRITE_CATALOGS.seasons[0].storageKey) === currentProgressBefore;
   result.newSeasonRewardsHidden = document.querySelector('#admin-codes-trigger').hidden;
   status.value = 'not-mastered'; status.dispatchEvent(new Event('change'));
